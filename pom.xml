@@ -9,10 +9,6 @@
 
     <name>reserve</name>
 
-    <modules>
-        <module>study</module>
-    </modules>
-
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
