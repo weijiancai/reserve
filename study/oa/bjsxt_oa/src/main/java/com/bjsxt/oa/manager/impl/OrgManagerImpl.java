@@ -1,6 +1,7 @@
 package com.bjsxt.oa.manager.impl;
 
 import com.bjsxt.oa.manager.OrgManager;
+import com.bjsxt.oa.manager.SystemException;
 import com.bjsxt.oa.model.Organization;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -28,7 +29,11 @@ public class OrgManagerImpl extends HibernateDaoSupport implements OrgManager {
 		
 		//判断子机构列表是否为空
 		if(org.getChildren().size() > 0){
-			throw new RuntimeException("存在子机构信息，不允许删除");
+			//throw new RuntimeException("存在子机构信息，不允许删除");
+//			SystemException se = new SystemException("");
+//			se.setKey();
+//			se.setValues(..);
+			throw new SystemException("errors.org.hassuborg",new Object[]{org.getName(),org.getChildren().size()},"存在子机构信息，不允许删除");
 		}
 		
 		//判断人员是否非空
