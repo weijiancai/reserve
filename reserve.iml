@@ -3,7 +3,9 @@
   <component name="FacetManager">
     <facet type="hibernate" name="Hibernate">
       <configuration>
-        <datasource-map />
+        <datasource-map>
+          <unit-entry name="hibernate.cfg.xml" />
+        </datasource-map>
         <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/booksource/Test Driven Practical TDD and Acceptance TDD for Java Developers/src/test/resources/hibernate.cfg.xml" />
       </configuration>
     </facet>
