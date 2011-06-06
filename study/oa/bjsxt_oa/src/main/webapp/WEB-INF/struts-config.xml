@@ -5,6 +5,26 @@
           "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
 
 <struts-config>
+	<form-beans>
+		<form-bean name="orgForm" type="com.bjsxt.oa.web.forms.OrgActionForm"/>
+	</form-beans>
+	<action-mappings>
+		<action 
+			path="/org"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			name="orgForm"
+			scope="request"
+			parameter="method"
+		>
+			<forward name="index" path="/org/index.jsp"></forward>
+			<forward name="add_input" path="/org/add_input.jsp"></forward>
+			<forward name="update_input" path="/org/update_input.jsp"></forward>
+			<forward name="add_success" path="/org/add_success.jsp"></forward>
+			<forward name="del_success" path="/org/del_success.jsp"></forward>
+			<forward name="update_success" path="/org/update_success.jsp"></forward>
+		</action>
+	</action-mappings>
+
     <message-resources parameter="MessageResources" />
 </struts-config>
 
