@@ -66,8 +66,8 @@
               <td width="5%" height="37" align="center"><b>操作</b></td>
           </tr>
           <!-- 列表数据栏 -->
-          <c:if test="${!empty orgs}">
-          <c:forEach items="${orgs }" var="org">
+          <c:if test="${!empty pm.datas}">
+          <c:forEach items="${pm.datas }" var="org">
 	      <tr bgcolor="#EFF3F7" class="TableBody1" onmouseover="this.bgColor = '#DEE7FF';" onmouseout="this.bgColor='#EFF3F7';">
 		      <td align="center" vAlign="center">${org.id }</td>
 	          <td align="center" vAlign="center"><a href="org.do?parentId=${org.id }">${org.name }</a></td>
@@ -80,7 +80,7 @@
         </c:forEach>
 		</c:if>
         <!-- 在列表数据为空的时候，要显示的提示信息 -->
-	    <c:if test="${empty orgs}">
+	    <c:if test="${empty pm.datas}">
 	    <tr>
 	    	<td colspan="7" align="center" bgcolor="#EFF3F7" class="TableBody1" onmouseover="this.bgColor = '#DEE7FF';" onmouseout="this.bgColor='#EFF3F7';">
 	    	没有找到相应的记录
@@ -93,6 +93,31 @@
           <TR>
             <TD height=28 align=right vAlign=center noWrap background=images/list_middle.jpg>&nbsp;&nbsp;
             <!-- 可以在这里插入分页导航条 -->
+<pg:pager url="org.do" items="${pm.total}" export="currentPageNumber=pageNumber">
+	<pg:param name="parentId"/>
+	<pg:first>
+		<a href="${pageUrl}">首页</a>
+	</pg:first>
+	<pg:prev>
+		<a href="${pageUrl}">前页</a>
+	</pg:prev>
+	<pg:pages>
+		<c:choose>
+			<c:when test="${currentPageNumber eq pageNumber}">
+				<font color="red">${pageNumber }</font>
+			</c:when>
+			<c:otherwise>
+				<a href="${pageUrl}">${pageNumber }</a>
+			</c:otherwise>
+		</c:choose>
+	</pg:pages>
+	<pg:next>
+		<a href="${pageUrl}">下页</a>
+	</pg:next>
+	<pg:last>
+		<a href="${pageUrl}">尾页</a>
+	</pg:last>
+</pg:pager>            
     		</TD>
           </TR>
         </TBODY>

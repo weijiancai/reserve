@@ -1,5 +1,6 @@
 package com.bjsxt.oa.web.actions;
 
+import com.bjsxt.oa.PagerModel;
 import com.bjsxt.oa.manager.OrgManager;
 import com.bjsxt.oa.model.Organization;
 import com.bjsxt.oa.web.forms.OrgActionForm;
@@ -11,7 +12,6 @@ import org.apache.struts.actions.DispatchAction;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 public class OrgAction extends DispatchAction {
 
@@ -28,8 +28,17 @@ public class OrgAction extends DispatchAction {
 		
 		OrgActionForm oaf = (OrgActionForm)form;
 		int parentId = oaf.getParentId();
-		List orgs = orgManager.searchOrgs(parentId);
-		request.setAttribute("orgs", orgs);
+		
+		int offset = 0;
+		
+		try {
+			offset = Integer.parseInt(request.getParameter("pager.offset"));
+		} catch (Exception ignore) {
+		}
+		int pagesize = 10;
+		
+		PagerModel pm = orgManager.searchOrgs(parentId,offset,pagesize);
+		request.setAttribute("pm", pm);
 		
 		int ppid = 0;
 		if(parentId != 0){

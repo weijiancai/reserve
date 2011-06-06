@@ -1,5 +1,6 @@
 package com.bjsxt.oa.manager.impl;
 
+import com.bjsxt.oa.PagerModel;
 import com.bjsxt.oa.manager.OrgManager;
 import com.bjsxt.oa.manager.SystemException;
 import com.bjsxt.oa.model.Organization;
@@ -50,15 +51,31 @@ public class OrgManagerImpl extends HibernateDaoSupport implements OrgManager {
 		return (Organization)getHibernateTemplate().load(Organization.class, orgId);
 	}
 
-	public List searchOrgs(int parentId) {
+	public PagerModel searchOrgs(int parentId,int offset,int pagesize) {
 		
-		if(parentId == 0){
-			return getHibernateTemplate().find("select o from Organization o where o.parent is null");
+		//查询总记录数
+		String selectCountHql = "select count(*) from Organization o where o.parent is null";
+		if(parentId != 0){
+			selectCountHql = "select count(*) from Organization o where o.parent.id = "+parentId;
 		}
+		int total = ((Long)getSession().createQuery(selectCountHql).uniqueResult()).intValue();
 		
-		String hql = "select o from Organization o where o.parent.id = ?";
 		
-		return getHibernateTemplate().find(hql, parentId);
+		//查询当前页的数据
+		String hql = "select o from Organization o where o.parent is null";
+		if(parentId != 0){
+			hql = "select o from Organization o where o.parent.id = "+parentId;
+		}
+		List datas = getSession().createQuery(hql)
+						.setFirstResult(offset)
+						.setMaxResults(pagesize)
+						.list();
+		 
+		PagerModel pm = new PagerModel();
+		pm.setDatas(datas);
+		pm.setTotal(total);
+		
+		return pm;
 	}
 
 	public void updateOrg(Organization org, int parentId) {

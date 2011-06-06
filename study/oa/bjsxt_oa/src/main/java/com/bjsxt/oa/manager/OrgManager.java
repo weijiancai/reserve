@@ -1,8 +1,7 @@
 package com.bjsxt.oa.manager;
 
+import com.bjsxt.oa.PagerModel;
 import com.bjsxt.oa.model.Organization;
-
-import java.util.List;
 
 public interface OrgManager {
 	
@@ -12,7 +11,7 @@ public interface OrgManager {
 	 * @param org
 	 * @param parentId
 	 */
-	public void addOrg(Organization org, int parentId);
+	public void addOrg(Organization org,int parentId);
 	
 	/**
 	 * 删除机构信息
@@ -26,7 +25,7 @@ public interface OrgManager {
 	 * @param org
 	 * @param parentId
 	 */
-	public void updateOrg(Organization org, int parentId);
+	public void updateOrg(Organization org,int parentId);
 	
 	/**
 	 * 查询特定机构的信息
@@ -39,7 +38,9 @@ public interface OrgManager {
 	 * 根据父机构ID查询子机构列表
 	 * 如果parentId为0，则查询顶级机构列表
 	 * @param parentId
+	 * @param offset 
+	 * @param pagesize
 	 * @return
 	 */
-	public List searchOrgs(int parentId);
+	public PagerModel searchOrgs(int parentId,int offset,int pagesize);
 }

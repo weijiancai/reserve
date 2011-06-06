@@ -3,9 +3,6 @@ package com.bjsxt.oa.manager;
 import com.bjsxt.oa.model.Organization;
 import org.springframework.test.AbstractTransactionalSpringContextTests;
 
-import java.util.Iterator;
-import java.util.List;
-
 public class OrgManagerTest extends AbstractTransactionalSpringContextTests {
 
 	private OrgManager orgManager;
@@ -56,11 +53,11 @@ public class OrgManagerTest extends AbstractTransactionalSpringContextTests {
 
 	public void testSearchOrgs() {
 		
-		List orgs = orgManager.searchOrgs(0);
-		for (Iterator iterator = orgs.iterator(); iterator.hasNext();) {
-			Organization org = (Organization) iterator.next();
-			System.out.println(org.getName());
-		}
+//		List orgs = orgManager.searchOrgs(0);
+//		for (Iterator iterator = orgs.iterator(); iterator.hasNext();) {
+//			Organization org = (Organization) iterator.next();
+//			System.out.println(org.getName());
+//		}
 		
 	}
 
