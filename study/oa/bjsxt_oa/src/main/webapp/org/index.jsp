@@ -117,7 +117,13 @@
 	<pg:last>
 		<a href="${pageUrl}">βҳ</a>
 	</pg:last>
-</pg:pager>            
+</pg:pager>        
+<select>
+	<option>10</option>
+	<option>20</option>
+	<option>50</option>
+	<option>100</option>
+</select>    
     		</TD>
           </TR>
         </TBODY>

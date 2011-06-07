@@ -28,16 +28,8 @@ public class OrgAction extends DispatchAction {
 		
 		OrgActionForm oaf = (OrgActionForm)form;
 		int parentId = oaf.getParentId();
-		
-		int offset = 0;
-		
-		try {
-			offset = Integer.parseInt(request.getParameter("pager.offset"));
-		} catch (Exception ignore) {
-		}
-		int pagesize = 10;
-		
-		PagerModel pm = orgManager.searchOrgs(parentId,offset,pagesize);
+
+		PagerModel pm = orgManager.searchOrgs(parentId);
 		request.setAttribute("pm", pm);
 		
 		int ppid = 0;

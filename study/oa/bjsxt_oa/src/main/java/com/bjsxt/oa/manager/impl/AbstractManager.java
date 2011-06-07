@@ -1,6 +1,7 @@
 package com.bjsxt.oa.manager.impl;
 
 import com.bjsxt.oa.PagerModel;
+import com.bjsxt.oa.SystemContext;
 import com.bjsxt.oa.manager.SystemException;
 import org.hibernate.Query;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
@@ -8,6 +9,18 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import java.util.List;
 
 public abstract class AbstractManager extends HibernateDaoSupport {
+	
+	public PagerModel searchPaginated(String hql){
+		return searchPaginated(hql, null);
+	}
+	
+	public PagerModel searchPaginated(String hql,Object value){
+		return searchPaginated(hql, new Object[]{value});
+	}
+	
+	public PagerModel searchPaginated(String hql,Object[] values){
+		return searchPaginated(hql, values, SystemContext.getOffset(), SystemContext.getPagesize());
+	}
 	
 	public PagerModel searchPaginated(String hql,int offset,int pagesize){
 		return searchPaginated(hql, null, offset, pagesize);

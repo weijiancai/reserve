@@ -48,14 +48,14 @@ public class OrgManagerImpl extends AbstractManager implements OrgManager {
 		return (Organization)getHibernateTemplate().load(Organization.class, orgId);
 	}
 
-	public PagerModel searchOrgs(int parentId,int offset,int pagesize) {
+	public PagerModel searchOrgs(int parentId) {
 		
 		String hql = "select o from Organization o where o.parent is null";
 		if(parentId != 0){
 			hql = "select o from Organization o where o.parent.id = "+parentId;
 		}
 
-		return searchPaginated(hql,offset, pagesize);
+		return searchPaginated(hql);
 	}
 
 	public void updateOrg(Organization org, int parentId) {

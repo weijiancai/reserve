@@ -38,9 +38,7 @@ public interface OrgManager {
 	 * 根据父机构ID查询子机构列表
 	 * 如果parentId为0，则查询顶级机构列表
 	 * @param parentId
-	 * @param offset 
-	 * @param pagesize
 	 * @return
 	 */
-	public PagerModel searchOrgs(int parentId,int offset,int pagesize);
+	public PagerModel searchOrgs(int parentId);
 }
