@@ -4,11 +4,8 @@ import com.bjsxt.oa.PagerModel;
 import com.bjsxt.oa.manager.OrgManager;
 import com.bjsxt.oa.manager.SystemException;
 import com.bjsxt.oa.model.Organization;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import java.util.List;
-
-public class OrgManagerImpl extends HibernateDaoSupport implements OrgManager {
+public class OrgManagerImpl extends AbstractManager implements OrgManager {
 	
 	public void addOrg(Organization org, int parentId) {
 		if(parentId != 0){
@@ -53,29 +50,12 @@ public class OrgManagerImpl extends HibernateDaoSupport implements OrgManager {
 
 	public PagerModel searchOrgs(int parentId,int offset,int pagesize) {
 		
-		//查询总记录数
-		String selectCountHql = "select count(*) from Organization o where o.parent is null";
-		if(parentId != 0){
-			selectCountHql = "select count(*) from Organization o where o.parent.id = "+parentId;
-		}
-		int total = ((Long)getSession().createQuery(selectCountHql).uniqueResult()).intValue();
-		
-		
-		//查询当前页的数据
 		String hql = "select o from Organization o where o.parent is null";
 		if(parentId != 0){
 			hql = "select o from Organization o where o.parent.id = "+parentId;
 		}
-		List datas = getSession().createQuery(hql)
-						.setFirstResult(offset)
-						.setMaxResults(pagesize)
-						.list();
-		 
-		PagerModel pm = new PagerModel();
-		pm.setDatas(datas);
-		pm.setTotal(total);
-		
-		return pm;
+
+		return searchPaginated(hql,offset, pagesize);
 	}
 
 	public void updateOrg(Organization org, int parentId) {
