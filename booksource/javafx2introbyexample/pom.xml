@@ -1,0 +1,54 @@
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>javafx2introbyexample</groupId>
+	<artifactId>javafx2introbyexample</artifactId>
+	<version>0.1</version>
+	<name>javafx2introbyexample</name>
+	<description>
+        JavaFX 2.0 Introduction by Example
+	</description>
+	<url>http://www.apress.com/9781430242574</url>
+
+	<!--<dependencies>
+        <dependency>
+            <groupId>javafx</groupId>
+            <artifactId>javafxrt</artifactId>
+            <version>2.1</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${env.JAVAFX_HOME}\lib\jfxrt.jar</systemPath>
+        </dependency>
+	</dependencies>-->
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<useSystemClassLoader>true</useSystemClassLoader>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>commons-lang</groupId>
+						<artifactId>commons-lang</artifactId>
+						<version>2.3</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.0-alpha-4</version>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
