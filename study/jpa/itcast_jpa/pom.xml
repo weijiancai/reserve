@@ -14,11 +14,11 @@
             <version>3.2.7.ga</version>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-annotations</artifactId>
             <version>3.4.0.GA</version>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -66,6 +66,25 @@
             <groupId>hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>2.2.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.9</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fly.framework</groupId>
+            <artifactId>dbtest</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 </project>

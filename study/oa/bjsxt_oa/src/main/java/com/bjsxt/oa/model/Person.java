@@ -1,15 +1,63 @@
 package com.bjsxt.oa.model;
 
+/**
+ * 
+ * @author Administrator
+ * @hibernate.class table="T_Person"
+ */
 public class Person {
+	
+	/**
+	 * @hibernate.id generator-class="native"
+	 */
 	private int id;
+	
+	/**
+	 * @hibernate.property
+	 */
 	private String name;
+	
+	/**
+	 * @hibernate.property
+	 */
 	private String sex;
+	
+	/**
+	 * @hibernate.property
+	 */
 	private String address;
+	
+	/**
+	 * @hibernate.property
+	 */
 	private int age;
+	
+	/**
+	 * @hibernate.property
+	 */
 	private String duty;
+	
+	/**
+	 * @hibernate.property
+	 */
 	private String phone;
+	
+	/**
+	 * @hibernate.many-to-one
+	 */
 	private Organization org;
 	
+	/**
+	 * @hibernate.one-to-one property-ref="person"
+	 */
+	private User user;
+	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	public String getSex() {
 		return sex;
 	}

@@ -2,12 +2,13 @@ package com.bjsxt.oa.model;
 
 import java.util.Set;
 
+
 /**
  * 
  * @author Administrator
- * @hibernate.class table="T_Organization"
+ * @hibernate.class table="T_Module"
  */
-public class Organization {
+public class Module {
 	
 	/**
 	 * @hibernate.id generator-class="native"
@@ -22,22 +23,27 @@ public class Organization {
 	/**
 	 * @hibernate.property
 	 */
+	private String url;
+	
+	/**
+	 * @hibernate.property unique="true"
+	 */
 	private String sn;
 	
 	/**
 	 * @hibernate.property
 	 */
-	private String description;
+	private int orderNo;
 	
 	/**
 	 * @hibernate.many-to-one column="pid"
 	 */
-	private Organization parent;
+	private Module parent;
 	
 	/**
 	 * @hibernate.set lazy="extra" inverse="true"
 	 * @hibernate.key column="pid"
-	 * @hibernate.one-to-many class="com.bjsxt.oa.model.Organization"
+	 * @hibernate.one-to-many class="com.bjsxt.oa.model.Module"
 	 */
 	private Set children;
 	
@@ -53,22 +59,28 @@ public class Organization {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
 	public String getSn() {
 		return sn;
 	}
 	public void setSn(String sn) {
 		this.sn = sn;
 	}
-	public String getDescription() {
-		return description;
+	public int getOrderNo() {
+		return orderNo;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+	public void setOrderNo(int orderNo) {
+		this.orderNo = orderNo;
 	}
-	public Organization getParent() {
+	public Module getParent() {
 		return parent;
 	}
-	public void setParent(Organization parent) {
+	public void setParent(Module parent) {
 		this.parent = parent;
 	}
 	public Set getChildren() {
