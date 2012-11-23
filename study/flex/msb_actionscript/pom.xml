@@ -14,7 +14,7 @@
         <dependency>
             <groupId>com.adobe.flex.framework</groupId>
             <artifactId>flex-framework</artifactId>
-            <version>4.1.0.16076</version>
+            <version>3.5.0.12683</version>
             <type>pom</type>
         </dependency>
 
@@ -35,7 +35,7 @@
             <plugin>
                 <groupId>org.sonatype.flexmojos</groupId>
                 <artifactId>flexmojos-maven-plugin</artifactId>
-                <version>4.0-RC2</version>
+                <version>3.8</version>
                 <extensions>true</extensions>
                 <configuration>
                     <sourceFile>./Main.mxml</sourceFile>
@@ -45,12 +45,13 @@
                     <locales>
                         <locale>en_US</locale>
                     </locales>
-                    <compilerWarnings>
+                    <!--<compilerWarnings>
                         <warn-no-constructor>false</warn-no-constructor>
-                    </compilerWarnings>
+                    </compilerWarnings>-->
                     <debug>true</debug>
-                    <coverage>true</coverage>
+                    <!--<coverage>true</coverage>-->
                     <aggregate>true</aggregate>
+                    <storepass/>
                 </configuration>
             </plugin>
         </plugins>

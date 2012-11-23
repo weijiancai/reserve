@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+    <mx:ApplicationControlBar dock="true" width="100%" height="90">
+        <mx:Canvas width="100%" height="100%">
+            <mx:Label text="Flex" x="0" y="0"/>
+            <mx:Label text="GROCER" x="0" y="41"/>
+            <mx:Button id="btnViewCart" label="View Cart"/>
+            <mx:Button id="btnCheckout" label="Checkout"/>
+        </mx:Canvas>
+    </mx:ApplicationControlBar>
+
+    <mx:Label text="(c)2006, Flex GROCER"/>
+
+    <mx:HBox width="100%" height="100%" x="0" y="0" id="bodyBox">
+        <mx:VBox width="100%" height="100%">
+            <mx:Label id="prodName" text="Milk"/>
+            <mx:Label id="price" text="$1.99"/>
+            <mx:Button id="add" label="Add to Cart"/>
+        </mx:VBox>
+    </mx:HBox>
+
+</mx:Application>

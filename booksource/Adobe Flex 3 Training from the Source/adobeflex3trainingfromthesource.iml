@@ -5,71 +5,34 @@
   </component>
   <component name="FlexBuildConfigurationManager" active="adobeflex3trainingfromthesource">
     <configurations>
-      <configuration name="adobeflex3trainingfromthesource" main-class="..Main" output-file="adobeflex3trainingfromthesource.swf" output-folder="$MODULE_DIR$/target">
+      <configuration name="adobeflex3trainingfromthesource" output-file="adobeflex3trainingfromthesource.swf" output-folder="$MODULE_DIR$/target">
         <dependencies>
           <entries>
-            <entry library-name="Maven: com.adobe.flex.framework:datavisualization:swc:4.1.0.16076" library-level="project">
+            <entry library-name="Maven: com.adobe.flex.framework:flex:swc:3.5.0.12683" library-level="project">
               <dependency linkage="Merged" />
             </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:flash-integration:swc:4.1.0.16076" library-level="project">
+            <entry library-name="Maven: com.adobe.flex.framework:framework:swc:3.5.0.12683" library-level="project">
               <dependency linkage="Merged" />
             </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:flex:swc:4.1.0.16076" library-level="project">
+            <entry library-name="Maven: com.adobe.flex.framework:rpc:swc:3.5.0.12683" library-level="project">
               <dependency linkage="Merged" />
             </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:framework:swc:4.1.0.16076" library-level="project">
+            <entry library-name="Maven: com.adobe.flex.framework:utilities:swc:3.5.0.12683" library-level="project">
               <dependency linkage="Merged" />
             </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:osmf:swc:4.1.0.16076" library-level="project">
+            <entry library-name="Maven: com.adobe.flex.framework:playerglobal:swc:9:3.5.0.12683" library-level="project">
               <dependency linkage="Merged" />
             </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:rpc:swc:4.1.0.16076" library-level="project">
+            <entry library-name="Maven: com.adobe.flex.framework:framework:rb.swc:3.5.0.12683" library-level="project">
               <dependency linkage="Merged" />
             </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:spark:swc:4.1.0.16076" library-level="project">
-              <dependency linkage="Merged" />
-            </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:sparkskins:swc:4.1.0.16076" library-level="project">
-              <dependency linkage="Merged" />
-            </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:textLayout:swc:4.1.0.16076" library-level="project">
-              <dependency linkage="Merged" />
-            </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:utilities:swc:4.1.0.16076" library-level="project">
-              <dependency linkage="Merged" />
-            </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:datavisualization:rb.swc:4.1.0.16076" library-level="project">
-              <dependency linkage="Merged" />
-            </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:framework:rb.swc:4.1.0.16076" library-level="project">
-              <dependency linkage="Merged" />
-            </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:osmf:rb.swc:4.1.0.16076" library-level="project">
-              <dependency linkage="Merged" />
-            </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:rpc:rb.swc:4.1.0.16076" library-level="project">
-              <dependency linkage="Merged" />
-            </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:spark:rb.swc:4.1.0.16076" library-level="project">
-              <dependency linkage="Merged" />
-            </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:textLayout:rb.swc:4.1.0.16076" library-level="project">
-              <dependency linkage="Merged" />
-            </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:flash-integration:rb.swc:4.1.0.16076" library-level="project">
-              <dependency linkage="Merged" />
-            </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:playerglobal:swc:10.0:4.1.0.16076" library-level="project">
-              <dependency linkage="Merged" />
-            </entry>
-            <entry library-name="Maven: com.adobe.flex.framework:playerglobal:rb.swc:4.1.0.16076" library-level="project">
+            <entry library-name="Maven: com.adobe.flex.framework:rpc:rb.swc:3.5.0.12683" library-level="project">
               <dependency linkage="Merged" />
             </entry>
             <entry library-name="Maven: com.adobe.flexunit:flexunit:swc:4.0-rc-1" library-level="project">
               <dependency linkage="Test" />
             </entry>
           </entries>
-          <sdk name="compiler-4.1.0.16076.pom" />
         </dependencies>
         <compiler-options>
           <map>
@@ -91,32 +54,17 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/flex" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/flex" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="jdk" jdkName="compiler-4.1.0.16076.pom" jdkType="Flexmojos SDK Type" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:datavisualization:swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:flash-integration:swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:flex:swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:framework:swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:osmf:swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:rpc:swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:spark:swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:sparkskins:swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:textLayout:swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:utilities:swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:datavisualization:rb.swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:framework:rb.swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:osmf:rb.swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:rpc:rb.swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:spark:rb.swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:textLayout:rb.swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:flash-integration:rb.swc:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:playerglobal:swc:10.0:4.1.0.16076" level="project" />
-    <orderEntry type="library" name="Maven: com.adobe.flex.framework:playerglobal:rb.swc:4.1.0.16076" level="project" />
+    <orderEntry type="library" name="Maven: com.adobe.flex.framework:flex:swc:3.5.0.12683" level="project" />
+    <orderEntry type="library" name="Maven: com.adobe.flex.framework:framework:swc:3.5.0.12683" level="project" />
+    <orderEntry type="library" name="Maven: com.adobe.flex.framework:rpc:swc:3.5.0.12683" level="project" />
+    <orderEntry type="library" name="Maven: com.adobe.flex.framework:utilities:swc:3.5.0.12683" level="project" />
+    <orderEntry type="library" name="Maven: com.adobe.flex.framework:playerglobal:swc:9:3.5.0.12683" level="project" />
+    <orderEntry type="library" name="Maven: com.adobe.flex.framework:framework:rb.swc:3.5.0.12683" level="project" />
+    <orderEntry type="library" name="Maven: com.adobe.flex.framework:rpc:rb.swc:3.5.0.12683" level="project" />
     <orderEntry type="library" name="Maven: com.adobe.flexunit:flexunit:swc:4.0-rc-1" level="project" />
   </component>
 </module>

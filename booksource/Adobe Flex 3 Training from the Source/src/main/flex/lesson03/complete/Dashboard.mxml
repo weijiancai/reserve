@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal">
+    <mx:Text text="I am using the Flex Properties View" x="160" y="180"/>
+</mx:Application>
