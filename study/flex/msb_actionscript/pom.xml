@@ -5,6 +5,7 @@
     <groupId>com.wjc.reserve.study.flex</groupId>
     <artifactId>msb_actionscript</artifactId>
     <version>0.1</version>
+    <description>尚学堂马士兵_Flex基础</description>
 
     <packaging>swf</packaging>
 
@@ -35,21 +36,21 @@
             <plugin>
                 <groupId>org.sonatype.flexmojos</groupId>
                 <artifactId>flexmojos-maven-plugin</artifactId>
-                <version>3.8</version>
+                <version>4.0-RC2</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <sourceFile>./Main.mxml</sourceFile>
+                    <!--<sourceFile>./as01/AS_0100_HelloWorld.as</sourceFile>-->
                     <!--<output>../WebRoot/flex/${project.build.finalName}.swf</output>
                     <services>../WebRoot/WEB-INF/flex/services-config.xml</services>
                     <contextRoot>/yuncrm</contextRoot>-->
-                    <locales>
+                    <!--<locales>
                         <locale>en_US</locale>
-                    </locales>
-                    <!--<compilerWarnings>
+                    </locales>-->
+                    <compilerWarnings>
                         <warn-no-constructor>false</warn-no-constructor>
-                    </compilerWarnings>-->
+                    </compilerWarnings>
                     <debug>true</debug>
-                    <!--<coverage>true</coverage>-->
+                    <coverage>true</coverage>
                     <aggregate>true</aggregate>
                     <storepass/>
                 </configuration>
