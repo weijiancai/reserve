@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal">
-    <mx:Text text="I am using the Flex Properties View" x="160" y="180"/>
+    <mx:ApplicationControlBar dock="true">
+        <mx:LinkButton label="All"/>
+        <mx:LinkButton label="Sales"/>
+        <mx:LinkButton label="Categories"/>
+        <mx:LinkButton label="Comparison"/>
+    </mx:ApplicationControlBar>
+
+    <mx:Panel id="sales" width="100%" height="100%" title="Sales Chart">
+        <mx:ControlBar></mx:ControlBar>
+    </mx:Panel>
+
+    <mx:VBox id="rightCharts" width="100%" height="100%">
+        <mx:Panel id="type" width="100%" height="100%" title="Category Chart">
+            <mx:ControlBar></mx:ControlBar>
+        </mx:Panel>
+        <mx:Panel id="comp" width="100%" height="100%" title="Comparison Chart">
+            <mx:ControlBar></mx:ControlBar>
+        </mx:Panel>
+    </mx:VBox>
 </mx:Application>

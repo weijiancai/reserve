@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" creationComplete="init()">
+
+    <mx:Script><![CDATA[
+        import mx.rpc.events.ResultEvent;
+
+        private function selectUser():void {
+            var user:String = users.selectedValue as String;
+            trace(user);
+            if("张三" == user) {
+                this.currentState = 'askForLeaveOrder';
+            } else if("管理员" == user) {
+                this.currentState = '';
+            }
+        }
+
+        private function init():void {
+            processImage.source = "http://localhost:8088/process?method=getImage";
+        }
+
+        private function submitForm():void {
+            trace("submitForm");
+            startProcess.send();
+        }
+
+        private function startProcessHandler(event:ResultEvent):void {
+
+        }
+
+    ]]></mx:Script>
+
+    <mx:RadioButtonGroup id="users" change="selectUser()"/>
+
+    <mx:HTTPService id="startProcess" url="http://localhost:8088/process?method=startProcess" result="startProcessHandler(event)">
+        <mx:request>
+            <name>zhangsan</name>
+            <days>{days.text}</days>
+            <desc>{desc.text}</desc>
+        </mx:request>
+    </mx:HTTPService>
+
+    <mx:ApplicationControlBar dock="true">
+        <mx:Canvas width="100%" height="100%">
+            <mx:HBox right="10" top="5" bottom="5">
+                <mx:RadioButton id="admin" label="管理员" group="{users}" selected="true"/>
+                <mx:RadioButton id="zhangsan" label="张三" group="{users}"/>
+                <mx:RadioButton id="lisi" label="李四" group="{users}"/>
+                <mx:RadioButton id="wangwu" label="王五" group="{users}"/>
+                <mx:RadioButton id="maliu" label="马六" group="{users}"/>
+            </mx:HBox>
+        </mx:Canvas>
+    </mx:ApplicationControlBar>
+
+    <mx:HBox width="100%">
+        <mx:Image id="processImage"/>
+        <mx:VBox id="orderBox">
+
+        </mx:VBox>
+    </mx:HBox>
+
+
+    <mx:states>
+        <mx:State name="askForLeaveOrder">
+            <mx:AddChild relativeTo="{orderBox}" position="lastChild">
+                <mx:Form>
+                    <mx:FormHeading label="请假单" width="100%"/>
+                    <mx:FormItem label="当前请假人：">
+                        <mx:Label text="张三"/>
+                    </mx:FormItem>
+                    <mx:FormItem label="请假天数：">
+                        <mx:TextInput id="days" text="3"/>
+                    </mx:FormItem>
+                    <mx:FormItem label="请假原因：">
+                        <mx:TextArea id="desc" width="200" height="100"/>
+                    </mx:FormItem>
+                    <mx:FormItem direction="horizontal">
+                        <mx:Button label="提交" click="submitForm()"/>
+                    </mx:FormItem>
+                </mx:Form>
+            </mx:AddChild>
+            <!--<mx:RemoveChild target="{linkbutton1}"/>
+            <mx:AddChild relativeTo="{cartBox}" position="lastChild">
+                <mx:LinkButton label="Continue Shopping" click="this.currentState=''"/>
+            </mx:AddChild>-->
+        </mx:State>
+
+        <mx:State name="myTasks">
+            <mx:AddChild>
+                <mx:DataGrid>
+                    <mx:columns>
+                        <mx:DataGridColumn></mx:DataGridColumn>
+                    </mx:columns>
+                </mx:DataGrid>
+            </mx:AddChild>
+        </mx:State>
+    </mx:states>
+</mx:Application>
