@@ -1,0 +1,218 @@
+<definitions joinwork:updateTime="1331283630824" exporter="Joinwork Process Studio" exporterVersion="3.1.0"
+             targetNamespace="http://www.ygsoft.com/" id="leaveApplicationAndBacklog" name="请假申请--条件分支合并"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:joinwork="http://www.joinwork.net/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:activiti="http://activiti.org/bpmn">
+
+    <process id="条件分支与合并流程" name="条件分支与合并流程">
+        <laneSet id="LaneSet_1" name="LaneSet_1">
+            <lane id="Lane_1" name="业务部门">
+                <flowNodeRef>Start_1</flowNodeRef>
+                <flowNodeRef>Task_1</flowNodeRef>
+                <flowNodeRef>Gateway_1</flowNodeRef>
+                <flowNodeRef>Task_2</flowNodeRef>
+                <flowNodeRef>Task_3</flowNodeRef>
+                <flowNodeRef>Gateway_2</flowNodeRef>
+                <flowNodeRef>Gateway_4</flowNodeRef>
+            </lane>
+            <lane id="Lane_2" name="人力资源部">
+                <flowNodeRef>Task_4</flowNodeRef>
+            </lane>
+            <lane id="Lane_3" name="考勤系统">
+                <flowNodeRef>Task_5</flowNodeRef>
+                <flowNodeRef>Gateway_3</flowNodeRef>
+                <flowNodeRef>End_1</flowNodeRef>
+            </lane>
+        </laneSet>
+        <startEvent id="Start_1" name="开始">
+            <outgoing>SequenceFlow_1</outgoing>
+        </startEvent>
+        <userTask id="Task_1" name="填写请假申请单">
+            <incoming>SequenceFlow_1</incoming>
+            <outgoing>SequenceFlow_2</outgoing>
+            <humanPerformer>
+                <resourceAssignmentExpression>
+                    <formalExpression>zhangsan</formalExpression>
+                </resourceAssignmentExpression>
+            </humanPerformer>
+        </userTask>
+        <exclusiveGateway id="Gateway_1" name="假期时长" gatewayDirection="Diverging">
+            <incoming>SequenceFlow_2</incoming>
+            <outgoing>SequenceFlow_3</outgoing>
+            <outgoing>SequenceFlow_4</outgoing>
+        </exclusiveGateway>
+        <userTask id="Task_2" name="部门经理审批">
+            <incoming>SequenceFlow_3</incoming>
+            <outgoing>SequenceFlow_5</outgoing>
+            <humanPerformer>
+                <resourceAssignmentExpression>
+                    <formalExpression>lisi</formalExpression>
+                </resourceAssignmentExpression>
+            </humanPerformer>
+        </userTask>
+        <userTask id="Task_3" name="基层经理审批">
+            <incoming>SequenceFlow_4</incoming>
+            <outgoing>SequenceFlow_6</outgoing>
+            <humanPerformer>
+                <resourceAssignmentExpression>
+                    <formalExpression>wangwu</formalExpression>
+                </resourceAssignmentExpression>
+            </humanPerformer>
+        </userTask>
+        <parallelGateway id="Gateway_2" name="转备案" gatewayDirection="Diverging">
+            <incoming>SequenceFlow_12</incoming>
+            <outgoing>SequenceFlow_7</outgoing>
+            <outgoing>SequenceFlow_8</outgoing>
+        </parallelGateway>
+        <userTask id="Task_4" name="人力专员确认">
+            <incoming>SequenceFlow_7</incoming>
+            <outgoing>SequenceFlow_9</outgoing>
+            <humanPerformer>
+                <resourceAssignmentExpression>
+                    <formalExpression>maliu</formalExpression>
+                </resourceAssignmentExpression>
+            </humanPerformer>
+        </userTask>
+        <serviceTask id="Task_5" name="自动备案" activiti:class="com.ygsoft.process.AutoRecordActivityDelegate">
+            <incoming>SequenceFlow_8</incoming>
+            <outgoing>SequenceFlow_10</outgoing>
+        </serviceTask>
+        <parallelGateway id="Gateway_3" name="合并" gatewayDirection="Converging">
+            <incoming>SequenceFlow_9</incoming>
+            <incoming>SequenceFlow_10</incoming>
+            <outgoing>SequenceFlow_11</outgoing>
+        </parallelGateway>
+        <endEvent id="End_1" name="结束">
+            <incoming>SequenceFlow_11</incoming>
+        </endEvent>
+        <sequenceFlow id="SequenceFlow_1" sourceRef="Start_1" targetRef="Task_1"/>
+        <sequenceFlow id="SequenceFlow_2" sourceRef="Task_1" targetRef="Gateway_1"/>
+        <sequenceFlow id="SequenceFlow_3" sourceRef="Gateway_1" targetRef="Task_2">
+            <conditionExpression><![CDATA[${order.days >= 3}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_4" sourceRef="Gateway_1" targetRef="Task_3">
+            <conditionExpression><![CDATA[${order.days < 3}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_5" sourceRef="Task_2" targetRef="Gateway_4"/>
+        <sequenceFlow id="SequenceFlow_7" sourceRef="Gateway_2" targetRef="Task_4"/>
+        <sequenceFlow id="SequenceFlow_9" sourceRef="Task_4" targetRef="Gateway_3"/>
+        <sequenceFlow id="SequenceFlow_10" sourceRef="Task_5" targetRef="Gateway_3"/>
+        <sequenceFlow id="SequenceFlow_11" sourceRef="Gateway_3" targetRef="End_1"/>
+        <sequenceFlow id="SequenceFlow_8" sourceRef="Gateway_2" targetRef="Task_5"/>
+        <exclusiveGateway id="Gateway_4" name="合并网关" gatewayDirection="Converging">
+            <incoming>SequenceFlow_5</incoming>
+            <incoming>SequenceFlow_6</incoming>
+            <outgoing>SequenceFlow_12</outgoing>
+        </exclusiveGateway>
+        <sequenceFlow id="SequenceFlow_12" sourceRef="Gateway_4" targetRef="Gateway_2"/>
+        <sequenceFlow id="SequenceFlow_6" sourceRef="Task_3" targetRef="Gateway_4"/>
+    </process>
+    <bpmndi:BPMNDiagram id="ProcessDiagram_1" name="ProcessDiagram_1">
+        <bpmndi:BPMNPlane bpmnElement="条件分支与合并流程">
+            <bpmndi:BPMNShape bpmnElement="Start_1" id="Shape_1">
+                <dc:Bounds height="22" width="22" x="103" y="135"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Task_1" id="Shape_2">
+                <dc:Bounds height="50" width="80" x="173" y="121"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="SequenceFlow_1" id="Connector_1">
+                <di:waypoint x="126" y="146"/>
+                <di:waypoint x="172" y="146"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNShape bpmnElement="Gateway_1" id="Shape_4" isMarkerVisible="false">
+                <dc:Bounds height="30" width="38" x="294" y="131"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Task_2" id="Shape_5">
+                <dc:Bounds height="50" width="80" x="375" y="76"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Task_3" id="Shape_6">
+                <dc:Bounds height="50" width="80" x="372" y="170"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="SequenceFlow_2" id="Connector_2">
+                <di:waypoint x="254" y="146"/>
+                <di:waypoint x="293" y="146"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="SequenceFlow_3" id="Connector_3">
+                <di:waypoint x="313" y="130"/>
+                <di:waypoint x="313" y="99"/>
+                <di:waypoint x="313" y="99"/>
+                <di:waypoint x="313" y="99"/>
+                <di:waypoint x="367" y="99"/>
+                <di:waypoint x="374" y="99"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="SequenceFlow_4" id="Connector_4">
+                <di:waypoint x="313" y="162"/>
+                <di:waypoint x="313" y="200"/>
+                <di:waypoint x="371" y="200"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNShape bpmnElement="Gateway_2" id="Shape_7">
+                <dc:Bounds height="30" width="38" x="634" y="133"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Task_4" id="Shape_8">
+                <dc:Bounds height="50" width="80" x="613" y="264"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="SequenceFlow_5" id="Connector_5">
+                <di:waypoint x="456" y="99"/>
+                <di:waypoint x="506" y="99"/>
+                <di:waypoint x="506" y="132"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="SequenceFlow_7" id="Connector_7">
+                <di:waypoint x="653" y="164"/>
+                <di:waypoint x="653" y="263"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNShape bpmnElement="Task_5" id="Shape_9">
+                <dc:Bounds height="50" width="80" x="695" y="352"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Lane_1" id="LaneCom_1" isHorizontal="true">
+                <dc:Bounds height="167" width="909" x="3" y="60"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Lane_2" id="LaneCom_2" isHorizontal="true">
+                <dc:Bounds height="100" width="910" x="3" y="227"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Lane_3" id="LaneCom_3" isHorizontal="true">
+                <dc:Bounds height="179" width="910" x="2" y="327"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Gateway_3" id="Shape_3">
+                <dc:Bounds height="30" width="38" x="634" y="425"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="SequenceFlow_9" id="Connector_9">
+                <di:waypoint x="653" y="315"/>
+                <di:waypoint x="653" y="363"/>
+                <di:waypoint x="653" y="424"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="SequenceFlow_10" id="Connector_10">
+                <di:waypoint x="735" y="403"/>
+                <di:waypoint x="673" y="440"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNShape bpmnElement="End_1" id="Shape_10">
+                <dc:Bounds height="22" width="22" x="395" y="429"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="SequenceFlow_11" id="Connector_11">
+                <di:waypoint x="633" y="440"/>
+                <di:waypoint x="418" y="440"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="SequenceFlow_8" id="Connector_8">
+                <di:waypoint x="673" y="143"/>
+                <di:waypoint x="735" y="143"/>
+                <di:waypoint x="735" y="351"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNShape bpmnElement="Gateway_4" id="Shape_11" isMarkerVisible="false">
+                <dc:Bounds height="30" width="38" x="487" y="133"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds height="15" width="80" x="466" y="165"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="SequenceFlow_12" id="Connector_12">
+                <di:waypoint x="526" y="148"/>
+                <di:waypoint x="525" y="148"/>
+                <di:waypoint x="633" y="148"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="SequenceFlow_6" id="Connector_6">
+                <di:waypoint x="453" y="200"/>
+                <di:waypoint x="506" y="200"/>
+                <di:waypoint x="506" y="164"/>
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>
