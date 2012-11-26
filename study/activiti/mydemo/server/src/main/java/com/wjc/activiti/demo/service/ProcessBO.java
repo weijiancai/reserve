@@ -1,6 +1,7 @@
 package com.wjc.activiti.demo.service;
 
 import org.activiti.engine.*;
+import org.activiti.engine.impl.util.IoUtil;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentBuilder;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -8,6 +9,7 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +51,19 @@ public class ProcessBO {
         ProcessDefinition processDefinition = getRepositoryService().createProcessDefinitionQuery().processDefinitionKey(PROCESS_KEY).latestVersion().singleResult();
         String diagramResourceName = processDefinition.getDiagramResourceName();
         return getRepositoryService().getResourceAsStream(processDefinition.getDeploymentId(), diagramResourceName);
+    }
+
+    /**
+     * 获得流程定义xml文件
+     *
+     * @return 返回流程定义xml文件内容
+     */
+    public static String getProcessDefXml() throws UnsupportedEncodingException {
+        ProcessDefinition processDefinition = getRepositoryService().createProcessDefinitionQuery().processDefinitionKey(PROCESS_KEY).latestVersion().singleResult();
+        String xmlResourceName = processDefinition.getResourceName();
+        InputStream is = getRepositoryService().getResourceAsStream(processDefinition.getDeploymentId(), xmlResourceName);
+        byte[] bytes = IoUtil.readInputStream(is, xmlResourceName);
+        return new String(bytes, "UTF-8");
     }
 
     public static String startProcess(String key, Map<String, Object> params) {

@@ -23,34 +23,45 @@ import java.util.Map;
 public class ProcessAction extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String method = req.getParameter("method");
-        if ("getImage".equals(method)) {
-            res.setContentType("image/png");
-            InputStream is = ProcessBO.getProcessImage();
-            PrintWriter pw = res.getWriter();
-            int i;
-            while ((i = is.read()) != -1) {
-                pw.write(i);
-            }
-            pw.flush();
-            pw.close();
-        } else if ("startProcess".equals(method)) {
-            String name = req.getParameter("name");
-            String days = req.getParameter("days");
-            String desc = req.getParameter("desc");
+        switch (method) {
+            case "getImage":
+                res.setContentType("image/png");
+                InputStream is = ProcessBO.getProcessImage();
+                PrintWriter pw = res.getWriter();
+                int i;
+                while ((i = is.read()) != -1) {
+                    pw.write(i);
+                }
+                pw.flush();
+                pw.close();
+                break;
+            case "startProcess":
+                String name = req.getParameter("name");
+                String days = req.getParameter("days");
+                String desc = req.getParameter("desc");
 
-            // 保存单据
-            Order order = new Order(name, Integer.parseInt(days), desc);
-            OrderBO.saveOrder(order);
+                // 保存单据
+                Order order = new Order(name, Integer.parseInt(days), desc);
+                OrderBO.saveOrder(order);
 
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put("order", order);
-            String processId = ProcessBO.startProcess(ProcessBO.PROCESS_KEY, params);
+                Map<String, Object> params = new HashMap<String, Object>();
+                params.put("order", order);
+                String processId = ProcessBO.startProcess(ProcessBO.PROCESS_KEY, params);
 
-            List<Task> tasks = ProcessBO.getTasksByUser(processId, name);
-            for (Task task : tasks) {
-                System.out.println("完成任务： " + task.getName());
-                ProcessBO.getTaskService().complete(task.getId());
-            }
+                List<Task> tasks = ProcessBO.getTasksByUser(processId, name);
+                for (Task task : tasks) {
+                    System.out.println("完成任务： " + task.getName());
+                    ProcessBO.getTaskService().complete(task.getId());
+                }
+                break;
+            case "getProcessDefXml":
+                res.setContentType("text/xml");
+                String xml = ProcessBO.getProcessDefXml();
+                System.out.println(xml);
+                res.getWriter().write(xml);
+                res.getWriter().flush();
+                res.getWriter().close();
+                break;
         }
     }
 

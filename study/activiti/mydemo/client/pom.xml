@@ -29,7 +29,7 @@
     </dependencies>
 
     <build>
-        <finalName>msb_actionscript</finalName>
+        <finalName>ApplicationDemo</finalName>
         <sourceDirectory>src/main/flex</sourceDirectory>
         <testSourceDirectory>src/test/flex</testSourceDirectory>
         <plugins>

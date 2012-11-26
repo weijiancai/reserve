@@ -2,20 +2,22 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" creationComplete="init()">
 
     <mx:Script><![CDATA[
+        import mx.controls.Alert;
         import mx.rpc.events.ResultEvent;
 
         private function selectUser():void {
             var user:String = users.selectedValue as String;
             trace(user);
-            if("张三" == user) {
+            if ("张三" == user) {
                 this.currentState = 'askForLeaveOrder';
-            } else if("管理员" == user) {
+            } else if ("管理员" == user) {
                 this.currentState = '';
             }
         }
 
         private function init():void {
             processImage.source = "http://localhost:8088/process?method=getImage";
+            processDefXml.send();
         }
 
         private function submitForm():void {
@@ -27,7 +29,18 @@
 
         }
 
-    ]]></mx:Script>
+        private static function processDefXmlHandler(event:ResultEvent):void {
+//            Alert.show(event.result.toString());
+            var xml:XML = event.result as XML;
+
+            namespace bpmndi = "http://www.omg.org/spec/BPMN/20100524/DI";
+            use namespace bpmndi;
+            Alert.show("a");
+            Alert.show(typeof xml.process);
+            Alert.show("abc");
+//            var xml:XMLList =
+        }
+        ]]></mx:Script>
 
     <mx:RadioButtonGroup id="users" change="selectUser()"/>
 
@@ -38,6 +51,8 @@
             <desc>{desc.text}</desc>
         </mx:request>
     </mx:HTTPService>
+
+    <mx:HTTPService id="processDefXml" url="http://localhost:8088/process?method=getProcessDefXml" result="processDefXmlHandler(event)"/>
 
     <mx:ApplicationControlBar dock="true">
         <mx:Canvas width="100%" height="100%">
