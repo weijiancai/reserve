@@ -5,6 +5,8 @@
         import mx.controls.Alert;
         import mx.rpc.events.ResultEvent;
 
+        private var processDefineXml:XML;
+
         private function selectUser():void {
             var user:String = users.selectedValue as String;
             trace(user);
@@ -29,16 +31,118 @@
 
         }
 
-        private static function processDefXmlHandler(event:ResultEvent):void {
-//            Alert.show(event.result.toString());
-            var xml:XML = event.result as XML;
+        private function processDefXmlHandler(event:ResultEvent):void {
+            processDefineXml = XML(event.result);
+        }
 
-            namespace bpmndi = "http://www.omg.org/spec/BPMN/20100524/DI";
-            use namespace bpmndi;
-            Alert.show("a");
-            Alert.show(typeof xml.process);
-            Alert.show("abc");
-//            var xml:XMLList =
+        // 画菱形
+        private static function drawRhombus(graphics:Graphics, x:Number, y:Number, width:Number, height:Number):void {
+            graphics.moveTo(x, y + height / 2);
+            graphics.lineTo(x + width / 2, y);
+            graphics.lineTo(x + width, y + height / 2);
+            graphics.lineTo(x + width / 2, y + height);
+            graphics.lineTo(x, y + height / 2);
+        }
+
+        // 显示流程图画布
+        private function showProcessImageCanvas():void {
+
+            if (showProcessImageCanvasBox.selected) {
+                this.currentState = 'processImageCanvas';
+                drawProcessImage();
+            } else {
+                this.currentState = '';
+            }
+        }
+
+        private function drawProcessImage():void {
+            var model:Namespace = processDefineXml.namespace();
+            var bpmndi:Namespace = processDefineXml.namespace("bpmndi");
+            var dc:Namespace = processDefineXml.namespace("dc");
+            var di:Namespace = processDefineXml.namespace("di");
+
+            var i:int;
+            var startEventArray:Array = new Array();
+            var endEventArray:Array = new Array();
+            var userTaskArray:Array = new Array();
+            var exclusiveGatewayArray:Array = new Array();
+            var parallelGatewayArray:Array = new Array();
+            var serviceTaskArray:Array = new Array();
+
+
+            var processNodeList:XMLList = processDefineXml.model::process.*;
+            var node:XML;
+
+            for (i = 0; i < processNodeList.length(); i++) {
+                node = processNodeList[i];
+//                Alert.show(node.localName());
+                if ("startEvent" == node.localName()) {
+                    startEventArray.push(node.@id.toString());
+                } else if ("endEvent" == node.localName()) {
+                    endEventArray.push(node.@id.toString());
+                } else if ("userTask" == node.localName()) {
+                    userTaskArray.push(node.@id.toString());
+                } else if ("exclusiveGateway" == node.localName()) {
+                    exclusiveGatewayArray.push(node.@id.toString());
+                } else if ("parallelGateway" == node.localName()) {
+                    parallelGatewayArray.push(node.@id.toString());
+                } else if ("serviceTask" == node.localName()) {
+                    serviceTaskArray.push(node.@id.toString());
+                }
+            }
+//            Alert.show(startEventArray.join());
+
+            var xmlList:XMLList = processDefineXml.bpmndi::BPMNDiagram..bpmndi::BPMNShape; // 图形
+//            Alert.show(xmlList.length());
+
+            var baseX:Number = canvas.x;
+            var baseY:Number = canvas.y;
+            var x:Number, y:Number, width:Number, height:Number, bpmnElement:String;
+            for (i = 0; i < xmlList.length(); i++) {
+                bpmnElement = xmlList[i].@bpmnElement;
+                x = baseX + Number(xmlList[i].dc::Bounds.@x);
+                y = baseY + Number(xmlList[i].dc::Bounds.@y);
+                width = Number(xmlList[i].dc::Bounds.@width);
+                height = Number(xmlList[i].dc::Bounds.@height);
+
+                if (startEventArray.indexOf(bpmnElement) != -1) { // 开始节点
+//                    Alert.show("Draw startEvent : " + bpmnElement)
+                    canvas.graphics.lineStyle(1, 0x000000);
+                    canvas.graphics.drawCircle(x + width / 2, y + height / 2, 15);
+                } else if (endEventArray.indexOf(bpmnElement) != -1) { // 结束节点
+//                    Alert.show("Draw endEvent : " + bpmnElement)
+                    canvas.graphics.lineStyle(4, 0x000000);
+                    canvas.graphics.drawCircle(x + width / 2, y + height / 2, 15);
+                } else if (exclusiveGatewayArray.indexOf(bpmnElement) != -1) {
+                    canvas.graphics.lineStyle(1, 0x123456);
+                    drawRhombus(canvas.graphics, x, y, width, height);
+                }
+
+                else {
+//                    Alert.show("Draw Rect : " + bpmnElement)
+                    canvas.graphics.lineStyle(1, 0x123456);
+                    canvas.graphics.drawRect(x, y, width, height);
+                }
+//                Alert.show(processNode.length());
+//                Alert.show(processNode.name().toString());
+            }
+
+            xmlList = processDefineXml.bpmndi::BPMNDiagram..bpmndi::BPMNEdge; // 画线
+            for (i = 0; i < xmlList.length(); i++) {
+                canvas.graphics.lineStyle(1, 0x000000);
+
+                var waypointList:XMLList = xmlList[i].di::waypoint;
+                var startX:Number = 0, startY:Number = 0;
+                for (var j:int = 0; j < waypointList.length(); j++) {
+                    if (startX > 0 && startY > 0) {
+                        canvas.graphics.moveTo(startX, startY);
+                        canvas.graphics.lineTo(baseX + Number(waypointList[j].@x), baseY + Number(waypointList[j].@y));
+                    }
+
+                    startX = baseX + Number(waypointList[j].@x);
+                    startY = baseY + Number(waypointList[j].@y);
+                }
+            }
         }
         ]]></mx:Script>
 
@@ -52,11 +156,12 @@
         </mx:request>
     </mx:HTTPService>
 
-    <mx:HTTPService id="processDefXml" url="http://localhost:8088/process?method=getProcessDefXml" result="processDefXmlHandler(event)"/>
+    <mx:HTTPService id="processDefXml" url="http://localhost:8088/process?method=getProcessDefXml" result="processDefXmlHandler(event)" resultFormat="xml"/>
 
     <mx:ApplicationControlBar dock="true">
         <mx:Canvas width="100%" height="100%">
             <mx:HBox right="10" top="5" bottom="5">
+                <mx:CheckBox id="showProcessImageCanvasBox" label="查看流程图画布" change="showProcessImageCanvas()"/>
                 <mx:RadioButton id="admin" label="管理员" group="{users}" selected="true"/>
                 <mx:RadioButton id="zhangsan" label="张三" group="{users}"/>
                 <mx:RadioButton id="lisi" label="李四" group="{users}"/>
@@ -67,12 +172,11 @@
     </mx:ApplicationControlBar>
 
     <mx:HBox width="100%">
-        <mx:Image id="processImage"/>
-        <mx:VBox id="orderBox">
-
-        </mx:VBox>
+        <mx:HBox id="imageBox">
+            <mx:Image id="processImage"/>
+        </mx:HBox>
+        <mx:VBox id="orderBox"/>
     </mx:HBox>
-
 
     <mx:states>
         <mx:State name="askForLeaveOrder">
@@ -99,7 +203,7 @@
             </mx:AddChild>-->
         </mx:State>
 
-        <mx:State name="myTasks">
+        <!--<mx:State name="myTasks">
             <mx:AddChild>
                 <mx:DataGrid>
                     <mx:columns>
@@ -107,6 +211,13 @@
                     </mx:columns>
                 </mx:DataGrid>
             </mx:AddChild>
+        </mx:State>-->
+
+        <mx:State name="processImageCanvas">
+            <mx:AddChild relativeTo="{imageBox}" position="lastChild">
+                <mx:Canvas id="canvas" width="100%"/>
+            </mx:AddChild>
+            <mx:RemoveChild target="{processImage}"/>
         </mx:State>
     </mx:states>
 </mx:Application>

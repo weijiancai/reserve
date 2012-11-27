@@ -1,5 +1,6 @@
 package com.wjc.activiti.demo.service;
 
+import com.wjc.activiti.demo.bean.ProcessEngineBean;
 import org.activiti.engine.*;
 import org.activiti.engine.impl.util.IoUtil;
 import org.activiti.engine.repository.Deployment;
@@ -10,6 +11,7 @@ import org.activiti.engine.task.Task;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -74,5 +76,27 @@ public class ProcessBO {
 
     public static List<Task> getTasksByUser(String processId, String user) {
         return getTaskService().createTaskQuery().processInstanceId(processId).taskAssignee(user).list();
+    }
+
+    /**
+     * 查询流程引擎Bean信息
+     *
+     * @return 返回流程引擎Bean列表
+     */
+    public static List<ProcessEngineBean> getProcessEngines() {
+        List<ProcessEngineBean> processEngineBeans = new ArrayList<>();
+        ProcessEngineBean bean;
+
+        for (ProcessEngine processEngine : ProcessEngines.getProcessEngines().values()) {
+            bean = new ProcessEngineBean(processEngine.getName());
+            ProcessEngineInfo info = ProcessEngines.getProcessEngineInfo(bean.getName());
+            if (null != info) {
+                bean.setException(info.getException());
+                bean.setResourceUrl(info.getResourceUrl());
+            }
+            processEngineBeans.add(bean);
+        }
+
+        return processEngineBeans;
     }
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" creationComplete="init()">
+    <mx:Script><![CDATA[
+        import mx.controls.Alert;
+        import mx.rpc.events.ResultEvent;
+
+        private function init():void {
+            processEngineService.send();
+        }
+
+        private function handlerProcessEngineService(event:ResultEvent):void {
+            var xml:XML = XML(event.result);
+            dg_processEngines.dataProvider = xml.children();
+        }
+
+        private function handleProcessEngineDgClick():void {
+            var obj:Object = dg_processEngines.selectedItem;
+            var name:String = obj.name;
+            Alert.show(name);
+        }
+    ]]></mx:Script>
+
+    <mx:HTTPService id="processEngineService" url="http://localhost:8088/process?method=getProcessEngines" resultFormat="xml" result="handlerProcessEngineService(event)"/>
+
+    <mx:VBox width="100%" height="100%">
+        <mx:Label text="ProcessEngine"/>
+        <mx:DataGrid id="dg_processEngines" width="100%" height="50" itemClick="handleProcessEngineDgClick()">
+            <mx:columns>
+                <mx:DataGridColumn headerText="Name" dataField="name" width="100"/>
+                <mx:DataGridColumn headerText="Exception" dataField="exception" width="100"/>
+                <mx:DataGridColumn headerText="ResourceUrl" dataField="resourceUrl"/>
+            </mx:columns>
+        </mx:DataGrid>
+
+        <mx:Label text="ProcessEngineConfiguration"/>
+        <mx:DataGrid id="dg_processEngineConfiguration" width="100%" height="50" itemClick="handleProcessEngineDgClick()">
+            <mx:columns>
+                <mx:DataGridColumn headerText="Name" dataField="name" width="100"/>
+                <mx:DataGridColumn headerText="Exception" dataField="exception" width="100"/>
+                <mx:DataGridColumn headerText="ResourceUrl" dataField="resourceUrl"/>
+            </mx:columns>
+        </mx:DataGrid>
+    </mx:VBox>
+
+</mx:Application>

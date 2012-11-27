@@ -1,14 +1,17 @@
 package com.wjc.activiti.demo.action;
 
 import com.wjc.activiti.demo.bean.Order;
+import com.wjc.activiti.demo.bean.ProcessEngineBean;
 import com.wjc.activiti.demo.service.OrderBO;
 import com.wjc.activiti.demo.service.ProcessBO;
+import com.wjc.activiti.demo.util.JaxbUtil;
 import org.activiti.engine.task.Task;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -55,17 +58,33 @@ public class ProcessAction extends HttpServlet {
                 }
                 break;
             case "getProcessDefXml":
-                res.setContentType("text/xml");
                 String xml = ProcessBO.getProcessDefXml();
-                System.out.println(xml);
-                res.getWriter().write(xml);
-                res.getWriter().flush();
-                res.getWriter().close();
+                sendXml(res, xml);
+                break;
+            case "getProcessEngines":
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("lists", ProcessBO.getProcessEngines());
+//                sendXml(res, XML.toString(new JSONObject(map)));
+                try {
+                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessEngines(), ProcessEngineBean.class));
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
+    }
+
+    private void sendXml(HttpServletResponse res, String xml) throws IOException {
+        res.setContentType("text/xml");
+        res.setCharacterEncoding("UTF-8");
+        System.out.println(xml);
+        System.out.println("=============================================================================");
+        res.getWriter().write(xml);
+        res.getWriter().flush();
+        res.getWriter().close();
     }
 }
