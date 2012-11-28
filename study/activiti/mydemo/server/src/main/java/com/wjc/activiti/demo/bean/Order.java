@@ -1,10 +1,12 @@
 package com.wjc.activiti.demo.bean;
 
+import java.io.Serializable;
+
 /**
  * @author weijiancai
  * @version 0.0.1
  */
-public class Order {
+public class Order implements Serializable {
     private static int count = 1;
 
     private int id;

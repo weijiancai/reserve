@@ -3,6 +3,7 @@
     <mx:Script><![CDATA[
         import mx.controls.Alert;
         import mx.rpc.events.ResultEvent;
+        import mx.utils.Base64Encoder;
 
         private function init():void {
             processEngineService.send();
@@ -14,13 +15,115 @@
         }
 
         private function handleProcessEngineDgClick():void {
+            // 清空数据
+            dg_deployment.dataProvider = null;
+            dg_processDefine.dataProvider = null;
+
             var obj:Object = dg_processEngines.selectedItem;
             var name:String = obj.name;
-            Alert.show(name);
+            // 请求流程引擎配置信息
+            processEngineConfigurationService.request.processEngineName = name;
+            processEngineConfigurationService.send();
+            // 请求部署信息
+            deploymentService.request.processEngineName = name;
+            deploymentService.send();
+        }
+
+        private function handlerProcessEngineConfigurationService(event:ResultEvent):void {
+            var xml:XML = XML(event.result);
+            dg_processEngineConfiguration.dataProvider = xml.children();
+        }
+
+        private function handlerProcessDefineService(event:ResultEvent):void {
+            var xml:XML = XML(event.result);
+            dg_processDefine.dataProvider = xml.children();
+        }
+
+        private function handlerDeploymentService(event:ResultEvent):void {
+            var xml:XML = XML(event.result);
+            dg_deployment.dataProvider = xml.children();
+        }
+
+        private function handleDeploymentDgClick():void {
+            // 清楚数据
+            dg_processDefine.dataProvider = null;
+
+            var obj:Object = dg_processEngines.selectedItem;
+            var processEngineName:String = obj.name;
+            obj = dg_deployment.selectedItem;
+            var deploymentId:String = obj.id;
+            // 请求流程定义
+            processDefineService.request.processEngineName = processEngineName;
+            processDefineService.request.deploymentId = deploymentId;
+            processDefineService.send();
+        }
+
+        private function handleProcessDefineDgClick():void {
+            // 清楚数据
+            dg_processInstance.dataProvider = null;
+
+            // 请求流程实例
+            processInstanceService.request.processEngineName = getProcessEngineName();
+            processInstanceService.request.processDefineId = getProcessDefineId();
+            processInstanceService.send();
+        }
+
+        // 获取流程引擎名称
+        private function getProcessEngineName():String {
+            return dg_processEngines.selectedItem.name;
+        }
+        // 获取部署ID
+        private function getDeploymentId():String {
+            return dg_deployment.selectedItem.id;
+        }
+        // 获取流程定义ID
+        private function getProcessDefineId():String {
+            return encodeURI(dg_processDefine.selectedItem.id);
+        }
+        // 获取流程实例ID
+        private function getProcessInstanceId():String {
+            return dg_processInstance.selectedItem.id;
+        }
+
+        private function handlerProcessInstanceService(event:ResultEvent):void {
+            var xml:XML = XML(event.result);
+            dg_processInstance.dataProvider = xml.children();
+        }
+
+        private function handleProcessInstanceDgClick():void {
+            // 清除数据
+            dg_processInstanceVariables.dataProvider = null;
+
+            // 获取流程实例变量
+            processInstanceVariableService.request.processEngineName = getProcessEngineName();
+            processInstanceVariableService.request.processInstanceId = getProcessInstanceId();
+            processInstanceVariableService.send();
+
+            // 获取流程实例任务
+            processInstanceTaskService.request.processEngineName = getProcessEngineName();
+            processInstanceTaskService.request.processInstanceId = getProcessInstanceId();
+            processInstanceTaskService.send();
+        }
+
+        private function handlerProcessInstanceVariablesService(event:ResultEvent):void {
+            var xml:XML = XML(event.result);
+            dg_processInstanceVariables.dataProvider = xml.children();
+        }
+
+        private function handlerProcessInstanceTasksService(event:ResultEvent):void {
+            var xml:XML = XML(event.result);
+            dg_processInstanceTasks.dataProvider = xml.children();
         }
     ]]></mx:Script>
 
     <mx:HTTPService id="processEngineService" url="http://localhost:8088/process?method=getProcessEngines" resultFormat="xml" result="handlerProcessEngineService(event)"/>
+    <mx:HTTPService id="processEngineConfigurationService" url="http://localhost:8088/process?method=getProcessEngineConfiguration" resultFormat="xml" result="handlerProcessEngineConfigurationService(event)"/>
+    <mx:HTTPService id="processDefineService" url="http://localhost:8088/process?method=getProcessDefine" resultFormat="xml" result="handlerProcessDefineService(event)"/>
+    <mx:HTTPService id="deploymentService" url="http://localhost:8088/process?method=getDeployment" resultFormat="xml" result="handlerDeploymentService(event)"/>
+    <mx:HTTPService id="processInstanceService" url="http://localhost:8088/process?method=getProcessInstance" resultFormat="xml" result="handlerProcessInstanceService(event)"/>
+    <mx:HTTPService id="processInstanceVariableService" url="http://localhost:8088/process?method=getProcessInstanceVariables" resultFormat="xml" result="handlerProcessInstanceVariablesService(event)"/>
+    <mx:HTTPService id="processInstanceTaskService" url="http://localhost:8088/process?method=getProcessInstanceTasks" resultFormat="xml" result="handlerProcessInstanceTasksService(event)"/>
+
 
     <mx:VBox width="100%" height="100%">
         <mx:Label text="ProcessEngine"/>
@@ -33,11 +136,115 @@
         </mx:DataGrid>
 
         <mx:Label text="ProcessEngineConfiguration"/>
-        <mx:DataGrid id="dg_processEngineConfiguration" width="100%" height="50" itemClick="handleProcessEngineDgClick()">
+        <mx:HBox width="100%">
+            <mx:DataGrid id="dg_processEngineConfiguration" width="100%" height="70" horizontalScrollPolicy="auto">
+                <mx:columns>
+                    <mx:DataGridColumn headerText="ProcessEngineName" dataField="processEngineName"/>
+
+                    <mx:DataGridColumn headerText="DatabaseSchemaUpdate" dataField="databaseSchemaUpdate"/>
+                    <mx:DataGridColumn headerText="DatabaseType" dataField="databaseType"/>
+
+                    <mx:DataGridColumn headerText="DataSource" dataField="dataSource"/>
+                    <mx:DataGridColumn headerText="DataSourceJndiName" dataField="dataSourceJndiName"/>
+
+                    <mx:DataGridColumn headerText="History" dataField="history"/>
+                    <mx:DataGridColumn headerText="IdBlockSize" dataField="idBlockSize"/>
+                    <mx:DataGridColumn headerText="TransactionsExternallyManaged" dataField="transactionsExternallyManaged"/>
+                    <mx:DataGridColumn headerText="JobExecutorActivate" dataField="jobExecutorActivate"/>
+
+                    <mx:DataGridColumn headerText="JdbcDriver" dataField="jdbcDriver"/>
+                    <mx:DataGridColumn headerText="JdbcUrl" dataField="jdbcUrl"/>
+                    <mx:DataGridColumn headerText="JdbcUsername" dataField="jdbcUsername"/>
+                    <mx:DataGridColumn headerText="JdbcPassword" dataField="jdbcPassword"/>
+
+                    <mx:DataGridColumn headerText="JdbcMaxActiveConnections" dataField="jdbcMaxActiveConnections"/>
+                    <mx:DataGridColumn headerText="JdbcMaxCheckoutTime" dataField="jdbcMaxCheckoutTime"/>
+                    <mx:DataGridColumn headerText="JdbcMaxIdleConnections" dataField="jdbcMaxIdleConnections"/>
+                    <mx:DataGridColumn headerText="JdbcMaxWaitTime" dataField="jdbcMaxWaitTime"/>
+
+                    <mx:DataGridColumn headerText="JdbcPingConnectionNotUsedFor" dataField="jdbcPingConnectionNotUsedFor"/>
+                    <mx:DataGridColumn headerText="JdbcPingEnabled" dataField="jdbcPingEnabled"/>
+                    <mx:DataGridColumn headerText="JdbcPingQuery" dataField="jdbcPingQuery"/>
+
+                    <mx:DataGridColumn headerText="JpaCloseEntityManager" dataField="jpaCloseEntityManager"/>
+                    <mx:DataGridColumn headerText="JpaHandleTransaction" dataField="jpaHandleTransaction"/>
+                    <mx:DataGridColumn headerText="JpaEntityManagerFactory" dataField="jpaEntityManagerFactory"/>
+                    <mx:DataGridColumn headerText="JpaPersistenceUnitName" dataField="jpaPersistenceUnitName"/>
+
+                    <mx:DataGridColumn headerText="MailServerDefaultFrom" dataField="mailServerDefaultFrom"/>
+                    <mx:DataGridColumn headerText="MailServerHost" dataField="mailServerHost"/>
+                    <mx:DataGridColumn headerText="MailServerPassword" dataField="mailServerPassword"/>
+                    <mx:DataGridColumn headerText="MailServerPort" dataField="mailServerPort"/>
+                    <mx:DataGridColumn headerText="MailServerUsername" dataField="mailServerUsername"/>
+                    <mx:DataGridColumn headerText="MailServerUseTLS" dataField="mailServerUseTLS"/>
+                </mx:columns>
+            </mx:DataGrid>
+        </mx:HBox>
+
+        <mx:Label text="Deployment"/>
+        <mx:DataGrid width="100%" id="dg_deployment" itemClick="handleDeploymentDgClick()">
             <mx:columns>
-                <mx:DataGridColumn headerText="Name" dataField="name" width="100"/>
-                <mx:DataGridColumn headerText="Exception" dataField="exception" width="100"/>
-                <mx:DataGridColumn headerText="ResourceUrl" dataField="resourceUrl"/>
+                <mx:DataGridColumn headerText="Id" dataField="id"/>
+                <mx:DataGridColumn headerText="Name" dataField="name"/>
+                <mx:DataGridColumn headerText="Category" dataField="category"/>
+                <mx:DataGridColumn headerText="DeploymentTime" dataField="deploymentTime"/>
+            </mx:columns>
+        </mx:DataGrid>
+
+        <mx:Label text="ProcessDefine"/>
+        <mx:DataGrid width="100%" height="50" id="dg_processDefine" itemClick="handleProcessDefineDgClick()">
+            <mx:columns>
+                <mx:DataGridColumn headerText="Id" dataField="id"/>
+                <mx:DataGridColumn headerText="Key" dataField="key"/>
+                <mx:DataGridColumn headerText="Name" dataField="name"/>
+                <mx:DataGridColumn headerText="Version" dataField="version"/>
+                <mx:DataGridColumn headerText="Category" dataField="category"/>
+                <mx:DataGridColumn headerText="Description" dataField="description"/>
+                <mx:DataGridColumn headerText="DeploymentId" dataField="deploymentId"/>
+                <mx:DataGridColumn headerText="ResourceName" dataField="resourceName"/>
+                <mx:DataGridColumn headerText="DiagramResourceName" dataField="diagramResourceName"/>
+                <mx:DataGridColumn headerText="HasStartFromKey" dataField="hasStartFromKey"/>
+                <mx:DataGridColumn headerText="Suspended" dataField="suspended"/>
+            </mx:columns>
+        </mx:DataGrid>
+
+        <mx:Label text="ProcessInstance"/>
+        <mx:DataGrid width="100%" id="dg_processInstance" itemClick="handleProcessInstanceDgClick()">
+            <mx:columns>
+                <mx:DataGridColumn headerText="Id" dataField="id"/>
+                <mx:DataGridColumn headerText="ProcessInstanceId" dataField="processInstanceId"/>
+                <mx:DataGridColumn headerText="Ended" dataField="ended"/>
+                <mx:DataGridColumn headerText="BusinessKey" dataField="businessKey"/>
+                <mx:DataGridColumn headerText="ProcessDefinitionId" dataField="processDefinitionId"/>
+                <mx:DataGridColumn headerText="Suspended" dataField="suspended"/>
+            </mx:columns>
+        </mx:DataGrid>
+
+        <mx:Label text="ProcessInstance Variables"/>
+        <mx:DataGrid width="100%" height="100" verticalScrollPolicy="auto" id="dg_processInstanceVariables">
+            <mx:columns>
+                <mx:DataGridColumn headerText="Key" dataField="key"/>
+                <mx:DataGridColumn headerText="Value" dataField="value"/>
+            </mx:columns>
+        </mx:DataGrid>
+
+        <mx:Label text="ProcessInstance Tasks"/>
+        <mx:DataGrid width="100%" height="100" verticalScrollPolicy="auto" id="dg_processInstanceTasks">
+            <mx:columns>
+                <mx:DataGridColumn headerText="" dataField=""/>
+                <mx:DataGridColumn headerText="" dataField=""/>
+                <mx:DataGridColumn headerText="" dataField=""/>
+                <mx:DataGridColumn headerText="" dataField=""/>
+                <mx:DataGridColumn headerText="" dataField=""/>
+                <mx:DataGridColumn headerText="" dataField=""/>
+                <mx:DataGridColumn headerText="" dataField=""/>
+                <mx:DataGridColumn headerText="" dataField=""/>
+                <mx:DataGridColumn headerText="" dataField=""/>
+                <mx:DataGridColumn headerText="" dataField=""/>
+                <mx:DataGridColumn headerText="" dataField=""/>
+                <mx:DataGridColumn headerText="" dataField=""/>
+                <mx:DataGridColumn headerText="" dataField=""/>
+                <mx:DataGridColumn headerText="" dataField=""/>
             </mx:columns>
         </mx:DataGrid>
     </mx:VBox>

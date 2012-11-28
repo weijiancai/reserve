@@ -1,7 +1,6 @@
 package com.wjc.activiti.demo.action;
 
-import com.wjc.activiti.demo.bean.Order;
-import com.wjc.activiti.demo.bean.ProcessEngineBean;
+import com.wjc.activiti.demo.bean.*;
 import com.wjc.activiti.demo.service.OrderBO;
 import com.wjc.activiti.demo.service.ProcessBO;
 import com.wjc.activiti.demo.util.JaxbUtil;
@@ -15,6 +14,7 @@ import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +26,8 @@ import java.util.Map;
 public class ProcessAction extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String method = req.getParameter("method");
+        String processEngineName, deploymentId, processDefineId, processInstanceId;
+
         switch (method) {
             case "getImage":
                 res.setContentType("image/png");
@@ -67,6 +69,58 @@ public class ProcessAction extends HttpServlet {
 //                sendXml(res, XML.toString(new JSONObject(map)));
                 try {
                     sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessEngines(), ProcessEngineBean.class));
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "getProcessEngineConfiguration":
+                processEngineName = req.getParameter("processEngineName");
+                try {
+                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessEngineConfiguration(processEngineName), ProcessEngineConfigurationBean.class));
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "getProcessDefine":
+                processEngineName = req.getParameter("processEngineName");
+                deploymentId = req.getParameter("deploymentId");
+                try {
+                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessDefine(processEngineName, deploymentId), ProcessDefineBean.class));
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "getDeployment":
+                processEngineName = req.getParameter("processEngineName");
+                try {
+                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getDeployment(processEngineName), DeploymentBean.class));
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "getProcessInstance":
+                processEngineName = req.getParameter("processEngineName");
+                processDefineId = URLDecoder.decode(req.getParameter("processDefineId"), "UTF-8");
+                try {
+                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessInstance(processEngineName, processDefineId), ProcessInstanceBean.class));
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "getProcessInstanceVariables":
+                processEngineName = req.getParameter("processEngineName");
+                processInstanceId = req.getParameter("processInstanceId");
+                try {
+                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessInstanceVariables(processEngineName, processInstanceId), Paris.class, Order.class));
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "getProcessInstanceTasks":
+                processEngineName = req.getParameter("processEngineName");
+                processInstanceId = req.getParameter("processInstanceId");
+                try {
+                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessInstanceTasks(processEngineName, processInstanceId), Paris.class, Order.class));
                 } catch (JAXBException e) {
                     e.printStackTrace();
                 }
