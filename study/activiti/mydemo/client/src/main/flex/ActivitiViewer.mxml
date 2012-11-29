@@ -84,6 +84,10 @@
         private function getProcessInstanceId():String {
             return dg_processInstance.selectedItem.id;
         }
+        // 获取流程实例任务ID
+        private function getTaskId():String {
+            return dg_processInstanceTasks.selectedItem.id;
+        }
 
         private function handlerProcessInstanceService(event:ResultEvent):void {
             var xml:XML = XML(event.result);
@@ -103,6 +107,26 @@
             processInstanceTaskService.request.processEngineName = getProcessEngineName();
             processInstanceTaskService.request.processInstanceId = getProcessInstanceId();
             processInstanceTaskService.send();
+
+            // 获取活动实例历史信息
+            historicActivityInstanceService.request.processEngineName = getProcessEngineName();
+            historicActivityInstanceService.request.processInstanceId = getProcessInstanceId();
+            historicActivityInstanceService.send();
+
+            // 获取流程实例历史信息
+            historicProcessInstanceService.request.processEngineName = getProcessEngineName();
+            historicProcessInstanceService.request.processInstanceId = getProcessInstanceId();
+            historicProcessInstanceService.send();
+
+            // 获取任务实例历史信息
+            historicTaskInstanceService.request.processEngineName = getProcessEngineName();
+            historicTaskInstanceService.request.processInstanceId = getProcessInstanceId();
+            historicTaskInstanceService.send();
+
+            // 获取历史详细信息
+            historicDetailService.request.processEngineName = getProcessEngineName();
+            historicDetailService.request.processInstanceId = getProcessInstanceId();
+            historicDetailService.send();
         }
 
         private function handlerProcessInstanceVariablesService(event:ResultEvent):void {
@@ -114,6 +138,41 @@
             var xml:XML = XML(event.result);
             dg_processInstanceTasks.dataProvider = xml.children();
         }
+
+        private function handlerTaskVariablesService(event:ResultEvent):void {
+            var xml:XML = XML(event.result);
+            dg_taskVariables.dataProvider = xml.children();
+        }
+
+        private function handleProcessInstanceTasksDgClick():void {
+            // 清除数据
+            dg_taskVariables.dataProvider = null;
+
+            // 获取流程实例任务变量
+            taskVariableService.request.processEngineName = getProcessEngineName();
+            taskVariableService.request.taskId = getTaskId();
+            taskVariableService.send();
+        }
+
+        private function handlerHistoricActivityInstanceService(event:ResultEvent):void {
+            var xml:XML = XML(event.result);
+            dg_historicActivityInstance.dataProvider = xml.children();
+        }
+
+        private function handlerHistoricProcessInstanceService(event:ResultEvent):void {
+            var xml:XML = XML(event.result);
+            dg_historicProcessInstance.dataProvider = xml.children();
+        }
+
+        private function handlerHistoricTaskInstanceService(event:ResultEvent):void {
+            var xml:XML = XML(event.result);
+            dg_historicTaskInstance.dataProvider = xml.children();
+        }
+
+        private function handlerHistoricDetailService(event:ResultEvent):void {
+            var xml:XML = XML(event.result);
+            dg_historicDetail.dataProvider = xml.children();
+        }
     ]]></mx:Script>
 
     <mx:HTTPService id="processEngineService" url="http://localhost:8088/process?method=getProcessEngines" resultFormat="xml" result="handlerProcessEngineService(event)"/>
@@ -123,6 +182,11 @@
     <mx:HTTPService id="processInstanceService" url="http://localhost:8088/process?method=getProcessInstance" resultFormat="xml" result="handlerProcessInstanceService(event)"/>
     <mx:HTTPService id="processInstanceVariableService" url="http://localhost:8088/process?method=getProcessInstanceVariables" resultFormat="xml" result="handlerProcessInstanceVariablesService(event)"/>
     <mx:HTTPService id="processInstanceTaskService" url="http://localhost:8088/process?method=getProcessInstanceTasks" resultFormat="xml" result="handlerProcessInstanceTasksService(event)"/>
+    <mx:HTTPService id="taskVariableService" url="http://localhost:8088/process?method=getTaskVariables" resultFormat="xml" result="handlerTaskVariablesService(event)"/>
+    <mx:HTTPService id="historicActivityInstanceService" url="http://localhost:8088/process?method=getHistoricActivityInstance" resultFormat="xml" result="handlerHistoricActivityInstanceService(event)"/>
+    <mx:HTTPService id="historicProcessInstanceService" url="http://localhost:8088/process?method=getHistoricProcessInstance" resultFormat="xml" result="handlerHistoricProcessInstanceService(event)"/>
+    <mx:HTTPService id="historicTaskInstanceService" url="http://localhost:8088/process?method=getHistoricTaskInstance" resultFormat="xml" result="handlerHistoricTaskInstanceService(event)"/>
+    <mx:HTTPService id="historicDetailService" url="http://localhost:8088/process?method=getHistoricDetail" resultFormat="xml" result="handlerHistoricDetailService(event)"/>
 
 
     <mx:VBox width="100%" height="100%">
@@ -221,32 +285,113 @@
         </mx:DataGrid>
 
         <mx:Label text="ProcessInstance Variables"/>
-        <mx:DataGrid width="100%" height="100" verticalScrollPolicy="auto" id="dg_processInstanceVariables">
+        <mx:HBox width="100%" height="100">
+            <mx:DataGrid width="100%" height="500" verticalScrollPolicy="on" id="dg_processInstanceVariables">
+                <mx:columns>
+                    <mx:DataGridColumn headerText="Key" dataField="key"/>
+                    <mx:DataGridColumn headerText="Value" dataField="value"/>
+                </mx:columns>
+            </mx:DataGrid>
+        </mx:HBox>
+
+        <mx:Label text="ProcessInstance Tasks"/>
+        <mx:DataGrid width="100%" height="100" verticalScrollPolicy="auto" id="dg_processInstanceTasks" itemClick="handleProcessInstanceTasksDgClick()">
             <mx:columns>
-                <mx:DataGridColumn headerText="Key" dataField="key"/>
-                <mx:DataGridColumn headerText="Value" dataField="value"/>
+                <mx:DataGridColumn headerText="Id" dataField="id"/>
+                <mx:DataGridColumn headerText="Name" dataField="name"/>
+                <mx:DataGridColumn headerText="Description" dataField="description"/>
+                <mx:DataGridColumn headerText="Priority" dataField="priority"/>
+                <mx:DataGridColumn headerText="Owner" dataField="owner"/>
+                <mx:DataGridColumn headerText="Assignee" dataField="assignee"/>
+                <mx:DataGridColumn headerText="CreateTime" dataField="createTime"/>
+                <mx:DataGridColumn headerText="DueDate" dataField="dueDate"/>
+                <mx:DataGridColumn headerText="DelegationState" dataField="delegationState"/>
+                <mx:DataGridColumn headerText="TaskDefinitionKey" dataField="taskDefinitionKey"/>
+                <mx:DataGridColumn headerText="ExecutionId" dataField="executionId"/>
+                <mx:DataGridColumn headerText="ProcessInstanceId" dataField="processInstanceId"/>
+                <mx:DataGridColumn headerText="ProcessDefinitionId" dataField="processDefinitionId"/>
+                <mx:DataGridColumn headerText="ParentTaskId" dataField="parentTaskId("/>
             </mx:columns>
         </mx:DataGrid>
 
-        <mx:Label text="ProcessInstance Tasks"/>
-        <mx:DataGrid width="100%" height="100" verticalScrollPolicy="auto" id="dg_processInstanceTasks">
-            <mx:columns>
-                <mx:DataGridColumn headerText="" dataField=""/>
-                <mx:DataGridColumn headerText="" dataField=""/>
-                <mx:DataGridColumn headerText="" dataField=""/>
-                <mx:DataGridColumn headerText="" dataField=""/>
-                <mx:DataGridColumn headerText="" dataField=""/>
-                <mx:DataGridColumn headerText="" dataField=""/>
-                <mx:DataGridColumn headerText="" dataField=""/>
-                <mx:DataGridColumn headerText="" dataField=""/>
-                <mx:DataGridColumn headerText="" dataField=""/>
-                <mx:DataGridColumn headerText="" dataField=""/>
-                <mx:DataGridColumn headerText="" dataField=""/>
-                <mx:DataGridColumn headerText="" dataField=""/>
-                <mx:DataGridColumn headerText="" dataField=""/>
-                <mx:DataGridColumn headerText="" dataField=""/>
-            </mx:columns>
-        </mx:DataGrid>
+        <mx:Label text="Task Variables"/>
+        <mx:HBox width="100%" height="100">
+            <mx:DataGrid width="100%" height="500" verticalScrollPolicy="on" id="dg_taskVariables">
+                <mx:columns>
+                    <mx:DataGridColumn headerText="Key" dataField="key"/>
+                    <mx:DataGridColumn headerText="Value" dataField="value"/>
+                </mx:columns>
+            </mx:DataGrid>
+        </mx:HBox>
+
+        <mx:Label text="Historic Activity Instance"/>
+        <mx:HBox width="100%" height="100">
+            <mx:DataGrid width="100%" height="500" verticalScrollPolicy="on" id="dg_historicActivityInstance">
+                <mx:columns>
+                    <mx:DataGridColumn headerText="Id" dataField="id"/>
+                    <mx:DataGridColumn headerText="ActivityId" dataField="activityId"/>
+                    <mx:DataGridColumn headerText="ActivityName" dataField="activityName"/>
+                    <mx:DataGridColumn headerText="ActivityType" dataField="activityType"/>
+                    <mx:DataGridColumn headerText="Assignee" dataField="assignee"/>
+                    <mx:DataGridColumn headerText="DurationInMillis" dataField="durationInMillis"/>
+                    <mx:DataGridColumn headerText="StartTime" dataField="startTime"/>
+                    <mx:DataGridColumn headerText="EndTime" dataField="endTime"/>
+                    <mx:DataGridColumn headerText="ExecutionId" dataField="executionId"/>
+                    <mx:DataGridColumn headerText="ProcessDefinitionId" dataField="processDefinitionId"/>
+                    <mx:DataGridColumn headerText="ProcessInstanceId" dataField="processInstanceId"/>
+                </mx:columns>
+            </mx:DataGrid>
+        </mx:HBox>
+
+        <mx:Label text="Historic Process Instance"/>
+        <mx:HBox width="100%" height="100">
+            <mx:DataGrid width="100%" height="500" verticalScrollPolicy="on" id="dg_historicProcessInstance">
+                <mx:columns>
+                    <mx:DataGridColumn headerText="Id" dataField="id"/>
+                    <mx:DataGridColumn headerText="BusinessKey" dataField="businessKey"/>
+                    <mx:DataGridColumn headerText="ProcessDefinitionId" dataField="processDefinitionId"/>
+                    <mx:DataGridColumn headerText="StartActivityId" dataField="startActivityId"/>
+                    <mx:DataGridColumn headerText="StartUserId" dataField="startUserId"/>
+                    <mx:DataGridColumn headerText="StartTime" dataField="startTime"/>
+                    <mx:DataGridColumn headerText="EndTime" dataField="endTime"/>
+                    <mx:DataGridColumn headerText="DurationInMillis" dataField="durationInMillis"/>
+                    <mx:DataGridColumn headerText="SupperProcessInstanceId" dataField="supperProcessInstanceId"/>
+                    <mx:DataGridColumn headerText="DeleteReason" dataField="deleteReason"/>
+                </mx:columns>
+            </mx:DataGrid>
+        </mx:HBox>
+
+        <mx:Label text="Historic Task Instance"/>
+        <mx:HBox width="100%" height="100">
+            <mx:DataGrid width="100%" height="500" verticalScrollPolicy="on" id="dg_historicTaskInstance">
+                <mx:columns>
+                    <mx:DataGridColumn headerText="Id" dataField="id"/>
+                    <mx:DataGridColumn headerText="BusinessKey" dataField="businessKey"/>
+                    <mx:DataGridColumn headerText="ProcessDefinitionId" dataField="processDefinitionId"/>
+                    <mx:DataGridColumn headerText="StartActivityId" dataField="startActivityId"/>
+                    <mx:DataGridColumn headerText="StartUserId" dataField="startUserId"/>
+                    <mx:DataGridColumn headerText="StartTime" dataField="startTime"/>
+                    <mx:DataGridColumn headerText="EndTime" dataField="endTime"/>
+                    <mx:DataGridColumn headerText="DurationInMillis" dataField="durationInMillis"/>
+                    <mx:DataGridColumn headerText="SupperProcessInstanceId" dataField="supperProcessInstanceId"/>
+                    <mx:DataGridColumn headerText="DeleteReason" dataField="deleteReason"/>
+                </mx:columns>
+            </mx:DataGrid>
+        </mx:HBox>
+
+        <mx:Label text="Historic Detail"/>
+        <mx:HBox width="100%" height="100">
+            <mx:DataGrid width="100%" height="500" verticalScrollPolicy="on" id="dg_historicDetail">
+                <mx:columns>
+                    <mx:DataGridColumn headerText="Id" dataField="id"/>
+                    <mx:DataGridColumn headerText="ExecutionId" dataField="executionId"/>
+                    <mx:DataGridColumn headerText="ProcessInstanceId" dataField="processInstanceId"/>
+                    <mx:DataGridColumn headerText="ActivityInstanceId" dataField="activityInstanceId"/>
+                    <mx:DataGridColumn headerText="TaskId" dataField="taskId"/>
+                    <mx:DataGridColumn headerText="Time" dataField="time"/>
+                </mx:columns>
+            </mx:DataGrid>
+        </mx:HBox>
     </mx:VBox>
 
 </mx:Application>

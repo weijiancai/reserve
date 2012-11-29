@@ -26,7 +26,7 @@ import java.util.Map;
 public class ProcessAction extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String method = req.getParameter("method");
-        String processEngineName, deploymentId, processDefineId, processInstanceId;
+        String processEngineName, deploymentId, processDefineId, processInstanceId, taskId;
 
         switch (method) {
             case "getImage":
@@ -120,7 +120,52 @@ public class ProcessAction extends HttpServlet {
                 processEngineName = req.getParameter("processEngineName");
                 processInstanceId = req.getParameter("processInstanceId");
                 try {
-                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessInstanceTasks(processEngineName, processInstanceId), Paris.class, Order.class));
+                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessInstanceTasks(processEngineName, processInstanceId), TaskBean.class));
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "getTaskVariables":
+                processEngineName = req.getParameter("processEngineName");
+                taskId = req.getParameter("taskId");
+                try {
+                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getTaskVariables(processEngineName, taskId), Paris.class, Order.class));
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "getHistoricActivityInstance":
+                processEngineName = req.getParameter("processEngineName");
+                processInstanceId = req.getParameter("processInstanceId");
+                try {
+                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getHistoricActivityInstance(processEngineName, processInstanceId), HistoricActivityInstanceBean.class));
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "getHistoricProcessInstance":
+                processEngineName = req.getParameter("processEngineName");
+                processInstanceId = req.getParameter("processInstanceId");
+                try {
+                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getHistoricProcessInstance(processEngineName, processInstanceId), HistoricProcessInstanceBean.class));
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "getHistoricTaskInstance":
+                processEngineName = req.getParameter("processEngineName");
+                processInstanceId = req.getParameter("processInstanceId");
+                try {
+                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getHistoricTaskInstance(processEngineName, processInstanceId), HistoricTaskInstanceBean.class));
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "getHistoricDetail":
+                processEngineName = req.getParameter("processEngineName");
+                processInstanceId = req.getParameter("processInstanceId");
+                try {
+                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getHistoricDetail(processEngineName, processInstanceId), HistoricDetailBean.class));
                 } catch (JAXBException e) {
                     e.printStackTrace();
                 }

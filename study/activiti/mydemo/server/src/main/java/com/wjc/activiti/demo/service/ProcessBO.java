@@ -2,6 +2,10 @@ package com.wjc.activiti.demo.service;
 
 import com.wjc.activiti.demo.bean.*;
 import org.activiti.engine.*;
+import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricDetail;
+import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.ProcessEngineImpl;
 import org.activiti.engine.impl.util.IoUtil;
 import org.activiti.engine.repository.Deployment;
@@ -235,7 +239,192 @@ public class ProcessBO {
         return result;
     }
 
-    public static void getProcessInstanceTasks(String processEngineName, String processInstanceId) {
+    public static List<TaskBean> getProcessInstanceTasks(String processEngineName, String processInstanceId) {
+        List<TaskBean> result = new ArrayList<>();
 
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        TaskService taskService = processEngine.getTaskService();
+        List<Task> lists = taskService.createTaskQuery().processInstanceId(processInstanceId).orderByTaskCreateTime().desc().list();
+
+        TaskBean bean;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for(Task task : lists) {
+            bean = new TaskBean();
+            bean.setId(task.getId());
+            bean.setName(task.getName());
+            bean.setDescription(task.getDescription());
+            bean.setPriority(task.getPriority());
+            bean.setOwner(task.getOwner());
+            bean.setAssignee(task.getAssignee());
+            bean.setCreateTime(sdf.format(task.getCreateTime()));
+            if (task.getDueDate() != null) {
+                bean.setDueDate(sdf.format(task.getDueDate()));
+            }
+            if (task.getDelegationState() != null) {
+                bean.setDelegationState(task.getDelegationState().name());
+            }
+
+            bean.setTaskDefinitionKey(task.getTaskDefinitionKey());
+            bean.setExecutionId(task.getExecutionId());
+            bean.setProcessInstanceId(task.getProcessInstanceId());
+            bean.setProcessDefinitionId(task.getProcessDefinitionId());
+            bean.setParentTaskId(task.getParentTaskId());
+
+            result.add(bean);
+        }
+
+        return result;
+    }
+
+    public static List<Paris> getTaskVariables(String processEngineName, String taskId) {
+        List<Paris> result = new ArrayList<>();
+
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        TaskService taskService = processEngine.getTaskService();
+        Map<String, Object> map = taskService.getVariables(taskId);
+        if (map != null) {
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                result.add(new Paris(entry.getKey(), entry.getValue()));
+            }
+        }
+
+        return result;
+    }
+
+    public static List<HistoricActivityInstanceBean> getHistoricActivityInstance(String processEngineName, String processInstanceId) {
+        List<HistoricActivityInstanceBean> result = new ArrayList<>();
+
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        HistoryService historyService = processEngine.getHistoryService();
+        List<HistoricActivityInstance> lists = historyService.createHistoricActivityInstanceQuery().processInstanceId(processInstanceId).list();
+
+        HistoricActivityInstanceBean bean;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (HistoricActivityInstance instance : lists) {
+            bean = new HistoricActivityInstanceBean();
+            bean.setId(instance.getId());
+            bean.setActivityId(instance.getActivityId());
+            bean.setActivityName(instance.getActivityName());
+            bean.setActivityType(instance.getActivityType());
+            bean.setAssignee(instance.getAssignee());
+            if (instance.getDurationInMillis() != null) {
+                bean.setDurationInMillis(instance.getDurationInMillis());
+            }
+            if (instance.getStartTime() != null) {
+                bean.setStartTime(sdf.format(instance.getStartTime()));
+            }
+            if (instance.getEndTime() != null) {
+                bean.setEndTime(sdf.format(instance.getEndTime()));
+            }
+            bean.setExecutionId(instance.getExecutionId());
+            bean.setProcessDefinitionId(instance.getProcessDefinitionId());
+            bean.setProcessInstanceId(instance.getProcessInstanceId());
+
+            result.add(bean);
+        }
+
+        return result;
+    }
+
+    public static List<HistoricProcessInstanceBean> getHistoricProcessInstance(String processEngineName, String processInstanceId) {
+        List<HistoricProcessInstanceBean> result = new ArrayList<>();
+
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        HistoryService historyService = processEngine.getHistoryService();
+        List<HistoricProcessInstance> lists = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).list();
+
+        HistoricProcessInstanceBean bean;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (HistoricProcessInstance instance : lists) {
+            bean = new HistoricProcessInstanceBean();
+            bean.setId(instance.getId());
+            bean.setBusinessKey(instance.getBusinessKey());
+            bean.setProcessDefinitionId(instance.getProcessDefinitionId());
+            bean.setStartActivityId(instance.getStartActivityId());
+            bean.setStartUserId(instance.getStartUserId());
+            if (instance.getStartTime() != null) {
+                bean.setStartTime(sdf.format(instance.getStartTime()));
+            }
+            if (instance.getEndTime() != null) {
+                bean.setEndTime(sdf.format(instance.getEndTime()));
+            }
+            if (instance.getDurationInMillis() != null) {
+                bean.setDurationInMills(instance.getDurationInMillis());
+            }
+            bean.setSupperProcessInstanceId(instance.getSuperProcessInstanceId());
+            bean.setDeleteReason(instance.getDeleteReason());
+
+            result.add(bean);
+        }
+
+        return result;
+    }
+
+    public static List<HistoricTaskInstanceBean> getHistoricTaskInstance(String processEngineName, String processInstanceId) {
+        List<HistoricTaskInstanceBean> result = new ArrayList<>();
+
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        HistoryService historyService = processEngine.getHistoryService();
+        List<HistoricTaskInstance> lists = historyService.createHistoricTaskInstanceQuery().processInstanceId(processInstanceId).list();
+
+        HistoricTaskInstanceBean bean;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (HistoricTaskInstance instance : lists) {
+            bean = new HistoricTaskInstanceBean();
+            bean.setId(instance.getId());
+            bean.setName(instance.getName());
+            bean.setOwner(instance.getOwner());
+            bean.setDescription(instance.getDescription());
+            bean.setAssignee(instance.getAssignee());
+            bean.setPriority(instance.getPriority());
+            if (instance.getStartTime() != null) {
+                bean.setStartTime(sdf.format(instance.getStartTime()));
+            }
+            if (instance.getEndTime() != null) {
+                bean.setEndTime(sdf.format(instance.getEndTime()));
+            }
+            if (instance.getDueDate() != null) {
+                bean.setDueDate(sdf.format(instance.getDueDate()));
+            }
+            if (instance.getDurationInMillis() != null) {
+                bean.setDurationInMills(instance.getDurationInMillis());
+            }
+            bean.setExecutionId(instance.getExecutionId());
+            bean.setProcessDefinitionId(instance.getProcessDefinitionId());
+            bean.setProcessInstanceId(instance.getProcessInstanceId());
+            bean.setTaskDefinitionKey(instance.getTaskDefinitionKey());
+            bean.setParentTaskId(instance.getParentTaskId());
+            bean.setDeleteReason(instance.getDeleteReason());
+
+            result.add(bean);
+        }
+
+        return result;
+    }
+
+    public static List<HistoricDetailBean> getHistoricDetail(String processEngineName, String processInstanceId) {
+        List<HistoricDetailBean> result = new ArrayList<>();
+
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        HistoryService historyService = processEngine.getHistoryService();
+        List<HistoricDetail> lists = historyService.createHistoricDetailQuery().processInstanceId(processInstanceId).list();
+
+        HistoricDetailBean bean;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (HistoricDetail detail : lists) {
+            bean = new HistoricDetailBean();
+            bean.setId(detail.getId());
+            bean.setExecutionId(detail.getExecutionId());
+            bean.setProcessInstanceId(detail.getProcessInstanceId());
+            bean.setActivityInstanceId(detail.getActivityInstanceId());
+            bean.setTaskId(detail.getTaskId());
+            if (detail.getTime() != null) {
+                bean.setTime(sdf.format(detail.getTime()));
+            }
+
+            result.add(bean);
+        }
+
+        return result;
     }
 }

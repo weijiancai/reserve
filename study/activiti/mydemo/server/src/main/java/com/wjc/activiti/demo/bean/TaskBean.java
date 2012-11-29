@@ -18,6 +18,7 @@ public class TaskBean {
     private String assignee;
     private String createTime;
     private String dueDate;
+    private String delegationState;
 
     private String taskDefinitionKey;
     private String executionId;
@@ -127,5 +128,13 @@ public class TaskBean {
 
     public void setParentTaskId(String parentTaskId) {
         this.parentTaskId = parentTaskId;
+    }
+
+    public String getDelegationState() {
+        return delegationState;
+    }
+
+    public void setDelegationState(String delegationState) {
+        this.delegationState = delegationState;
     }
 }
