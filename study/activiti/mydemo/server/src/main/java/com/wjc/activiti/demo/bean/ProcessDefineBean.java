@@ -1,5 +1,6 @@
 package com.wjc.activiti.demo.bean;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -22,6 +23,7 @@ public class ProcessDefineBean {
     private boolean hasStartFromKey;
     private boolean isSuspended;
 
+    @XmlAttribute
     public String getId() {
         return id;
     }
@@ -30,6 +32,7 @@ public class ProcessDefineBean {
         this.id = id;
     }
 
+    @XmlAttribute
     public String getKey() {
         return key;
     }
@@ -38,6 +41,7 @@ public class ProcessDefineBean {
         this.key = key;
     }
 
+    @XmlAttribute
     public String getName() {
         return name;
     }
@@ -46,6 +50,7 @@ public class ProcessDefineBean {
         this.name = name;
     }
 
+    @XmlAttribute
     public int getVersion() {
         return version;
     }
@@ -54,6 +59,7 @@ public class ProcessDefineBean {
         this.version = version;
     }
 
+    @XmlAttribute
     public String getCategory() {
         return category;
     }
@@ -62,6 +68,7 @@ public class ProcessDefineBean {
         this.category = category;
     }
 
+    @XmlAttribute
     public String getDescription() {
         return description;
     }
@@ -70,6 +77,7 @@ public class ProcessDefineBean {
         this.description = description;
     }
 
+    @XmlAttribute
     public String getDeploymentId() {
         return deploymentId;
     }
@@ -78,6 +86,7 @@ public class ProcessDefineBean {
         this.deploymentId = deploymentId;
     }
 
+    @XmlAttribute
     public String getResourceName() {
         return resourceName;
     }
@@ -86,6 +95,7 @@ public class ProcessDefineBean {
         this.resourceName = resourceName;
     }
 
+    @XmlAttribute
     public String getDiagramResourceName() {
         return diagramResourceName;
     }
@@ -94,6 +104,7 @@ public class ProcessDefineBean {
         this.diagramResourceName = diagramResourceName;
     }
 
+    @XmlAttribute
     public boolean isHasStartFromKey() {
         return hasStartFromKey;
     }
@@ -102,6 +113,7 @@ public class ProcessDefineBean {
         this.hasStartFromKey = hasStartFromKey;
     }
 
+    @XmlAttribute
     public boolean isSuspended() {
         return isSuspended;
     }

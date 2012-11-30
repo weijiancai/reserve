@@ -100,6 +100,7 @@ public class ProcessBO {
                 bean.setException(info.getException());
                 bean.setResourceUrl(info.getResourceUrl());
             }
+            bean.setProcessDefineBeanList(getProcessDefine(processEngine.getName(), null));
             processEngineBeans.add(bean);
         }
 
@@ -161,7 +162,12 @@ public class ProcessBO {
 
         ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
         RepositoryService repositoryService = processEngine.getRepositoryService();
-        List<ProcessDefinition> lists = repositoryService.createProcessDefinitionQuery().deploymentId(deploymentId).list();
+        List<ProcessDefinition> lists;
+        if (deploymentId == null) {
+            lists = repositoryService.createProcessDefinitionQuery().orderByProcessDefinitionName().orderByProcessDefinitionVersion().desc().list();
+        } else {
+            lists = repositoryService.createProcessDefinitionQuery().deploymentId(deploymentId).orderByProcessDefinitionName().orderByProcessDefinitionVersion().desc().list();
+        }
 
         ProcessDefineBean bean;
         for (ProcessDefinition processDefinition : lists) {

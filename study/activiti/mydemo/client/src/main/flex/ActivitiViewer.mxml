@@ -193,9 +193,9 @@
         <mx:Label text="ProcessEngine"/>
         <mx:DataGrid id="dg_processEngines" width="100%" height="50" itemClick="handleProcessEngineDgClick()">
             <mx:columns>
-                <mx:DataGridColumn headerText="Name" dataField="name" width="100"/>
-                <mx:DataGridColumn headerText="Exception" dataField="exception" width="100"/>
-                <mx:DataGridColumn headerText="ResourceUrl" dataField="resourceUrl"/>
+                <mx:DataGridColumn headerText="Name" dataField="@name" width="100"/>
+                <mx:DataGridColumn headerText="Exception" dataField="@exception" width="100"/>
+                <mx:DataGridColumn headerText="ResourceUrl" dataField="@resourceUrl"/>
             </mx:columns>
         </mx:DataGrid>
 
