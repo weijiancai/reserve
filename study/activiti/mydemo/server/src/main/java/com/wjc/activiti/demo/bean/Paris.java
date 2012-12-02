@@ -1,5 +1,6 @@
 package com.wjc.activiti.demo.bean;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -21,6 +22,7 @@ public class Paris {
         this.key = key;
     }
 
+    @XmlAttribute
     public String getKey() {
         return key;
     }

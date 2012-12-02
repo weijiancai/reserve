@@ -1,5 +1,6 @@
 package com.wjc.activiti.demo.bean;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -25,6 +26,7 @@ public class DeploymentBean {
         this.deploymentTime = deploymentTime;
     }
 
+    @XmlAttribute
     public String getId() {
         return id;
     }
@@ -33,6 +35,7 @@ public class DeploymentBean {
         this.id = id;
     }
 
+    @XmlAttribute
     public String getName() {
         return name;
     }
@@ -41,6 +44,7 @@ public class DeploymentBean {
         this.name = name;
     }
 
+    @XmlAttribute
     public String getCategory() {
         return category;
     }
@@ -49,6 +53,7 @@ public class DeploymentBean {
         this.category = category;
     }
 
+    @XmlAttribute
     public String getDeploymentTime() {
         return deploymentTime;
     }

@@ -1,5 +1,7 @@
 package com.wjc.activiti.demo.bean;
 
+import javax.xml.bind.annotation.XmlAttribute;
+
 /**
  * @author weijiancai
  * @since 0.0.1
@@ -22,6 +24,7 @@ public class HistoricTaskInstanceBean {
     private String parentTaskId;
     private String deleteReason;
 
+    @XmlAttribute
     public String getId() {
         return id;
     }
@@ -30,6 +33,7 @@ public class HistoricTaskInstanceBean {
         this.id = id;
     }
 
+    @XmlAttribute
     public String getName() {
         return name;
     }
@@ -38,6 +42,7 @@ public class HistoricTaskInstanceBean {
         this.name = name;
     }
 
+    @XmlAttribute
     public String getOwner() {
         return owner;
     }
@@ -46,6 +51,7 @@ public class HistoricTaskInstanceBean {
         this.owner = owner;
     }
 
+    @XmlAttribute
     public String getDescription() {
         return description;
     }
@@ -54,6 +60,7 @@ public class HistoricTaskInstanceBean {
         this.description = description;
     }
 
+    @XmlAttribute
     public String getAssignee() {
         return assignee;
     }
@@ -62,6 +69,7 @@ public class HistoricTaskInstanceBean {
         this.assignee = assignee;
     }
 
+    @XmlAttribute
     public int getPriority() {
         return priority;
     }
@@ -70,6 +78,7 @@ public class HistoricTaskInstanceBean {
         this.priority = priority;
     }
 
+    @XmlAttribute
     public String getStartTime() {
         return startTime;
     }
@@ -78,6 +87,7 @@ public class HistoricTaskInstanceBean {
         this.startTime = startTime;
     }
 
+    @XmlAttribute
     public String getEndTime() {
         return endTime;
     }
@@ -86,6 +96,7 @@ public class HistoricTaskInstanceBean {
         this.endTime = endTime;
     }
 
+    @XmlAttribute
     public String getDueDate() {
         return dueDate;
     }
@@ -94,6 +105,7 @@ public class HistoricTaskInstanceBean {
         this.dueDate = dueDate;
     }
 
+    @XmlAttribute
     public long getDurationInMills() {
         return durationInMills;
     }
@@ -102,6 +114,7 @@ public class HistoricTaskInstanceBean {
         this.durationInMills = durationInMills;
     }
 
+    @XmlAttribute
     public String getExecutionId() {
         return executionId;
     }
@@ -110,6 +123,7 @@ public class HistoricTaskInstanceBean {
         this.executionId = executionId;
     }
 
+    @XmlAttribute
     public String getProcessDefinitionId() {
         return processDefinitionId;
     }
@@ -118,6 +132,7 @@ public class HistoricTaskInstanceBean {
         this.processDefinitionId = processDefinitionId;
     }
 
+    @XmlAttribute
     public String getProcessInstanceId() {
         return processInstanceId;
     }
@@ -126,6 +141,7 @@ public class HistoricTaskInstanceBean {
         this.processInstanceId = processInstanceId;
     }
 
+    @XmlAttribute
     public String getTaskDefinitionKey() {
         return taskDefinitionKey;
     }
@@ -134,6 +150,7 @@ public class HistoricTaskInstanceBean {
         this.taskDefinitionKey = taskDefinitionKey;
     }
 
+    @XmlAttribute
     public String getParentTaskId() {
         return parentTaskId;
     }
@@ -142,6 +159,7 @@ public class HistoricTaskInstanceBean {
         this.parentTaskId = parentTaskId;
     }
 
+    @XmlAttribute
     public String getDeleteReason() {
         return deleteReason;
     }

@@ -1,5 +1,6 @@
 package com.wjc.activiti.demo.bean;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -15,6 +16,7 @@ public class HistoricDetailBean {
     private String activityInstanceId;
     private String time;
 
+    @XmlAttribute
     public String getId() {
         return id;
     }
@@ -23,6 +25,7 @@ public class HistoricDetailBean {
         this.id = id;
     }
 
+    @XmlAttribute
     public String getExecutionId() {
         return executionId;
     }
@@ -31,6 +34,7 @@ public class HistoricDetailBean {
         this.executionId = executionId;
     }
 
+    @XmlAttribute
     public String getProcessInstanceId() {
         return processInstanceId;
     }
@@ -39,6 +43,7 @@ public class HistoricDetailBean {
         this.processInstanceId = processInstanceId;
     }
 
+    @XmlAttribute
     public String getTaskId() {
         return taskId;
     }
@@ -47,6 +52,7 @@ public class HistoricDetailBean {
         this.taskId = taskId;
     }
 
+    @XmlAttribute
     public String getActivityInstanceId() {
         return activityInstanceId;
     }
@@ -55,6 +61,7 @@ public class HistoricDetailBean {
         this.activityInstanceId = activityInstanceId;
     }
 
+    @XmlAttribute
     public String getTime() {
         return time;
     }

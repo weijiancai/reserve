@@ -55,8 +55,15 @@ public class ProcessBO {
         deployId = deployment.getId();
     }
 
-    public static InputStream getProcessImage() {
-        ProcessDefinition processDefinition = getRepositoryService().createProcessDefinitionQuery().processDefinitionKey(PROCESS_KEY).latestVersion().singleResult();
+    public static InputStream getProcessImage(String processEngineName, String processDefineId) {
+        ProcessDefinition processDefinition;
+        if (processEngineName != null && processDefineId != null) {
+            ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+            processDefinition = processEngine.getRepositoryService().getProcessDefinition(processDefineId);
+        } else {
+            processDefinition = getRepositoryService().createProcessDefinitionQuery().processDefinitionKey(PROCESS_KEY).latestVersion().singleResult();
+        }
+
         String diagramResourceName = processDefinition.getDiagramResourceName();
         return getRepositoryService().getResourceAsStream(processDefinition.getDeploymentId(), diagramResourceName);
     }
@@ -65,9 +72,17 @@ public class ProcessBO {
      * 获得流程定义xml文件
      *
      * @return 返回流程定义xml文件内容
+     * @param processEngineName
+     * @param processDefineId
      */
-    public static String getProcessDefXml() throws UnsupportedEncodingException {
-        ProcessDefinition processDefinition = getRepositoryService().createProcessDefinitionQuery().processDefinitionKey(PROCESS_KEY).latestVersion().singleResult();
+    public static String getProcessDefXml(String processEngineName, String processDefineId) throws UnsupportedEncodingException {
+        ProcessDefinition processDefinition;
+        if (processEngineName != null && processDefineId != null) {
+            ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+            processDefinition = processEngine.getRepositoryService().getProcessDefinition(processDefineId);
+        } else {
+            processDefinition = getRepositoryService().createProcessDefinitionQuery().processDefinitionKey(PROCESS_KEY).latestVersion().singleResult();
+        }
         String xmlResourceName = processDefinition.getResourceName();
         InputStream is = getRepositoryService().getResourceAsStream(processDefinition.getDeploymentId(), xmlResourceName);
         byte[] bytes = IoUtil.readInputStream(is, xmlResourceName);
@@ -190,6 +205,38 @@ public class ProcessBO {
         return result;
     }
 
+    public static List<ProcessDefineBean> getProcessDefinitionById(String processEngineName, String processDefinitionId) {
+        List<ProcessDefineBean> result = new ArrayList<>();
+
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        RepositoryService repositoryService = processEngine.getRepositoryService();
+        List<ProcessDefinition> lists = repositoryService.createProcessDefinitionQuery().processDefinitionId(processDefinitionId).orderByProcessDefinitionName().orderByProcessDefinitionVersion().desc().list();
+
+        ProcessDefineBean bean;
+        Deployment deployment;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (ProcessDefinition processDefinition : lists) {
+            bean = new ProcessDefineBean();
+            bean.setId(processDefinition.getId());
+            bean.setKey(processDefinition.getKey());
+            bean.setName(processDefinition.getName());
+            bean.setVersion(processDefinition.getVersion());
+            bean.setCategory(processDefinition.getCategory());
+            bean.setDescription(processDefinition.getDescription());
+            bean.setDeploymentId(processDefinition.getDeploymentId());
+            bean.setResourceName(processDefinition.getResourceName());
+            bean.setDiagramResourceName(processDefinition.getDiagramResourceName());
+            bean.setHasStartFromKey(processDefinition.hasStartFormKey());
+            bean.setSuspended(processDefinition.isSuspended());
+            deployment = getDeploymentById(processEngineName, bean.getDeploymentId());
+            bean.setDeploymentTime(sdf.format(deployment.getDeploymentTime()));
+
+            result.add(bean);
+        }
+
+        return result;
+    }
+
     public static List<DeploymentBean> getDeployment(String processEngineName) {
         List<DeploymentBean> result = new ArrayList<>();
 
@@ -205,6 +252,13 @@ public class ProcessBO {
         }
 
         return result;
+    }
+
+    public static Deployment getDeploymentById(String processEngineName, String deploymentId) {
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        RepositoryService repositoryService = processEngine.getRepositoryService();
+
+        return repositoryService.createDeploymentQuery().deploymentId(deploymentId).singleResult();
     }
 
     public static List<ProcessInstanceBean> getProcessInstance(String processEngineName, String processDefineId) {
@@ -339,31 +393,49 @@ public class ProcessBO {
         HistoryService historyService = processEngine.getHistoryService();
         List<HistoricProcessInstance> lists = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).list();
 
-        HistoricProcessInstanceBean bean;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for (HistoricProcessInstance instance : lists) {
-            bean = new HistoricProcessInstanceBean();
-            bean.setId(instance.getId());
-            bean.setBusinessKey(instance.getBusinessKey());
-            bean.setProcessDefinitionId(instance.getProcessDefinitionId());
-            bean.setStartActivityId(instance.getStartActivityId());
-            bean.setStartUserId(instance.getStartUserId());
-            if (instance.getStartTime() != null) {
-                bean.setStartTime(sdf.format(instance.getStartTime()));
-            }
-            if (instance.getEndTime() != null) {
-                bean.setEndTime(sdf.format(instance.getEndTime()));
-            }
-            if (instance.getDurationInMillis() != null) {
-                bean.setDurationInMills(instance.getDurationInMillis());
-            }
-            bean.setSupperProcessInstanceId(instance.getSuperProcessInstanceId());
-            bean.setDeleteReason(instance.getDeleteReason());
-
-            result.add(bean);
+            result.add(convertToHistoricProcessInstanceBean(instance));
         }
 
         return result;
+    }
+
+    public static List<HistoricProcessInstanceBean> getHistoricProcessInstanceByProcessDefineId(String processEngineName, String processDefineId) {
+        List<HistoricProcessInstanceBean> result = new ArrayList<>();
+
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        HistoryService historyService = processEngine.getHistoryService();
+        List<HistoricProcessInstance> lists = historyService.createHistoricProcessInstanceQuery().processDefinitionId(processDefineId).list();
+
+        for (HistoricProcessInstance instance : lists) {
+            result.add(convertToHistoricProcessInstanceBean(instance));
+        }
+
+        return result;
+    }
+
+    private static HistoricProcessInstanceBean convertToHistoricProcessInstanceBean(HistoricProcessInstance instance) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        HistoricProcessInstanceBean bean = new HistoricProcessInstanceBean();
+
+        bean.setId(instance.getId());
+        bean.setBusinessKey(instance.getBusinessKey());
+        bean.setProcessDefinitionId(instance.getProcessDefinitionId());
+        bean.setStartActivityId(instance.getStartActivityId());
+        bean.setStartUserId(instance.getStartUserId());
+        if (instance.getStartTime() != null) {
+            bean.setStartTime(sdf.format(instance.getStartTime()));
+        }
+        if (instance.getEndTime() != null) {
+            bean.setEndTime(sdf.format(instance.getEndTime()));
+        }
+        if (instance.getDurationInMillis() != null) {
+            bean.setDurationInMills(instance.getDurationInMillis());
+        }
+        bean.setSupperProcessInstanceId(instance.getSuperProcessInstanceId());
+        bean.setDeleteReason(instance.getDeleteReason());
+
+        return bean;
     }
 
     public static List<HistoricTaskInstanceBean> getHistoricTaskInstance(String processEngineName, String processInstanceId) {
@@ -432,5 +504,11 @@ public class ProcessBO {
         }
 
         return result;
+    }
+
+    public static void startProcessByProcessDefineId(String processEngineName, String processDefineId) {
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        RuntimeService runtimeService = processEngine.getRuntimeService();
+        runtimeService.startProcessInstanceById(processDefineId);
     }
 }

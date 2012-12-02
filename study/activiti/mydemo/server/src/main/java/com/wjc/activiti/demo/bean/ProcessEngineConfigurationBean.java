@@ -1,6 +1,7 @@
 package com.wjc.activiti.demo.bean;
 
 import javax.sql.DataSource;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
@@ -43,6 +44,7 @@ public class ProcessEngineConfigurationBean {
     protected boolean jpaHandleTransaction;
     protected boolean jpaCloseEntityManager;
 
+    @XmlAttribute
     public String getProcessEngineName() {
         return processEngineName;
     }
@@ -51,6 +53,7 @@ public class ProcessEngineConfigurationBean {
         this.processEngineName = processEngineName;
     }
 
+    @XmlAttribute
     public int getIdBlockSize() {
         return idBlockSize;
     }
@@ -60,7 +63,7 @@ public class ProcessEngineConfigurationBean {
         this.idBlockSize = idBlockSize;
     }
 
-
+    @XmlAttribute
     public String getHistory() {
         return history;
     }
@@ -69,7 +72,7 @@ public class ProcessEngineConfigurationBean {
         this.history = history;
     }
 
-
+    @XmlAttribute
     public String getMailServerHost() {
         return mailServerHost;
     }
@@ -79,7 +82,7 @@ public class ProcessEngineConfigurationBean {
         this.mailServerHost = mailServerHost;
     }
 
-
+    @XmlAttribute
     public String getMailServerUsername() {
         return mailServerUsername;
     }
@@ -89,7 +92,7 @@ public class ProcessEngineConfigurationBean {
         this.mailServerUsername = mailServerUsername;
     }
 
-
+    @XmlAttribute
     public String getMailServerPassword() {
         return mailServerPassword;
     }
@@ -99,7 +102,7 @@ public class ProcessEngineConfigurationBean {
         this.mailServerPassword = mailServerPassword;
     }
 
-
+    @XmlAttribute
     public int getMailServerPort() {
         return mailServerPort;
     }
@@ -109,7 +112,7 @@ public class ProcessEngineConfigurationBean {
         this.mailServerPort = mailServerPort;
     }
 
-
+    @XmlAttribute
     public boolean getMailServerUseTLS() {
         return useTLS;
     }
@@ -119,7 +122,7 @@ public class ProcessEngineConfigurationBean {
         this.useTLS = useTLS;
     }
 
-
+    @XmlAttribute
     public String getMailServerDefaultFrom() {
         return mailServerDefaultFrom;
     }
@@ -129,7 +132,7 @@ public class ProcessEngineConfigurationBean {
         this.mailServerDefaultFrom = mailServerDefaultFrom;
     }
 
-
+    @XmlAttribute
     public String getDatabaseType() {
         return databaseType;
     }
@@ -139,7 +142,7 @@ public class ProcessEngineConfigurationBean {
         this.databaseType = databaseType;
     }
 
-
+    @XmlAttribute
     public String getDatabaseSchemaUpdate() {
         return databaseSchemaUpdate;
     }
@@ -149,9 +152,9 @@ public class ProcessEngineConfigurationBean {
         this.databaseSchemaUpdate = databaseSchemaUpdate;
     }
 
-
+    @XmlAttribute
     public String getDataSource() {
-        return dataSource.toString();
+        return dataSource == null ? "" : dataSource.toString();
     }
 
 
@@ -159,7 +162,7 @@ public class ProcessEngineConfigurationBean {
         this.dataSource = dataSource;
     }
 
-
+    @XmlAttribute
     public String getJdbcDriver() {
         return jdbcDriver;
     }
@@ -169,7 +172,7 @@ public class ProcessEngineConfigurationBean {
         this.jdbcDriver = jdbcDriver;
     }
 
-
+    @XmlAttribute
     public String getJdbcUrl() {
         return jdbcUrl;
     }
@@ -179,7 +182,7 @@ public class ProcessEngineConfigurationBean {
         this.jdbcUrl = jdbcUrl;
     }
 
-
+    @XmlAttribute
     public String getJdbcUsername() {
         return jdbcUsername;
     }
@@ -189,7 +192,7 @@ public class ProcessEngineConfigurationBean {
         this.jdbcUsername = jdbcUsername;
     }
 
-
+    @XmlAttribute
     public String getJdbcPassword() {
         return jdbcPassword;
     }
@@ -199,7 +202,7 @@ public class ProcessEngineConfigurationBean {
         this.jdbcPassword = jdbcPassword;
     }
 
-
+    @XmlAttribute
     public boolean isTransactionsExternallyManaged() {
         return transactionsExternallyManaged;
     }
@@ -209,7 +212,7 @@ public class ProcessEngineConfigurationBean {
         this.transactionsExternallyManaged = transactionsExternallyManaged;
     }
 
-
+    @XmlAttribute
     public int getJdbcMaxActiveConnections() {
         return jdbcMaxActiveConnections;
     }
@@ -219,7 +222,7 @@ public class ProcessEngineConfigurationBean {
         this.jdbcMaxActiveConnections = jdbcMaxActiveConnections;
     }
 
-
+    @XmlAttribute
     public int getJdbcMaxIdleConnections() {
         return jdbcMaxIdleConnections;
     }
@@ -229,7 +232,7 @@ public class ProcessEngineConfigurationBean {
         this.jdbcMaxIdleConnections = jdbcMaxIdleConnections;
     }
 
-
+    @XmlAttribute
     public int getJdbcMaxCheckoutTime() {
         return jdbcMaxCheckoutTime;
     }
@@ -239,7 +242,7 @@ public class ProcessEngineConfigurationBean {
         this.jdbcMaxCheckoutTime = jdbcMaxCheckoutTime;
     }
 
-
+    @XmlAttribute
     public int getJdbcMaxWaitTime() {
         return jdbcMaxWaitTime;
     }
@@ -248,6 +251,7 @@ public class ProcessEngineConfigurationBean {
         this.jdbcMaxWaitTime = jdbcMaxWaitTime;
     }
 
+    @XmlAttribute
     public boolean isJdbcPingEnabled() {
         return jdbcPingEnabled;
     }
@@ -256,6 +260,7 @@ public class ProcessEngineConfigurationBean {
         this.jdbcPingEnabled = jdbcPingEnabled;
     }
 
+    @XmlAttribute
     public String getJdbcPingQuery() {
         return jdbcPingQuery;
     }
@@ -264,6 +269,7 @@ public class ProcessEngineConfigurationBean {
         this.jdbcPingQuery = jdbcPingQuery;
     }
 
+    @XmlAttribute
     public int getJdbcPingConnectionNotUsedFor() {
         return jdbcPingConnectionNotUsedFor;
     }
@@ -272,45 +278,43 @@ public class ProcessEngineConfigurationBean {
         this.jdbcPingConnectionNotUsedFor = jdbcPingNotUsedFor;
     }
 
+    @XmlAttribute
     public boolean isJobExecutorActivate() {
         return jobExecutorActivate;
     }
-
 
     public void setJobExecutorActivate(boolean jobExecutorActivate) {
         this.jobExecutorActivate = jobExecutorActivate;
     }
 
-
+    @XmlAttribute
     public String getJpaEntityManagerFactory() {
-        return jpaEntityManagerFactory.toString();
+        return jpaEntityManagerFactory == null ? "" : jpaEntityManagerFactory.toString();
     }
-
 
     public void setJpaEntityManagerFactory(Object jpaEntityManagerFactory) {
         this.jpaEntityManagerFactory = jpaEntityManagerFactory;
     }
 
-
+    @XmlAttribute
     public boolean isJpaHandleTransaction() {
         return jpaHandleTransaction;
     }
-
 
     public void setJpaHandleTransaction(boolean jpaHandleTransaction) {
         this.jpaHandleTransaction = jpaHandleTransaction;
     }
 
-
+    @XmlAttribute
     public boolean isJpaCloseEntityManager() {
         return jpaCloseEntityManager;
     }
-
 
     public void setJpaCloseEntityManager(boolean jpaCloseEntityManager) {
         this.jpaCloseEntityManager = jpaCloseEntityManager;
     }
 
+    @XmlAttribute
     public String getJpaPersistenceUnitName() {
         return jpaPersistenceUnitName;
     }
@@ -319,6 +323,7 @@ public class ProcessEngineConfigurationBean {
         this.jpaPersistenceUnitName = jpaPersistenceUnitName;
     }
 
+    @XmlAttribute
     public String getDataSourceJndiName() {
         return dataSourceJndiName;
     }

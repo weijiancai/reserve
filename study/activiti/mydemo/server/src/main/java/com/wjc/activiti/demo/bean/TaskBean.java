@@ -1,5 +1,6 @@
 package com.wjc.activiti.demo.bean;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -26,6 +27,7 @@ public class TaskBean {
     private String processDefinitionId;
     private String parentTaskId;
 
+    @XmlAttribute
     public String getId() {
         return id;
     }
@@ -34,6 +36,7 @@ public class TaskBean {
         this.id = id;
     }
 
+    @XmlAttribute
     public String getName() {
         return name;
     }
@@ -42,6 +45,7 @@ public class TaskBean {
         this.name = name;
     }
 
+    @XmlAttribute
     public String getDescription() {
         return description;
     }
@@ -50,6 +54,7 @@ public class TaskBean {
         this.description = description;
     }
 
+    @XmlAttribute
     public int getPriority() {
         return priority;
     }
@@ -58,6 +63,7 @@ public class TaskBean {
         this.priority = priority;
     }
 
+    @XmlAttribute
     public String getOwner() {
         return owner;
     }
@@ -66,6 +72,7 @@ public class TaskBean {
         this.owner = owner;
     }
 
+    @XmlAttribute
     public String getAssignee() {
         return assignee;
     }
@@ -74,6 +81,7 @@ public class TaskBean {
         this.assignee = assignee;
     }
 
+    @XmlAttribute
     public String getCreateTime() {
         return createTime;
     }
@@ -82,6 +90,7 @@ public class TaskBean {
         this.createTime = createTime;
     }
 
+    @XmlAttribute
     public String getDueDate() {
         return dueDate;
     }
@@ -90,6 +99,7 @@ public class TaskBean {
         this.dueDate = dueDate;
     }
 
+    @XmlAttribute
     public String getTaskDefinitionKey() {
         return taskDefinitionKey;
     }
@@ -98,6 +108,7 @@ public class TaskBean {
         this.taskDefinitionKey = taskDefinitionKey;
     }
 
+    @XmlAttribute
     public String getExecutionId() {
         return executionId;
     }
@@ -106,6 +117,7 @@ public class TaskBean {
         this.executionId = executionId;
     }
 
+    @XmlAttribute
     public String getProcessInstanceId() {
         return processInstanceId;
     }
@@ -114,6 +126,7 @@ public class TaskBean {
         this.processInstanceId = processInstanceId;
     }
 
+    @XmlAttribute
     public String getProcessDefinitionId() {
         return processDefinitionId;
     }
@@ -122,6 +135,7 @@ public class TaskBean {
         this.processDefinitionId = processDefinitionId;
     }
 
+    @XmlAttribute
     public String getParentTaskId() {
         return parentTaskId;
     }
@@ -130,6 +144,7 @@ public class TaskBean {
         this.parentTaskId = parentTaskId;
     }
 
+    @XmlAttribute
     public String getDelegationState() {
         return delegationState;
     }

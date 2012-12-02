@@ -22,6 +22,7 @@ public class ProcessDefineBean {
     private String diagramResourceName;
     private boolean hasStartFromKey;
     private boolean isSuspended;
+    private String deploymentTime;
 
     @XmlAttribute
     public String getId() {
@@ -120,5 +121,14 @@ public class ProcessDefineBean {
 
     public void setSuspended(boolean suspended) {
         isSuspended = suspended;
+    }
+
+    @XmlAttribute
+    public String getDeploymentTime() {
+        return deploymentTime;
+    }
+
+    public void setDeploymentTime(String deploymentTime) {
+        this.deploymentTime = deploymentTime;
     }
 }

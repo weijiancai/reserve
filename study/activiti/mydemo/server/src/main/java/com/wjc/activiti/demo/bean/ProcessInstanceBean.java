@@ -1,5 +1,6 @@
 package com.wjc.activiti.demo.bean;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -17,6 +18,7 @@ public class ProcessInstanceBean {
     private String processDefinitionId;
     private boolean isSuspended;
 
+    @XmlAttribute
     public String getId() {
         return id;
     }
@@ -25,6 +27,7 @@ public class ProcessInstanceBean {
         this.id = id;
     }
 
+    @XmlAttribute
     public String getProcessInstanceId() {
         return processInstanceId;
     }
@@ -33,6 +36,7 @@ public class ProcessInstanceBean {
         this.processInstanceId = processInstanceId;
     }
 
+    @XmlAttribute
     public boolean isEnded() {
         return isEnded;
     }
@@ -41,6 +45,7 @@ public class ProcessInstanceBean {
         isEnded = ended;
     }
 
+    @XmlAttribute
     public String getBusinessKey() {
         return businessKey;
     }
@@ -49,6 +54,7 @@ public class ProcessInstanceBean {
         this.businessKey = businessKey;
     }
 
+    @XmlAttribute
     public String getProcessDefinitionId() {
         return processDefinitionId;
     }
@@ -57,6 +63,7 @@ public class ProcessInstanceBean {
         this.processDefinitionId = processDefinitionId;
     }
 
+    @XmlAttribute
     public boolean isSuspended() {
         return isSuspended;
     }

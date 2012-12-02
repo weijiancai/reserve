@@ -1,5 +1,6 @@
 package com.wjc.activiti.demo.bean;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -20,6 +21,7 @@ public class HistoricActivityInstanceBean {
     private String processDefinitionId;
     private String processInstanceId;
 
+    @XmlAttribute
     public String getId() {
         return id;
     }
@@ -28,6 +30,7 @@ public class HistoricActivityInstanceBean {
         this.id = id;
     }
 
+    @XmlAttribute
     public String getActivityId() {
         return activityId;
     }
@@ -36,6 +39,7 @@ public class HistoricActivityInstanceBean {
         this.activityId = activityId;
     }
 
+    @XmlAttribute
     public String getActivityName() {
         return activityName;
     }
@@ -44,6 +48,7 @@ public class HistoricActivityInstanceBean {
         this.activityName = activityName;
     }
 
+    @XmlAttribute
     public String getActivityType() {
         return activityType;
     }
@@ -52,6 +57,7 @@ public class HistoricActivityInstanceBean {
         this.activityType = activityType;
     }
 
+    @XmlAttribute
     public String getAssignee() {
         return assignee;
     }
@@ -60,6 +66,7 @@ public class HistoricActivityInstanceBean {
         this.assignee = assignee;
     }
 
+    @XmlAttribute
     public long getDurationInMillis() {
         return durationInMillis;
     }
@@ -68,6 +75,7 @@ public class HistoricActivityInstanceBean {
         this.durationInMillis = durationInMillis;
     }
 
+    @XmlAttribute
     public String getEndTime() {
         return endTime;
     }
@@ -76,6 +84,7 @@ public class HistoricActivityInstanceBean {
         this.endTime = endTime;
     }
 
+    @XmlAttribute
     public String getExecutionId() {
         return executionId;
     }
@@ -84,6 +93,7 @@ public class HistoricActivityInstanceBean {
         this.executionId = executionId;
     }
 
+    @XmlAttribute
     public String getProcessDefinitionId() {
         return processDefinitionId;
     }
@@ -92,6 +102,7 @@ public class HistoricActivityInstanceBean {
         this.processDefinitionId = processDefinitionId;
     }
 
+    @XmlAttribute
     public String getProcessInstanceId() {
         return processInstanceId;
     }
@@ -100,6 +111,7 @@ public class HistoricActivityInstanceBean {
         this.processInstanceId = processInstanceId;
     }
 
+    @XmlAttribute
     public String getStartTime() {
         return startTime;
     }

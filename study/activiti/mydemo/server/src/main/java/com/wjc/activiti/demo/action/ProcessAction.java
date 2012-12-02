@@ -28,10 +28,19 @@ public class ProcessAction extends HttpServlet {
         String method = req.getParameter("method");
         String processEngineName, deploymentId, processDefineId, processInstanceId, taskId;
 
+        processEngineName = req.getParameter("processEngineName");
+        processDefineId = req.getParameter("processDefineId");
+        if (processDefineId != null) {
+            processDefineId = URLDecoder.decode(processDefineId, "UTF-8");
+        }
+        deploymentId = req.getParameter("deploymentId");
+        processInstanceId = req.getParameter("processInstanceId");
+        taskId = req.getParameter("taskId");
+
         switch (method) {
             case "getImage":
                 res.setContentType("image/png");
-                InputStream is = ProcessBO.getProcessImage();
+                InputStream is = ProcessBO.getProcessImage(processEngineName, processDefineId);
                 PrintWriter pw = res.getWriter();
                 int i;
                 while ((i = is.read()) != -1) {
@@ -41,32 +50,34 @@ public class ProcessAction extends HttpServlet {
                 pw.close();
                 break;
             case "startProcess":
-                String name = req.getParameter("name");
-                String days = req.getParameter("days");
-                String desc = req.getParameter("desc");
+                if (processEngineName != null && processDefineId != null) {
+                    ProcessBO.startProcessByProcessDefineId(processEngineName, processDefineId);
+                } else {
+                    String name = req.getParameter("name");
+                    String days = req.getParameter("days");
+                    String desc = req.getParameter("desc");
 
-                // 保存单据
-                Order order = new Order(name, Integer.parseInt(days), desc);
-                OrderBO.saveOrder(order);
+                    // 保存单据
+                    Order order = new Order(name, Integer.parseInt(days), desc);
+                    OrderBO.saveOrder(order);
 
-                Map<String, Object> params = new HashMap<String, Object>();
-                params.put("order", order);
-                String processId = ProcessBO.startProcess(ProcessBO.PROCESS_KEY, params);
+                    Map<String, Object> params = new HashMap<String, Object>();
+                    params.put("order", order);
+                    String processId = ProcessBO.startProcess(ProcessBO.PROCESS_KEY, params);
 
-                List<Task> tasks = ProcessBO.getTasksByUser(processId, name);
-                for (Task task : tasks) {
-                    System.out.println("完成任务： " + task.getName());
-                    ProcessBO.getTaskService().complete(task.getId());
+                    List<Task> tasks = ProcessBO.getTasksByUser(processId, name);
+                    for (Task task : tasks) {
+                        System.out.println("完成任务： " + task.getName());
+                        ProcessBO.getTaskService().complete(task.getId());
+                    }
                 }
+
                 break;
             case "getProcessDefXml":
-                String xml = ProcessBO.getProcessDefXml();
+                String xml = ProcessBO.getProcessDefXml(processEngineName, processDefineId);
                 sendXml(res, xml);
                 break;
             case "getProcessEngines":
-//                Map<String, Object> map = new HashMap<>();
-//                map.put("lists", ProcessBO.getProcessEngines());
-//                sendXml(res, XML.toString(new JSONObject(map)));
                 try {
                     sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessEngines(), ProcessEngineBean.class));
                 } catch (JAXBException e) {
@@ -74,7 +85,6 @@ public class ProcessAction extends HttpServlet {
                 }
                 break;
             case "getProcessEngineConfiguration":
-                processEngineName = req.getParameter("processEngineName");
                 try {
                     sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessEngineConfiguration(processEngineName), ProcessEngineConfigurationBean.class));
                 } catch (JAXBException e) {
@@ -82,16 +92,20 @@ public class ProcessAction extends HttpServlet {
                 }
                 break;
             case "getProcessDefine":
-                processEngineName = req.getParameter("processEngineName");
-                deploymentId = req.getParameter("deploymentId");
                 try {
                     sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessDefine(processEngineName, deploymentId), ProcessDefineBean.class));
                 } catch (JAXBException e) {
                     e.printStackTrace();
                 }
                 break;
+            case "getProcessDefineById":
+                try {
+                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessDefinitionById(processEngineName, processDefineId), ProcessDefineBean.class));
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+                break;
             case "getDeployment":
-                processEngineName = req.getParameter("processEngineName");
                 try {
                     sendXml(res, JaxbUtil.marshalList(ProcessBO.getDeployment(processEngineName), DeploymentBean.class));
                 } catch (JAXBException e) {
@@ -99,8 +113,6 @@ public class ProcessAction extends HttpServlet {
                 }
                 break;
             case "getProcessInstance":
-                processEngineName = req.getParameter("processEngineName");
-                processDefineId = URLDecoder.decode(req.getParameter("processDefineId"), "UTF-8");
                 try {
                     sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessInstance(processEngineName, processDefineId), ProcessInstanceBean.class));
                 } catch (JAXBException e) {
@@ -108,8 +120,6 @@ public class ProcessAction extends HttpServlet {
                 }
                 break;
             case "getProcessInstanceVariables":
-                processEngineName = req.getParameter("processEngineName");
-                processInstanceId = req.getParameter("processInstanceId");
                 try {
                     sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessInstanceVariables(processEngineName, processInstanceId), Paris.class, Order.class));
                 } catch (JAXBException e) {
@@ -117,8 +127,6 @@ public class ProcessAction extends HttpServlet {
                 }
                 break;
             case "getProcessInstanceTasks":
-                processEngineName = req.getParameter("processEngineName");
-                processInstanceId = req.getParameter("processInstanceId");
                 try {
                     sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessInstanceTasks(processEngineName, processInstanceId), TaskBean.class));
                 } catch (JAXBException e) {
@@ -126,8 +134,6 @@ public class ProcessAction extends HttpServlet {
                 }
                 break;
             case "getTaskVariables":
-                processEngineName = req.getParameter("processEngineName");
-                taskId = req.getParameter("taskId");
                 try {
                     sendXml(res, JaxbUtil.marshalList(ProcessBO.getTaskVariables(processEngineName, taskId), Paris.class, Order.class));
                 } catch (JAXBException e) {
@@ -135,8 +141,6 @@ public class ProcessAction extends HttpServlet {
                 }
                 break;
             case "getHistoricActivityInstance":
-                processEngineName = req.getParameter("processEngineName");
-                processInstanceId = req.getParameter("processInstanceId");
                 try {
                     sendXml(res, JaxbUtil.marshalList(ProcessBO.getHistoricActivityInstance(processEngineName, processInstanceId), HistoricActivityInstanceBean.class));
                 } catch (JAXBException e) {
@@ -144,17 +148,17 @@ public class ProcessAction extends HttpServlet {
                 }
                 break;
             case "getHistoricProcessInstance":
-                processEngineName = req.getParameter("processEngineName");
-                processInstanceId = req.getParameter("processInstanceId");
                 try {
-                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getHistoricProcessInstance(processEngineName, processInstanceId), HistoricProcessInstanceBean.class));
+                    if (processDefineId != null) {
+                        sendXml(res, JaxbUtil.marshalList(ProcessBO.getHistoricProcessInstanceByProcessDefineId(processEngineName, processDefineId), HistoricProcessInstanceBean.class));
+                    } else {
+                        sendXml(res, JaxbUtil.marshalList(ProcessBO.getHistoricProcessInstance(processEngineName, processInstanceId), HistoricProcessInstanceBean.class));
+                    }
                 } catch (JAXBException e) {
                     e.printStackTrace();
                 }
                 break;
             case "getHistoricTaskInstance":
-                processEngineName = req.getParameter("processEngineName");
-                processInstanceId = req.getParameter("processInstanceId");
                 try {
                     sendXml(res, JaxbUtil.marshalList(ProcessBO.getHistoricTaskInstance(processEngineName, processInstanceId), HistoricTaskInstanceBean.class));
                 } catch (JAXBException e) {
@@ -162,8 +166,6 @@ public class ProcessAction extends HttpServlet {
                 }
                 break;
             case "getHistoricDetail":
-                processEngineName = req.getParameter("processEngineName");
-                processInstanceId = req.getParameter("processInstanceId");
                 try {
                     sendXml(res, JaxbUtil.marshalList(ProcessBO.getHistoricDetail(processEngineName, processInstanceId), HistoricDetailBean.class));
                 } catch (JAXBException e) {

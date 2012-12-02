@@ -1,5 +1,6 @@
 package com.wjc.activiti.demo.bean;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -19,6 +20,7 @@ public class HistoricProcessInstanceBean {
     private String supperProcessInstanceId;
     private String deleteReason;
 
+    @XmlAttribute
     public String getId() {
         return id;
     }
@@ -27,6 +29,7 @@ public class HistoricProcessInstanceBean {
         this.id = id;
     }
 
+    @XmlAttribute
     public String getBusinessKey() {
         return businessKey;
     }
@@ -35,6 +38,7 @@ public class HistoricProcessInstanceBean {
         this.businessKey = businessKey;
     }
 
+    @XmlAttribute
     public String getProcessDefinitionId() {
         return processDefinitionId;
     }
@@ -43,6 +47,7 @@ public class HistoricProcessInstanceBean {
         this.processDefinitionId = processDefinitionId;
     }
 
+    @XmlAttribute
     public String getStartActivityId() {
         return startActivityId;
     }
@@ -51,6 +56,7 @@ public class HistoricProcessInstanceBean {
         this.startActivityId = startActivityId;
     }
 
+    @XmlAttribute
     public String getStartUserId() {
         return startUserId;
     }
@@ -59,6 +65,7 @@ public class HistoricProcessInstanceBean {
         this.startUserId = startUserId;
     }
 
+    @XmlAttribute
     public String getStartTime() {
         return startTime;
     }
@@ -67,6 +74,7 @@ public class HistoricProcessInstanceBean {
         this.startTime = startTime;
     }
 
+    @XmlAttribute
     public String getEndTime() {
         return endTime;
     }
@@ -75,6 +83,7 @@ public class HistoricProcessInstanceBean {
         this.endTime = endTime;
     }
 
+    @XmlAttribute
     public long getDurationInMills() {
         return durationInMills;
     }
@@ -83,6 +92,7 @@ public class HistoricProcessInstanceBean {
         this.durationInMills = durationInMills;
     }
 
+    @XmlAttribute
     public String getSupperProcessInstanceId() {
         return supperProcessInstanceId;
     }
@@ -91,6 +101,7 @@ public class HistoricProcessInstanceBean {
         this.supperProcessInstanceId = supperProcessInstanceId;
     }
 
+    @XmlAttribute
     public String getDeleteReason() {
         return deleteReason;
     }
