@@ -139,6 +139,9 @@
         }
 
         private function drawProcessImage():void {
+            // 清空画布
+            this.canvas.graphics.clear();
+
             var model:Namespace = processDefineXml.namespace();
             var bpmndi:Namespace = processDefineXml.namespace("bpmndi");
             var dc:Namespace = processDefineXml.namespace("dc");
@@ -178,8 +181,9 @@
             var xmlList:XMLList = processDefineXml.bpmndi::BPMNDiagram..bpmndi::BPMNShape; // 图形
 //            Alert.show(xmlList.length());
 
-            var baseX:Number = canvas.x;
-            var baseY:Number = canvas.y;
+            var baseX:Number = 0;
+            var baseY:Number = -50;
+            trace("basX = " + baseX + ", basY = " + baseY);
             var x:Number, y:Number, width:Number, height:Number, bpmnElement:String;
             for (i = 0; i < xmlList.length(); i++) {
                 bpmnElement = xmlList[i].@bpmnElement;
