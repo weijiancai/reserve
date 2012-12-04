@@ -163,6 +163,11 @@
             // 清空画布
             this.canvas.graphics.clear();
 
+            var processIcon:ProcessIcon = new ProcessIcon(null);
+            processIcon.x = 0;
+            processIcon.y = 0;
+            canvas.addChild(processIcon);
+
             var model:Namespace = processDefineXml.namespace();
             var bpmndi:Namespace = processDefineXml.namespace("bpmndi");
             var dc:Namespace = processDefineXml.namespace("dc");
