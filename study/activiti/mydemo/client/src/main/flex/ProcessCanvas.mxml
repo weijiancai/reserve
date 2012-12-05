@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()">
     <mx:Script><![CDATA[
-        [Bindable]
-        [Embed(source="images/user.png")]
-        public var userTask:Class;  // 用户任务
+        import mx.controls.Alert;
+
+        private var processDefinitionXml:String;
 
         private function init():void {
             this.graphics.clear();
@@ -11,6 +11,115 @@
             this.graphics.beginFill(0xFFFFFF);
             this.graphics.drawRect(0, 0, this.width, this.height);
             this.graphics.endFill();
+        }
+        
+        public function setProcessDefinitionXml(xml:String):void {
+            processDefinitionXml = xml;
+        }
+        
+        public function draw(processDefinitionXml:XML):void {
+            // 清空画布
+            this.graphics.clear();
+
+            var model:Namespace = processDefinitionXml.namespace();
+            var bpmndi:Namespace = processDefinitionXml.namespace("bpmndi");
+            var dc:Namespace = processDefinitionXml.namespace("dc");
+            var di:Namespace = processDefinitionXml.namespace("di");
+
+            var i:int;
+            var startEventArray:Array = new Array();
+            var endEventArray:Array = new Array();
+            var userTaskArray:Array = new Array();
+            var exclusiveGatewayArray:Array = new Array();
+            var parallelGatewayArray:Array = new Array();
+            var serviceTaskArray:Array = new Array();
+
+
+            var processNodeList:XMLList = processDefinitionXml.model::process.*;
+            var node:XML;
+
+            for (i = 0; i < processNodeList.length(); i++) {
+                node = processNodeList[i];
+                //                Alert.show(node.localName());
+                if ("startEvent" == node.localName()) {
+                    startEventArray.push(node.@id.toString());
+                } else if ("endEvent" == node.localName()) {
+                    endEventArray.push(node.@id.toString());
+                } else if ("userTask" == node.localName()) {
+                    userTaskArray.push(node.@id.toString());
+                } else if ("exclusiveGateway" == node.localName()) {
+                    exclusiveGatewayArray.push(node.@id.toString());
+                } else if ("parallelGateway" == node.localName()) {
+                    parallelGatewayArray.push(node.@id.toString());
+                } else if ("serviceTask" == node.localName()) {
+                    serviceTaskArray.push(node.@id.toString());
+                }
+            }
+            //            Alert.show(startEventArray.join());
+
+            var xmlList:XMLList = processDefinitionXml.bpmndi::BPMNDiagram..bpmndi::BPMNShape; // 图形
+            //            Alert.show(xmlList.length());
+
+            var baseX:Number = 0;
+            var baseY:Number = -50;
+            trace("basX = " + baseX + ", basY = " + baseY);
+            var x:Number, y:Number, width:Number, height:Number, bpmnElement:String;
+            for (i = 0; i < xmlList.length(); i++) {
+                bpmnElement = xmlList[i].@bpmnElement;
+                x = baseX + Number(xmlList[i].dc::Bounds.@x);
+                y = baseY + Number(xmlList[i].dc::Bounds.@y);
+                width = Number(xmlList[i].dc::Bounds.@width);
+                height = Number(xmlList[i].dc::Bounds.@height);
+
+                if (startEventArray.indexOf(bpmnElement) != -1) { // 开始节点
+                    //                    Alert.show("Draw startEvent : " + bpmnElement)
+                    /*this.graphics.lineStyle(1, 0x000000);
+                    this.graphics.drawCircle(x + width / 2, y + height / 2, 15);*/
+                    this.addChild(new ProcessIcon(SysConst.TYPE_START_EVENT, "startEvent", "开始", x, y, width, height));
+                } else if (endEventArray.indexOf(bpmnElement) != -1) { // 结束节点
+                    //                    Alert.show("Draw endEvent : " + bpmnElement)
+                    /*this.graphics.lineStyle(4, 0x000000);
+                    this.graphics.drawCircle(x + width / 2, y + height / 2, 15);*/
+                    this.addChild(new ProcessIcon(SysConst.TYPE_END_EVENT, "endEvent", "结束", x, y, width, height));
+                } else if (exclusiveGatewayArray.indexOf(bpmnElement) != -1) {
+                    /*this.graphics.lineStyle(1, 0x123456);
+                    drawRhombus(this.graphics, x, y, width, height);*/
+                }
+
+                else {
+                    //                    Alert.show("Draw Rect : " + bpmnElement)
+                    /*this.graphics.lineStyle(1, 0x123456);
+                    this.graphics.drawRect(x, y, width, height);*/
+                }
+                //                Alert.show(processNode.length());
+                //                Alert.show(processNode.name().toString());
+            }
+
+            /*xmlList = processDefinitionXml.bpmndi::BPMNDiagram..bpmndi::BPMNEdge; // 画线
+            for (i = 0; i < xmlList.length(); i++) {
+                this.graphics.lineStyle(1, 0x000000);
+
+                var waypointList:XMLList = xmlList[i].di::waypoint;
+                var startX:Number = 0, startY:Number = 0;
+                for (var j:int = 0; j < waypointList.length(); j++) {
+                    if (startX > 0 && startY > 0) {
+                        this.graphics.moveTo(startX, startY);
+                        this.graphics.lineTo(baseX + Number(waypointList[j].@x), baseY + Number(waypointList[j].@y));
+                    }
+
+                    startX = baseX + Number(waypointList[j].@x);
+                    startY = baseY + Number(waypointList[j].@y);
+                }
+            }*/
+        }
+
+        // 画菱形
+        private static function drawRhombus(graphics:Graphics, x:Number, y:Number, width:Number, height:Number):void {
+            graphics.moveTo(x, y + height / 2);
+            graphics.lineTo(x + width / 2, y);
+            graphics.lineTo(x + width, y + height / 2);
+            graphics.lineTo(x + width / 2, y + height);
+            graphics.lineTo(x, y + height / 2);
         }
         ]]></mx:Script>
 </mx:Canvas>
