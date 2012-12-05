@@ -84,6 +84,8 @@
                 } else if (exclusiveGatewayArray.indexOf(bpmnElement) != -1) {
                     /*this.graphics.lineStyle(1, 0x123456);
                     drawRhombus(this.graphics, x, y, width, height);*/
+                } else if(userTaskArray.indexOf(bpmnElement) != -1) {
+                    this.addChild(new ProcessIcon(SysConst.TYPE_USER_TASK, "userTask", "用户任务", x, y, width, height));
                 }
 
                 else {

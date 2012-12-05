@@ -5,13 +5,19 @@
 package {
     import event.IconEvent;
 
+    import flash.display.Bitmap;
+
+    import flash.display.BitmapData;
+
     import flash.events.MouseEvent;
     import flash.text.TextField;
     import flash.text.TextFieldAutoSize;
 
     import mx.controls.Alert;
+    import mx.controls.Button;
 
     import mx.controls.Image;
+    import mx.controls.Label;
 
     [Event(name = IconEvent.ICON_MOUSE_DOWN, type = "event.IconEvent")]
     [Event(name = IconEvent.ICON_MOUSE_UP, type = "event.IconEvent")]
@@ -20,11 +26,11 @@ package {
     public class ProcessIcon extends Image {
         [Bindable]
         [Embed(source = "images/user.png")]
-        public var userTask:Class;  // 用户任务
+        public static var userTaskPng:Class;  // 用户任务
 
         [Bindable]
         [Embed(source = "images/service.png")]
-        public var serviceTask:Class;  // 服务任务
+        public var serviceTaskPng:Class;  // 服务任务
 
         // 图像唯一标识符
 //        private var _id:String;
@@ -73,9 +79,6 @@ package {
             this.graphics.endFill();*/
 
             text.autoSize = TextFieldAutoSize.LEFT;
-            text.x = x + 0;
-            text.y = y + 30 + 3;
-            this.addChild(text);
 
             this.draw();
             this.bindEvents();
@@ -146,9 +149,34 @@ package {
                 if(SysConst.TYPE_START_EVENT == this._type) { // 画开始节点
                     this.graphics.lineStyle(1, 0x000000);
                     this.graphics.drawCircle(_x + _width / 2, _y + _height / 2, 15);
+
+                    text.x = _x - 3;
+                    text.y = _y + 30 + 3;
+                    this.addChild(text);
                 } else if(SysConst.TYPE_END_EVENT == _type) { // 画结束节点
                     this.graphics.lineStyle(4, 0x000000);
                     this.graphics.drawCircle(_x + _width / 2, _y + _height / 2, 15);
+
+                    text.x = _x - 3;
+                    text.y = _y + 30 + 3;
+                    this.addChild(text);
+                } else if(SysConst.TYPE_USER_TASK == _type) { // 画用户任务节点
+                    /*this.x = _x;
+                    this.y = _y;
+                    this.source = userTaskPng;*/
+
+                    this.graphics.lineStyle(0,0,1, true);
+                    this.graphics.drawRoundRect(_x + 0.5,  _y + 0.5,  _width, _height, 20, 20);  // + 0.5抗锯齿
+
+                    var img:Image = new Image();
+                    img.source = userTaskPng;
+                    var myBitmapData:BitmapData = new BitmapData(16, 16,true,0x00000000);//true表示背景透明
+                    myBitmapData.draw(img);
+
+                    var bmp:Bitmap = new Bitmap(myBitmapData);
+                    bmp.x = _x;
+                    bmp.y = _y;
+
                 }
             } else {
                 this.source = _icon;
