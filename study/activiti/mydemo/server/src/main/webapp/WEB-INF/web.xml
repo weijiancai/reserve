@@ -19,6 +19,6 @@
     </servlet-mapping>
     
     <welcome-file-list>
-        <welcome-file>flex/ApplicationDemo.html</welcome-file>
+        <welcome-file>flex/ActivitiView2.html</welcome-file>
     </welcome-file-list>
 </web-app>

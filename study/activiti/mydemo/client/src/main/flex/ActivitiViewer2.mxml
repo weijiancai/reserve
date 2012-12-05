@@ -2,14 +2,35 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" paddingLeft="0" paddingTop="0" paddingRight="0" paddingBottom="0">
     <mx:Script><![CDATA[
         import mx.collections.ArrayCollection;
+        import mx.controls.Alert;
         import mx.rpc.events.ResultEvent;
 
         private var processDefineXml:XML;
         private var processEngineName:String;
         private var processDefineId:String;
+        private var xmlFile:FileReference;
+        private var fileName:String;
 
         private function init():void {
             processEngineService.send();
+
+            Security.allowDomain("*");
+
+            xmlFile = new FileReference();
+            xmlFile.addEventListener(Event.SELECT, selectFileHandler);
+            xmlFile.addEventListener(Event.COMPLETE, completeHandler);
+        }
+
+        private function selectFileHandler(event:Event):void {
+            var file:FileReference = FileReference(event.target);
+            Alert.show(file.name);
+            file.load();
+        }
+
+        private function completeHandler(event:Event):void {
+            processDefineXml = XML(event.target.data);
+            ta_xmlStr.text = processDefineXml.toXMLString();
+            drawProcessImage();
         }
 
         private function handleProcessEngineTreeClick():void {
@@ -301,6 +322,19 @@
             processInstanceService.request.processDefineId = processDefineId;
             processInstanceService.send();
         }
+
+        private function openFile():void {
+            xmlFile.browse(getTypeFilter());
+        }
+
+        private static function getTypeFilter():Array {
+            var imagesFilter:FileFilter = new FileFilter("BPMN 2.0 Xml (*.xml)", "*.xml");
+            return [imagesFilter];
+        }
+
+        private function deployProcess():void {
+
+        }
         ]]></mx:Script>
 
     <mx:HTTPService id="processEngineService" url="http://localhost:8088/process?method=getProcessEngines" resultFormat="e4x"/>
@@ -346,6 +380,8 @@
             </mx:DataGrid>
 
             <mx:Canvas width="100%" height="60%">
+                <mx:Button label="打开" right="160" y="0" click="openFile()"/>
+                <mx:Button label="部署" right="100" y="0" click="deployProcess()"/>
                 <mx:Button label="启动流程" right="20" y="0" click="startProcess()"/>
 
                 <mx:TabNavigator width="100%" height="100%" creationPolicy="all" x="0" y="5">
