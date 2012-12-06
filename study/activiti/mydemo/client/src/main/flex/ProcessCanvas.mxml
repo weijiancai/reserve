@@ -22,9 +22,10 @@
             this.graphics.clear();
 
             var model:Namespace = processDefinitionXml.namespace();
-            var bpmndi:Namespace = processDefinitionXml.namespace("bpmndi");
-            var dc:Namespace = processDefinitionXml.namespace("dc");
-            var di:Namespace = processDefinitionXml.namespace("di");
+
+            var bpmndi:Namespace = getNameSpace(processDefinitionXml, "http://www.omg.org/spec/BPMN/20100524/DI");
+            var dc:Namespace = getNameSpace(processDefinitionXml, "http://www.omg.org/spec/DD/20100524/DC");
+            var di:Namespace = getNameSpace(processDefinitionXml, "http://www.omg.org/spec/DD/20100524/DI");
 
             var i:int;
             var startEventArray:Array = new Array();
@@ -53,6 +54,11 @@
                     parallelGatewayArray.push(node.@id.toString());
                 } else if ("serviceTask" == node.localName()) {
                     serviceTaskArray.push(node.@id.toString());
+                }
+
+                if(bpmndi != null) {
+                    var list:XMLList = processDefinitionXml.bpmndi::BPMNDiagram..bpmndi::BPMNShape.(@bpmnElement=node.@id.toString());
+                    trace(list.length());
                 }
             }
             //            Alert.show(startEventArray.join());
@@ -122,6 +128,25 @@
             graphics.lineTo(x + width, y + height / 2);
             graphics.lineTo(x + width / 2, y + height);
             graphics.lineTo(x, y + height / 2);
+        }
+
+        /**
+         * 获取指定uri的命名空间
+         *
+         * @param xml
+         * @param uriStr
+         * @return
+         */
+        private static function getNameSpace(xml:XML, uriStr:String):Namespace {
+            for(var i:uint = 0; i < xml.namespaceDeclarations(); i++) {
+                var ns:Namespace = xml.namespaceDeclarations()[i];
+                var uri:String = ns.uri;
+                if(uri == uriStr) {
+                    return ns;
+                }
+            }
+
+            return null;
         }
         ]]></mx:Script>
 </mx:Canvas>
