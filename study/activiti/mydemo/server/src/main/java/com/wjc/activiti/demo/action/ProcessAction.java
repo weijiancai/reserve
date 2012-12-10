@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,7 @@ import java.util.Map;
 public class ProcessAction extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String method = req.getParameter("method");
-        String processEngineName, deploymentId, processDefineId, processInstanceId, taskId;
+        String processEngineName, deploymentId, processDefineId, processInstanceId, taskId, groupId, userId;
 
         processEngineName = req.getParameter("processEngineName");
         processDefineId = req.getParameter("processDefineId");
@@ -36,6 +37,8 @@ public class ProcessAction extends HttpServlet {
         deploymentId = req.getParameter("deploymentId");
         processInstanceId = req.getParameter("processInstanceId");
         taskId = req.getParameter("taskId");
+        groupId = req.getParameter("groupId");
+        userId = req.getParameter("userId");
 
         switch (method) {
             case "getImage":
@@ -43,6 +46,16 @@ public class ProcessAction extends HttpServlet {
                 InputStream is = ProcessBO.getProcessImage(processEngineName, processDefineId);
                 PrintWriter pw = res.getWriter();
                 int i;
+                while ((i = is.read()) != -1) {
+                    pw.write(i);
+                }
+                pw.flush();
+                pw.close();
+                break;
+            case "getActiveImage":
+                res.setContentType("image/png");
+                is = ProcessBO.getProcessActiveImage(processEngineName, processInstanceId);
+                pw = res.getWriter();
                 while ((i = is.read()) != -1) {
                     pw.write(i);
                 }
@@ -126,9 +139,15 @@ public class ProcessAction extends HttpServlet {
                     e.printStackTrace();
                 }
                 break;
-            case "getProcessInstanceTasks":
+            case "getTasks":
                 try {
-                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessInstanceTasks(processEngineName, processInstanceId), TaskBean.class));
+                    if (groupId != null) {
+                        sendXml(res, JaxbUtil.marshalList(ProcessBO.getGroupTasks(processEngineName, processInstanceId, groupId), TaskBean.class));
+                    } else if (userId != null) {
+                        sendXml(res, JaxbUtil.marshalList(ProcessBO.getUserTasks(processEngineName, processInstanceId, userId), TaskBean.class));
+                    } else if (processInstanceId != null) {
+                        sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessInstanceTasks(processEngineName, processInstanceId), TaskBean.class));
+                    }
                 } catch (JAXBException e) {
                     e.printStackTrace();
                 }
@@ -168,6 +187,37 @@ public class ProcessAction extends HttpServlet {
             case "getHistoricDetail":
                 try {
                     sendXml(res, JaxbUtil.marshalList(ProcessBO.getHistoricDetail(processEngineName, processInstanceId), HistoricDetailBean.class));
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "getProcessInstanceExecution":
+                try {
+                    sendXml(res, JaxbUtil.marshalList(ProcessBO.getProcessInstanceExecution(processEngineName, processInstanceId), ExecutionBean.class));
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "getGroups":
+                try {
+                    GroupBean groupBean = new GroupBean();
+                    groupBean.setName("用户组");
+                    groupBean.setChildren(ProcessBO.getGroups(processEngineName));
+                    List<GroupBean> list = new ArrayList<>();
+                    list.add(groupBean);
+                    sendXml(res, JaxbUtil.marshalList(list, GroupBean.class));
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "getUsers":
+                try {
+                    UserBean userBean = new UserBean();
+                    userBean.setFirstName("用户");
+                    userBean.setChildren(ProcessBO.getUsers(processEngineName, groupId));
+                    List<UserBean> list = new ArrayList<>();
+                    list.add(userBean);
+                    sendXml(res, JaxbUtil.marshalList(list, UserBean.class));
                 } catch (JAXBException e) {
                     e.printStackTrace();
                 }

@@ -21,6 +21,13 @@
         <!-- mail server configurations -->
         <property name="mailServerPort" value="5025" />
         <property name="history" value="full" />
+
+        <property name="customSessionFactories">
+            <list>
+                <bean class="com.wjc.activiti.demo.identity.MyUserManagerFactory"/>
+                <bean class="com.wjc.activiti.demo.identity.MyGroupManagerFactory"/>
+            </list>
+        </property>
     </bean>
 
 </beans>

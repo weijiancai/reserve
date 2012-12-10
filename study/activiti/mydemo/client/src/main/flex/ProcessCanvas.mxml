@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()">
     <mx:Script><![CDATA[
-        import mx.controls.Alert;
+        import event.IconEvent;
 
-        private var processDefinitionXml:String;
+        private var processIconList:Array = [];
+        private var currentSelected:ProcessIcon = null;
 
         private function init():void {
             this.graphics.clear();
@@ -12,11 +13,7 @@
             this.graphics.drawRect(0, 0, this.width, this.height);
             this.graphics.endFill();
         }
-        
-        public function setProcessDefinitionXml(xml:String):void {
-            processDefinitionXml = xml;
-        }
-        
+
         public function draw(processDefinitionXml:XML):void {
             // 清空画布
             this.graphics.clear();
@@ -24,110 +21,41 @@
             var model:Namespace = processDefinitionXml.namespace();
 
             var bpmndi:Namespace = getNameSpace(processDefinitionXml, "http://www.omg.org/spec/BPMN/20100524/DI");
-            var dc:Namespace = getNameSpace(processDefinitionXml, "http://www.omg.org/spec/DD/20100524/DC");
-            var di:Namespace = getNameSpace(processDefinitionXml, "http://www.omg.org/spec/DD/20100524/DI");
-
-            var i:int;
-            var startEventArray:Array = new Array();
-            var endEventArray:Array = new Array();
-            var userTaskArray:Array = new Array();
-            var exclusiveGatewayArray:Array = new Array();
-            var parallelGatewayArray:Array = new Array();
-            var serviceTaskArray:Array = new Array();
-
 
             var processNodeList:XMLList = processDefinitionXml.model::process.*;
             var node:XML;
+            var processIcon:ProcessIcon;
 
-            for (i = 0; i < processNodeList.length(); i++) {
+            for (var i:int = 0; i < processNodeList.length(); i++) {
                 node = processNodeList[i];
-                //                Alert.show(node.localName());
-                if ("startEvent" == node.localName()) {
-                    startEventArray.push(node.@id.toString());
-                } else if ("endEvent" == node.localName()) {
-                    endEventArray.push(node.@id.toString());
-                } else if ("userTask" == node.localName()) {
-                    userTaskArray.push(node.@id.toString());
-                } else if ("exclusiveGateway" == node.localName()) {
-                    exclusiveGatewayArray.push(node.@id.toString());
-                } else if ("parallelGateway" == node.localName()) {
-                    parallelGatewayArray.push(node.@id.toString());
-                } else if ("serviceTask" == node.localName()) {
-                    serviceTaskArray.push(node.@id.toString());
-                }
 
+                var diNode:XML;
                 if(bpmndi != null) {
-                    var list:XMLList = processDefinitionXml.bpmndi::BPMNDiagram..bpmndi::BPMNShape.(@bpmnElement=node.@id.toString());
-                    trace(list.length());
-                }
-            }
-            //            Alert.show(startEventArray.join());
+                    trace(node.@id.toString());
 
-            var xmlList:XMLList = processDefinitionXml.bpmndi::BPMNDiagram..bpmndi::BPMNShape; // 图形
-            //            Alert.show(xmlList.length());
-
-            var baseX:Number = 0;
-            var baseY:Number = -50;
-            trace("basX = " + baseX + ", basY = " + baseY);
-            var x:Number, y:Number, width:Number, height:Number, bpmnElement:String;
-            for (i = 0; i < xmlList.length(); i++) {
-                bpmnElement = xmlList[i].@bpmnElement;
-                x = baseX + Number(xmlList[i].dc::Bounds.@x);
-                y = baseY + Number(xmlList[i].dc::Bounds.@y);
-                width = Number(xmlList[i].dc::Bounds.@width);
-                height = Number(xmlList[i].dc::Bounds.@height);
-
-                if (startEventArray.indexOf(bpmnElement) != -1) { // 开始节点
-                    //                    Alert.show("Draw startEvent : " + bpmnElement)
-                    /*this.graphics.lineStyle(1, 0x000000);
-                    this.graphics.drawCircle(x + width / 2, y + height / 2, 15);*/
-                    this.addChild(new ProcessIcon(SysConst.TYPE_START_EVENT, "startEvent", "开始", x, y, width, height));
-                } else if (endEventArray.indexOf(bpmnElement) != -1) { // 结束节点
-                    //                    Alert.show("Draw endEvent : " + bpmnElement)
-                    /*this.graphics.lineStyle(4, 0x000000);
-                    this.graphics.drawCircle(x + width / 2, y + height / 2, 15);*/
-                    this.addChild(new ProcessIcon(SysConst.TYPE_END_EVENT, "endEvent", "结束", x, y, width, height));
-                } else if (exclusiveGatewayArray.indexOf(bpmnElement) != -1) {
-                    /*this.graphics.lineStyle(1, 0x123456);
-                    drawRhombus(this.graphics, x, y, width, height);*/
-                } else if(userTaskArray.indexOf(bpmnElement) != -1) {
-                    this.addChild(new ProcessIcon(SysConst.TYPE_USER_TASK, "userTask", "用户任务", x, y, width, height));
-                }
-
-                else {
-                    //                    Alert.show("Draw Rect : " + bpmnElement)
-                    /*this.graphics.lineStyle(1, 0x123456);
-                    this.graphics.drawRect(x, y, width, height);*/
-                }
-                //                Alert.show(processNode.length());
-                //                Alert.show(processNode.name().toString());
-            }
-
-            /*xmlList = processDefinitionXml.bpmndi::BPMNDiagram..bpmndi::BPMNEdge; // 画线
-            for (i = 0; i < xmlList.length(); i++) {
-                this.graphics.lineStyle(1, 0x000000);
-
-                var waypointList:XMLList = xmlList[i].di::waypoint;
-                var startX:Number = 0, startY:Number = 0;
-                for (var j:int = 0; j < waypointList.length(); j++) {
-                    if (startX > 0 && startY > 0) {
-                        this.graphics.moveTo(startX, startY);
-                        this.graphics.lineTo(baseX + Number(waypointList[j].@x), baseY + Number(waypointList[j].@y));
+                    var list:XMLList = processDefinitionXml.bpmndi::BPMNDiagram..bpmndi::BPMNShape.(@bpmnElement == node.@id.toString());
+                    if(list.length() > 0) {
+                        diNode = list[0];
+                    } else {
+                        list = processDefinitionXml.bpmndi::BPMNDiagram..bpmndi::BPMNEdge.(@bpmnElement == node.@id.toString());
+                        if(list.length() > 0) {
+                            diNode = list[0];
+                        }
                     }
-
-                    startX = baseX + Number(waypointList[j].@x);
-                    startY = baseY + Number(waypointList[j].@y);
                 }
-            }*/
+
+                processIcon = new ProcessIcon(node,  diNode);
+                processIcon.addEventListener(IconEvent.ICON_MOUSE_DOWN, onIconMouseDownHandler);
+                processIconList.push(processIcon);
+                this.addChild(processIcon);
+            }
         }
 
-        // 画菱形
-        private static function drawRhombus(graphics:Graphics, x:Number, y:Number, width:Number, height:Number):void {
-            graphics.moveTo(x, y + height / 2);
-            graphics.lineTo(x + width / 2, y);
-            graphics.lineTo(x + width, y + height / 2);
-            graphics.lineTo(x + width / 2, y + height);
-            graphics.lineTo(x, y + height / 2);
+        internal function onIconMouseDownHandler(event:IconEvent):void {
+//            clearAllSelected();
+            trace(event.type);
+            /*currentSelected = event.icon;
+            currentSelected.selected();*/
         }
 
         /**
@@ -138,7 +66,7 @@
          * @return
          */
         private static function getNameSpace(xml:XML, uriStr:String):Namespace {
-            for(var i:uint = 0; i < xml.namespaceDeclarations(); i++) {
+            for(var i:uint = 0; i < xml.namespaceDeclarations().length; i++) {
                 var ns:Namespace = xml.namespaceDeclarations()[i];
                 var uri:String = ns.uri;
                 if(uri == uriStr) {
@@ -147,6 +75,37 @@
             }
 
             return null;
+        }
+
+        public function highlightNode(key:String):void {
+            var processIcon:ProcessIcon;
+            for(var i:int = 0; i < processIconList.length; i++) {
+                processIcon = processIconList[i];
+                if(processIcon.key == key) {
+                    processIcon.highlight();
+                }
+            }
+        }
+
+        // 清除所有选中
+        private function clearAllSelected():void {
+            for(var i:int = 0; i < processIconList.length; i++) {
+                var processIcon:ProcessIcon = processIconList[i];
+                processIcon.clearSelected();
+            }
+        }
+
+        // 清除所有高亮
+        private function clearAllHighlight():void {
+            for(var i:int = 0; i < processIconList.length; i++) {
+                var processIcon:ProcessIcon = processIconList[i];
+                processIcon.clearHighlight();
+            }
+        }
+
+        // 获取当前选中的节点
+        public function getCurrentSelected():ProcessIcon {
+            return currentSelected;
         }
         ]]></mx:Script>
 </mx:Canvas>

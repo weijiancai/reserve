@@ -6,16 +6,24 @@ import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricDetail;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.identity.Group;
+import org.activiti.engine.identity.User;
 import org.activiti.engine.impl.ProcessEngineImpl;
+import org.activiti.engine.impl.RepositoryServiceImpl;
+import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramGenerator;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.util.IoUtil;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentBuilder;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.activiti.engine.task.TaskQuery;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -306,6 +314,12 @@ public class ProcessBO {
         TaskService taskService = processEngine.getTaskService();
         List<Task> lists = taskService.createTaskQuery().processInstanceId(processInstanceId).orderByTaskCreateTime().desc().list();
 
+        convertToTaskBean(result, lists);
+
+        return result;
+    }
+
+    private static void convertToTaskBean(List<TaskBean> result, List<Task> lists) {
         TaskBean bean;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for(Task task : lists) {
@@ -332,8 +346,6 @@ public class ProcessBO {
 
             result.add(bean);
         }
-
-        return result;
     }
 
     public static List<Paris> getTaskVariables(String processEngineName, String taskId) {
@@ -510,5 +522,117 @@ public class ProcessBO {
         ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
         RuntimeService runtimeService = processEngine.getRuntimeService();
         runtimeService.startProcessInstanceById(processDefineId);
+    }
+
+    public static List<ExecutionBean> getProcessInstanceExecution(String processEngineName, String processInstanceId) {
+        List<ExecutionBean> result = new ArrayList<>();
+
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        RuntimeService runtimeService = processEngine.getRuntimeService();
+        List<Execution> list = runtimeService.createExecutionQuery().processInstanceId(processInstanceId).list();
+
+        ExecutionBean bean;
+        for (Execution execution : list) {
+            bean = new ExecutionBean();
+            bean.setId(execution.getId());
+            bean.setProcessInstanceId(execution.getProcessInstanceId());
+            bean.setEnded(execution.isEnded());
+
+            result.add(bean);
+        }
+
+        return result;
+    }
+
+    public static List<GroupBean> getGroups(String processEngineName) {
+        List<GroupBean> result = new ArrayList<>();
+
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        List<Group> list = processEngine.getIdentityService().createGroupQuery().list();
+
+        GroupBean bean;
+        for (Group group : list) {
+            bean = new GroupBean();
+            bean.setId(group.getId());
+            bean.setName(group.getName());
+            bean.setType(group.getType());
+            result.add(bean);
+        }
+        return result;
+    }
+
+    public static List<UserBean> getUsers(String processEngineName, String groupId) {
+        List<UserBean> result = new ArrayList<>();
+
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        List<User> list;
+        if (groupId == null) {
+            list = processEngine.getIdentityService().createUserQuery().list();
+        } else {
+            list = processEngine.getIdentityService().createUserQuery().memberOfGroup(groupId).list();
+        }
+
+        UserBean bean;
+        for (User user : list) {
+            bean = new UserBean();
+            bean.setId(user.getId());
+            bean.setFirstName(user.getFirstName());
+            bean.setLastName(user.getLastName());
+            bean.setPassword(user.getPassword());
+            bean.setEmail(user.getEmail());
+            result.add(bean);
+        }
+
+        return result;
+    }
+
+    public static InputStream getProcessActiveImage(String processEngineName, String processInstanceId) {
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        RepositoryService repositoryService = processEngine.getRepositoryService();
+        ProcessInstance processInstance = processEngine.getRuntimeService().createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+        ProcessDefinitionEntity processDefinition = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService).getDeployedProcessDefinition(processInstance.getProcessDefinitionId());
+
+        return ProcessDiagramGenerator.generateDiagram(processDefinition, "png", processEngine.getRuntimeService().getActiveActivityIds(processInstanceId));
+    }
+
+    public static List<TaskBean> getGroupTasks(String processEngineName, String processInstanceId, String groupId) {
+        List<TaskBean> result = new ArrayList<>();
+
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        TaskService taskService = processEngine.getTaskService();
+        TaskQuery query = taskService.createTaskQuery();
+        if (processInstanceId != null) {
+            query.processInstanceId(processInstanceId);
+        }
+        query.taskCandidateGroup(groupId);
+        List<Task> lists = query.orderByTaskCreateTime().desc().list();
+
+        convertToTaskBean(result, lists);
+
+        return result;
+    }
+
+    public static List<TaskBean> getUserTasks(String processEngineName, String processInstanceId, String userId) {
+        List<TaskBean> result = new ArrayList<>();
+
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        TaskService taskService = processEngine.getTaskService();
+        TaskQuery query = taskService.createTaskQuery();
+        if (processInstanceId != null) {
+            query.processInstanceId(processInstanceId);
+        }
+        query.taskAssignee(userId);
+        List<Task> lists = query.orderByTaskCreateTime().desc().list();
+
+        query = taskService.createTaskQuery();
+        if (processInstanceId != null) {
+            query.processInstanceId(processInstanceId);
+        }
+        query.taskCandidateUser(userId);
+        lists.addAll(query.orderByTaskCreateTime().desc().list());
+
+        convertToTaskBean(result, lists);
+
+        return result;
     }
 }

@@ -19,9 +19,14 @@ package {
         public function testXmlNamespace():void {
             var xml:XML = getXml();
             trace(xml.namespaceDeclarations().length);
+            for(var i:uint = 0; i < xml.namespaceDeclarations().length; i++) {
+                var ns:Namespace = xml.namespaceDeclarations()[i];
+                var uri:String = ns.uri;
+                trace(uri);
+            }
         }
 
-        private function getXml():XML {
+        private static function getXml():XML {
             return XML("<definitions joinwork:updateTime=\"1331283630824\" exporter=\"Joinwork Process Studio\" exporterVersion=\"3.1.0\"\n" +
                             "             targetNamespace=\"http://www.ygsoft.com/\" id=\"leaveApplicationAndBacklog\" name=\"请假申请--条件分支合并\"\n" +
                             "             xmlns=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\"\n" +
