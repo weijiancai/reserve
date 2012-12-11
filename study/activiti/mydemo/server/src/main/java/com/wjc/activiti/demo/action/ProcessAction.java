@@ -27,7 +27,7 @@ import java.util.Map;
 public class ProcessAction extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String method = req.getParameter("method");
-        String processEngineName, deploymentId, processDefineId, processInstanceId, taskId, groupId, userId;
+        String processEngineName, deploymentId, processDefineId, processInstanceId, taskId, groupId, userId, taskDefineKey;
 
         processEngineName = req.getParameter("processEngineName");
         processDefineId = req.getParameter("processDefineId");
@@ -39,6 +39,7 @@ public class ProcessAction extends HttpServlet {
         taskId = req.getParameter("taskId");
         groupId = req.getParameter("groupId");
         userId = req.getParameter("userId");
+        taskDefineKey = req.getParameter("taskDefineKey");
 
         switch (method) {
             case "getImage":
@@ -221,6 +222,15 @@ public class ProcessAction extends HttpServlet {
                 } catch (JAXBException e) {
                     e.printStackTrace();
                 }
+                break;
+            case "assignUser":
+                ProcessBO.assignUserToTask(processEngineName, processDefineId, userId, taskDefineKey);
+                break;
+            case "addCandidateUser":
+                ProcessBO.addCandidateUserToTask(processEngineName, processDefineId, userId, taskDefineKey);
+                break;
+            case "addCandidateGroup":
+                ProcessBO.addCandidateGroupToTask(processEngineName, processDefineId, groupId, taskDefineKey);
                 break;
         }
     }

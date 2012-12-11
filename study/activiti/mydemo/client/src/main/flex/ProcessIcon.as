@@ -3,7 +3,7 @@
  * @author weijiancai
  */
 package {
-    import event.IconEvent;
+    import activitiviewer.event.IconEvent;
 
     import flash.display.Bitmap;
 
@@ -27,9 +27,9 @@ package {
     import mx.core.BitmapAsset;
     import mx.effects.Glow;
 
-    [Event(name = IconEvent.ICON_MOUSE_DOWN, type = "event.IconEvent")]
-    [Event(name = IconEvent.ICON_MOUSE_UP, type = "event.IconEvent")]
-    [Event(name = IconEvent.ICON_MOVE, type = "event.IconEvent")]
+    [Event(name = IconEvent.ICON_MOUSE_DOWN, type = "activitiviewer.event.IconEvent")]
+    [Event(name = IconEvent.ICON_MOUSE_UP, type = "activitiviewer.event.IconEvent")]
+    [Event(name = IconEvent.ICON_MOVE, type = "activitiviewer.event.IconEvent")]
 
     public class ProcessIcon extends Image {
         public static const TYPE_START_EVENT:String = "startEvent";
@@ -325,8 +325,6 @@ package {
             glow.end();
             glow.play();
 
-            selected();
-
             this.dispatchEvent(e);
         }
 
@@ -347,7 +345,8 @@ package {
         // 高亮此节点
         public function highlight():void {
             if(TYPE_USER_TASK == _type || TYPE_SERVICE_TASK == _type) {
-                highlightRectBorder.drawRect(1, 0xff0000, _width, _height, 0, 20, 20, -5.5, -1.5);
+                highlightRectBorder.drawRect(2, 0xff0000, _width, _height, 0, 20, 20, -5.5, -1.5, false);
+                this.addChild(highlightRectBorder);
                 this.isHighlight = true;
             }
         }

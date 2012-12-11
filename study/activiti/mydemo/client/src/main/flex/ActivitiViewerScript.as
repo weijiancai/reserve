@@ -6,6 +6,9 @@ private var processDefineXml:XML;
 private var processEngineName:String;
 private var processDefineId:String;
 private var xmlFile:FileReference;
+private var processInstanceId:String;
+private var userId:String;
+private var groupId:String;
 
 private function init():void {
     processEngineService.send();
@@ -117,7 +120,7 @@ private function handlerProcessInstanceService(event:ResultEvent):void {
 }
 
 private function handleProcessInstanceDgClick():void {
-    var processInstanceId:String = dg_processInstance.selectedItem.@id;
+    processInstanceId = dg_processInstance.selectedItem.@id;
 
     propAccordion.selectedIndex = 2;
     historyNavigator.selectedIndex = 1;
@@ -304,13 +307,20 @@ private function handlerProcessInstanceTasksService(event:ResultEvent):void {
     }
 }
 
-private function handleTasksDgClick():void {
-    propAccordion.selectedIndex = 2;
+private function handleProcessInstanceTasksDgClick():void {
+    reqTaskVariables(dg_tasks.selectedItem.@id);
+}
 
-    // 获取流程实例任务变量
+public function handleMyTasksDgClick():void {
+    reqTaskVariables(dg_myTasks.selectedItem.@id);
+}
+
+// 获取任务变量
+private function reqTaskVariables(taskId:String):void {
+    propAccordion.selectedIndex = 2;
     dg_variables.dataProvider = null;
     taskVariableService.request.processEngineName = processEngineName;
-    taskVariableService.request.taskId = dg_tasks.selectedItem.@id;
+    taskVariableService.request.taskId = taskId;
     taskVariableService.send();
 }
 
@@ -365,10 +375,11 @@ private function handleGroupTreeClick():void {
     }
 
     propAccordion.selectedIndex = 3;
+    historyNavigator.selectedIndex = 6;
     dg_groups.dataProvider = null;
     addItemToDataGrid(dg_groups, groupTree.selectedItem as XML);
 
-    var groupId:String = groupTree.selectedItem.@id;
+    groupId = groupTree.selectedItem.@id;
     // 请求此用户组下的所有用户信息
     userService.request.processEngineName = processEngineName;
     userService.request.groupId = groupId;
@@ -387,10 +398,11 @@ private function handleUserTreeClick():void {
     }
 
     propAccordion.selectedIndex = 4;
+    historyNavigator.selectedIndex = 6;
     dg_users.dataProvider = null;
     addItemToDataGrid(dg_users, userTree.selectedItem as XML);
 
-    var userId:String = userTree.selectedItem.@id;
+    userId = userTree.selectedItem.@id;
     // 获取用户的任务列表
     dg_myTasks.dataProvider = null;
     myTaskService.request.processEngineName = processEngineName;

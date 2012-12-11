@@ -4,40 +4,102 @@
     <mx:Script><![CDATA[
         include "ActivitiViewerScript.as";
         private function handlerMyTasksService(event:ResultEvent):void {
-            dg_myTasks.dataProvider = XML(event.result.data).children();
+            dg_myTasks.dataProvider = XML(event.result).children();
         }
 
         private function assigneeUser():void {
+            var currentTaskIcon:ProcessIcon = processCanvas.getCurrentSelected();
+            if(processDefineId == null) {
+                Alert.show("请选择流程定义！");
+            } else if(userId == null) {
+                Alert.show("请选择用户！");
+            } else if(currentTaskIcon == null) {
+                Alert.show("请选择任务节点！");
+            } else {
+                var taskDefineKey:String = currentTaskIcon.key;
+                assignUserService.request.processEngineName = processEngineName;
+                assignUserService.request.processDefineId = processDefineId;
+                assignUserService.request.taskDefineKey = taskDefineKey;
+                assignUserService.request.userId = userId;
+                assignUserService.send();
 
+                // 更新流程实例任务
+                dg_tasks.dataProvider = null;
+                processInstanceTaskService.request.processEngineName = processEngineName;
+                processInstanceTaskService.request.processInstanceId = processInstanceId;
+                processInstanceTaskService.send();
+            }
+        }
+
+        // 添加候选人
+        private function addCandidateUser():void {
+            var currentTaskIcon:ProcessIcon = processCanvas.getCurrentSelected();
+            if(processDefineId == null) {
+                Alert.show("请选择流程定义！");
+            } else if(userId == null) {
+                Alert.show("请选择用户！");
+            } else if(currentTaskIcon == null) {
+                Alert.show("请选择任务节点！");
+            } else {
+                var taskDefineKey:String = currentTaskIcon.key;
+                addCandidateUserService.request.processEngineName = processEngineName;
+                addCandidateUserService.request.processDefineId = processDefineId;
+                addCandidateUserService.request.taskDefineKey = taskDefineKey;
+                addCandidateUserService.request.userId = userId;
+                addCandidateUserService.send();
+            }
+        }
+
+        // 添加候选组
+        private function addCandidateGroup():void {
+            var currentTaskIcon:ProcessIcon = processCanvas.getCurrentSelected();
+            if(processDefineId == null) {
+                Alert.show("请选择流程定义！");
+            } else if(groupId == null) {
+                Alert.show("请选择用户组！");
+            } else if(currentTaskIcon == null) {
+                Alert.show("请选择任务节点！");
+            } else {
+                var taskDefineKey:String = currentTaskIcon.key;
+                addCandidateGroupService.request.processEngineName = processEngineName;
+                addCandidateGroupService.request.processDefineId = processDefineId;
+                addCandidateGroupService.request.taskDefineKey = taskDefineKey;
+                addCandidateGroupService.request.groupId = groupId;
+                addCandidateGroupService.send();
+            }
         }
     ]]></mx:Script>
 
-    <mx:HTTPService id="processEngineService" url="http://localhost:8088/process?method=getProcessEngines" method="post" resultFormat="e4x"/>
+    <mx:HTTPService id="processEngineService" url="/process?method=getProcessEngines" method="post" resultFormat="e4x"/>
     <mx:XMLListCollection id="processEngineList" source="{processEngineService.lastResult.list}"/>
-    <mx:HTTPService id="processEngineConfigurationService" url="http://localhost:8088/process?method=getProcessEngineConfiguration" method="post" resultFormat="xml" result="handlerProcessEngineConfigurationService(event)"/>
+    <mx:HTTPService id="processEngineConfigurationService" url="/process?method=getProcessEngineConfiguration" method="post" resultFormat="xml" result="handlerProcessEngineConfigurationService(event)"/>
 
-    <mx:HTTPService id="processDefineService" url="http://localhost:8088/process?method=getProcessDefineById" method="post" resultFormat="xml" result="handlerProcessDefineService(event)"/>
-    <mx:HTTPService id="processInstanceService" url="http://localhost:8088/process?method=getProcessInstance" method="post" resultFormat="xml" result="handlerProcessInstanceService(event)"/>
-    <mx:HTTPService id="processDefXml" url="http://localhost:8088/process?method=getProcessDefXml" method="post" result="processDefXmlHandler(event)" resultFormat="xml"/>
-    <mx:HTTPService id="startProcessService" url="http://localhost:8088/process?method=startProcess" method="post" result="startProcessHandler(event)"/>
-    <mx:HTTPService id="processInstanceVariableService" url="http://localhost:8088/process?method=getProcessInstanceVariables" method="post" resultFormat="xml" result="handlerVariablesService(event)"/>
-    <mx:HTTPService id="processInstanceTaskService" url="http://localhost:8088/process?method=getTasks" method="post" resultFormat="xml" result="handlerProcessInstanceTasksService(event)"/>
-    <mx:HTTPService id="myTaskService" url="http://localhost:8088/process?method=getTasks" method="post" resultFormat="xml" result="handlerMyTasksService(event)"/>
-    <mx:HTTPService id="processInstanceExecutionService" url="http://localhost:8088/process?method=getProcessInstanceExecution" method="post" resultFormat="xml" result="handlerProcessInstanceExecutionService(event)"/>
+    <mx:HTTPService id="processDefineService" url="/process?method=getProcessDefineById" method="post" resultFormat="xml" result="handlerProcessDefineService(event)"/>
+    <mx:HTTPService id="processInstanceService" url="/process?method=getProcessInstance" method="post" resultFormat="xml" result="handlerProcessInstanceService(event)"/>
+    <mx:HTTPService id="processDefXml" url="/process?method=getProcessDefXml" method="post" result="processDefXmlHandler(event)" resultFormat="xml"/>
+    <mx:HTTPService id="startProcessService" url="/process?method=startProcess" method="post" result="startProcessHandler(event)"/>
+    <mx:HTTPService id="processInstanceVariableService" url="/process?method=getProcessInstanceVariables" method="post" resultFormat="xml" result="handlerVariablesService(event)"/>
+    <mx:HTTPService id="processInstanceTaskService" url="/process?method=getTasks" method="post" resultFormat="xml" result="handlerProcessInstanceTasksService(event)"/>
+    <mx:HTTPService id="myTaskService" url="/process?method=getTasks" method="post" resultFormat="xml" result="handlerMyTasksService(event)" fault="{trace('error')}"/>
+    <mx:HTTPService id="processInstanceExecutionService" url="/process?method=getProcessInstanceExecution" method="post" resultFormat="xml" result="handlerProcessInstanceExecutionService(event)"/>
 
 
-    <mx:HTTPService id="taskVariableService" url="http://localhost:8088/process?method=getTaskVariables" method="post" resultFormat="xml" result="handlerVariablesService(event)"/>
+    <mx:HTTPService id="taskVariableService" url="/process?method=getTaskVariables" method="post" resultFormat="xml" result="handlerVariablesService(event)"/>
 
-    <mx:HTTPService id="historicActivityInstanceService" url="http://localhost:8088/process?method=getHistoricActivityInstance" method="post" resultFormat="xml" result="handlerHistoricActivityInstanceService(event)"/>
-    <mx:HTTPService id="historicProcessInstanceService" url="http://localhost:8088/process?method=getHistoricProcessInstance" method="post" resultFormat="xml" result="handlerHistoricProcessInstanceService(event)"/>
-    <mx:HTTPService id="historicTaskInstanceService" url="http://localhost:8088/process?method=getHistoricTaskInstance" method="post" resultFormat="xml" result="handlerHistoricTaskInstanceService(event)"/>
-    <mx:HTTPService id="historicDetailService" url="http://localhost:8088/process?method=getHistoricDetail" method="post" resultFormat="xml" result="handlerHistoricDetailService(event)"/>
+    <mx:HTTPService id="historicActivityInstanceService" url="/process?method=getHistoricActivityInstance" method="post" resultFormat="xml" result="handlerHistoricActivityInstanceService(event)"/>
+    <mx:HTTPService id="historicProcessInstanceService" url="/process?method=getHistoricProcessInstance" method="post" resultFormat="xml" result="handlerHistoricProcessInstanceService(event)"/>
+    <mx:HTTPService id="historicTaskInstanceService" url="/process?method=getHistoricTaskInstance" method="post" resultFormat="xml" result="handlerHistoricTaskInstanceService(event)"/>
+    <mx:HTTPService id="historicDetailService" url="/process?method=getHistoricDetail" method="post" resultFormat="xml" result="handlerHistoricDetailService(event)"/>
 
-    <mx:HTTPService id="groupService" url="http://localhost:8088/process?method=getGroups" method="post" resultFormat="e4x"/>
+    <mx:HTTPService id="groupService" url="/process?method=getGroups" method="post" resultFormat="e4x"/>
     <mx:XMLListCollection id="groupList" source="{groupService.lastResult.list}"/>
 
-    <mx:HTTPService id="userService" url="http://localhost:8088/process?method=getUsers" method="post" resultFormat="e4x" fault="{trace('error');}"/>
+    <mx:HTTPService id="userService" url="/process?method=getUsers" method="post" resultFormat="e4x" fault="{trace('error');}"/>
     <mx:XMLListCollection id="userList" source="{userService.lastResult.list}"/>
+
+    <mx:HTTPService id="assignUserService" url="/process?method=assignUser" method="post" resultFormat="e4x" fault="{trace('error');}"/>
+    <mx:HTTPService id="addCandidateUserService" url="/process?method=addCandidateUser" method="post" resultFormat="e4x" fault="{trace('error');}"/>
+    <mx:HTTPService id="addCandidateGroupService" url="/process?method=addCandidateGroup" method="post" resultFormat="e4x" fault="{trace('error');}"/>
 
     <mx:HDividedBox width="100%" height="100%">
         <mx:VBox width="17%" height="100%">
@@ -69,6 +131,8 @@
             </mx:DataGrid>
 
             <mx:Canvas width="100%" height="60%">
+                <mx:Button label="添加候选人" right="390" y="0" click="addCandidateUser()"/>
+                <mx:Button label="添加候选组" right="300" y="0" click="addCandidateGroup()"/>
                 <mx:Button label="指定用户" right="220" y="0" click="assigneeUser()"/>
                 <mx:Button label="打开" right="160" y="0" click="openFile()"/>
                 <mx:Button label="部署" right="100" y="0" click="deployProcess()"/>
@@ -132,8 +196,8 @@
                         </mx:DataGrid>
                     </mx:HBox>
 
-                    <mx:HBox label="任务列表">
-                        <mx:DataGrid width="100%" height="100%" verticalScrollPolicy="auto" id="dg_tasks" itemClick="handleTasksDgClick()">
+                    <mx:HBox label="流程实例任务">
+                        <mx:DataGrid width="100%" height="100%" verticalScrollPolicy="auto" id="dg_tasks" itemClick="handleProcessInstanceTasksDgClick()">
                             <mx:columns>
                                 <mx:DataGridColumn headerText="Id" dataField="@id"/>
                                 <mx:DataGridColumn headerText="Name" dataField="@name"/>
@@ -184,7 +248,7 @@
                     </mx:HBox>
 
                     <mx:HBox label="我的任务">
-                        <mx:DataGrid width="100%" height="100%" verticalScrollPolicy="auto" id="dg_myTasks" itemClick="handleTasksDgClick()">
+                        <mx:DataGrid width="100%" height="100%" verticalScrollPolicy="auto" id="dg_myTasks" itemClick="handleMyTasksDgClick()">
                             <mx:columns>
                                 <mx:DataGridColumn headerText="Id" dataField="@id"/>
                                 <mx:DataGridColumn headerText="Name" dataField="@name"/>

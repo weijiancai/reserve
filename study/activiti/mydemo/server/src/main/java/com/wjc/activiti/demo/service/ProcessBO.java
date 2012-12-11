@@ -23,7 +23,6 @@ import org.activiti.engine.task.TaskQuery;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -634,5 +633,32 @@ public class ProcessBO {
         convertToTaskBean(result, lists);
 
         return result;
+    }
+
+    public static void assignUserToTask(String processEngineName, String processDefineId, String userId, String taskDefineKey) {
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        TaskService taskService = processEngine.getTaskService();
+        List<Task> list = taskService.createTaskQuery().processDefinitionId(processDefineId).taskDefinitionKey(taskDefineKey).list();
+        for (Task task : list) {
+            taskService.setAssignee(task.getId(), userId);
+        }
+    }
+
+    public static void addCandidateUserToTask(String processEngineName, String processDefineId, String userId, String taskDefineKey) {
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        TaskService taskService = processEngine.getTaskService();
+        List<Task> list = taskService.createTaskQuery().processDefinitionId(processDefineId).taskDefinitionKey(taskDefineKey).list();
+        for (Task task : list) {
+            taskService.addCandidateUser(task.getId(), userId);
+        }
+    }
+
+    public static void addCandidateGroupToTask(String processEngineName, String processDefineId, String groupId, String taskDefineKey) {
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        TaskService taskService = processEngine.getTaskService();
+        List<Task> list = taskService.createTaskQuery().processDefinitionId(processDefineId).taskDefinitionKey(taskDefineKey).list();
+        for (Task task : list) {
+            taskService.addCandidateGroup(task.getId(), groupId);
+        }
     }
 }

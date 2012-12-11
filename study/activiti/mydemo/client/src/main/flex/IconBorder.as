@@ -80,11 +80,15 @@ package {
             super();
         }
 
-        public function drawRect(thickness:Number = 0, color:uint = 0, width:Number = 0, height:Number = 0, fillColor:uint = 0, eclipseWidth:Number = 0, eclipseHeight:Number = 0, x:Number = 0, y:Number = 0):void {
+        public function drawRect(thickness:Number = 0, color:uint = 0, width:Number = 0, height:Number = 0, fillColor:uint = 0, eclipseWidth:Number = 0, eclipseHeight:Number = 0, x:Number = 0, y:Number = 0, isFill:Boolean = true):void {
             this.graphics.lineStyle(thickness, color, 1, true);
-            this.graphics.beginFill(fillColor, 0.4);
+            if(isFill) {
+                this.graphics.beginFill(fillColor, 0.4);
+            }
             this.graphics.drawRoundRect(x,  y,  width, height, eclipseWidth, eclipseHeight);  // + 0.5抗锯齿
-            this.graphics.endFill();
+            if(isFill) {
+                this.graphics.endFill();
+            }
         }
 
         public function drawCircle(thickness:Number = 0, color:uint = 0, x:Number = 0, y:Number = 0, fillColor:uint = 0, radius:Number = 15):void {

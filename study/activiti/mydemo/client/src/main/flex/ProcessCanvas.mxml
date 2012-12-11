@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()">
     <mx:Script><![CDATA[
-        import event.IconEvent;
+        import activitiviewer.event.IconEvent;
 
         private var processIconList:Array = [];
         private var currentSelected:ProcessIcon = null;
@@ -45,17 +45,17 @@
                 }
 
                 processIcon = new ProcessIcon(node,  diNode);
-                processIcon.addEventListener(IconEvent.ICON_MOUSE_DOWN, onIconMouseDownHandler);
                 processIconList.push(processIcon);
                 this.addChild(processIcon);
+                processIcon.addEventListener(IconEvent.ICON_MOUSE_DOWN, onIconMouseDownHandler);
             }
         }
 
         internal function onIconMouseDownHandler(event:IconEvent):void {
-//            clearAllSelected();
+            clearAllSelected();
             trace(event.type);
-            /*currentSelected = event.icon;
-            currentSelected.selected();*/
+            currentSelected = event.icon;
+            currentSelected.selected();
         }
 
         /**

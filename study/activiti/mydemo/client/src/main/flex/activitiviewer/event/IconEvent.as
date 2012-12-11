@@ -5,7 +5,7 @@
  * Time: 上午9:39
  * To change this template use File | Settings | File Templates.
  */
-package event {
+package activitiviewer.event {
     import flash.events.Event;
 
     public class IconEvent extends Event {
