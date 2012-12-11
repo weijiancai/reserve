@@ -29,6 +29,9 @@
             <outgoing>SequenceFlow_1</outgoing>
         </startEvent>
         <userTask id="Task_1" name="填写请假申请单">
+            <extensionElements>
+                <activiti:taskListener event="create" class="com.wjc.activiti.demo.listener.MyAssignmentHandle"/>
+            </extensionElements>
             <incoming>SequenceFlow_1</incoming>
             <outgoing>SequenceFlow_2</outgoing>
             <humanPerformer>
