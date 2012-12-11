@@ -27,7 +27,7 @@ import java.util.Map;
 public class ProcessAction extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String method = req.getParameter("method");
-        String processEngineName, deploymentId, processDefineId, processInstanceId, taskId, groupId, userId, taskDefineKey;
+        String processEngineName, deploymentId, processDefineId, processInstanceId, taskId, groupId, userId, taskDefineKey, processDefineXml, fileName;
 
         processEngineName = req.getParameter("processEngineName");
         processDefineId = req.getParameter("processDefineId");
@@ -40,6 +40,8 @@ public class ProcessAction extends HttpServlet {
         groupId = req.getParameter("groupId");
         userId = req.getParameter("userId");
         taskDefineKey = req.getParameter("taskDefineKey");
+        processDefineXml = req.getParameter("processDefineXml");
+        fileName = req.getParameter("fileName");
 
         switch (method) {
             case "getImage":
@@ -62,6 +64,9 @@ public class ProcessAction extends HttpServlet {
                 }
                 pw.flush();
                 pw.close();
+                break;
+            case "deployProcess":
+                ProcessBO.deployProcess(processEngineName, fileName, processDefineXml);
                 break;
             case "startProcess":
                 if (processEngineName != null && processDefineId != null) {

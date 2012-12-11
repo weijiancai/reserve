@@ -11,5 +11,10 @@ public class MyAssignmentHandle implements TaskListener {
     @Override
     public void notify(DelegateTask delegateTask) {
         // 执行自定义的身份查找
+
+        // 接下来，例如调用以下方法：
+        delegateTask.setAssignee("gonzo");
+        delegateTask.addCandidateUser("fozzie");
+        delegateTask.addCandidateGroup("management");
     }
 }

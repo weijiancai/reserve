@@ -68,11 +68,16 @@
                 addCandidateGroupService.send();
             }
         }
+
+        private function handlerDeployProcess(event:ResultEvent):void {
+            processEngineService.send();
+        }
     ]]></mx:Script>
 
     <mx:HTTPService id="processEngineService" url="/process?method=getProcessEngines" method="post" resultFormat="e4x"/>
     <mx:XMLListCollection id="processEngineList" source="{processEngineService.lastResult.list}"/>
     <mx:HTTPService id="processEngineConfigurationService" url="/process?method=getProcessEngineConfiguration" method="post" resultFormat="xml" result="handlerProcessEngineConfigurationService(event)"/>
+    <mx:HTTPService id="deployProcessService" url="/process?method=deployProcess" method="post" result="handlerDeployProcess(event)"/>
 
     <mx:HTTPService id="processDefineService" url="/process?method=getProcessDefineById" method="post" resultFormat="xml" result="handlerProcessDefineService(event)"/>
     <mx:HTTPService id="processInstanceService" url="/process?method=getProcessInstance" method="post" resultFormat="xml" result="handlerProcessInstanceService(event)"/>

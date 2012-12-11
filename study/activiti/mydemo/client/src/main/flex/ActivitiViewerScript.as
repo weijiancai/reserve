@@ -361,7 +361,10 @@ private static function getTypeFilter():Array {
 }
 
 private function deployProcess():void {
-
+    deployProcessService.request.processEngineName = processEngineName;
+    deployProcessService.request.fileName = xmlFile.name;
+    deployProcessService.request.processDefineXml = ta_xmlStr.text;
+    deployProcessService.send();
 }
 
 private function handlerProcessInstanceExecutionService(event:ResultEvent):void {

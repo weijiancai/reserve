@@ -7,16 +7,21 @@
         private var currentSelected:ProcessIcon = null;
 
         private function init():void {
-            this.graphics.clear();
+            clearCanvas();
             //填充背景
             this.graphics.beginFill(0xFFFFFF);
             this.graphics.drawRect(0, 0, this.width, this.height);
             this.graphics.endFill();
         }
 
+        // 清空画布
+        public function clearCanvas():void {
+//            this.graphics.clear();
+            this.removeAllChildren();
+        }
+
         public function draw(processDefinitionXml:XML):void {
-            // 清空画布
-            this.graphics.clear();
+            clearCanvas();
 
             var model:Namespace = processDefinitionXml.namespace();
 

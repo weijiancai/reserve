@@ -661,4 +661,9 @@ public class ProcessBO {
             taskService.addCandidateGroup(task.getId(), groupId);
         }
     }
+
+    public static void deployProcess(String processEngineName, String fileName, String processDefineXml) {
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        processEngine.getRepositoryService().createDeployment().addString(fileName, processDefineXml).deploy();
+    }
 }
