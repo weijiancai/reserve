@@ -129,9 +129,6 @@ package {
             glow.blurYFrom = 0;
             glow.blurYTo = 15;
 
-            selectedRectBorder = new IconBorder();
-            highlightRectBorder = new IconBorder();
-
             this.draw();
             this.bindEvents();
         }
@@ -345,6 +342,8 @@ package {
         // 高亮此节点
         public function highlight():void {
             if(TYPE_USER_TASK == _type || TYPE_SERVICE_TASK == _type) {
+                clearHighlight();
+                highlightRectBorder = new IconBorder();
                 highlightRectBorder.drawRect(2, 0xff0000, _width, _height, 0, 20, 20, -5.5, -1.5, false);
                 this.addChild(highlightRectBorder);
                 this.isHighlight = true;
@@ -353,14 +352,17 @@ package {
 
         // 清除高亮
         public function clearHighlight():void {
-            if(this.contains(highlightRectBorder)) {
+            if(highlightRectBorder != null && this.contains(highlightRectBorder)) {
                 this.removeChild(highlightRectBorder);
                 this.isHighlight = false;
+                highlightRectBorder = null;
             }
         }
 
         // 选中
         public function selected():void {
+            clearSelected();
+            selectedRectBorder = new IconBorder();
             if(TYPE_START_EVENT == this._type) { // 画开始节点
                 selectedRectBorder.drawCircle(1, 0x0000ff, _x + _width / 2, _y + _height / 2);
             } else if(TYPE_END_EVENT == _type) { // 画结束节点
@@ -378,9 +380,10 @@ package {
 
         // 清除选中
         public function clearSelected():void {
-            if(this.contains(selectedRectBorder)) {
+            if(selectedRectBorder != null && this.contains(selectedRectBorder)) {
                 this.removeChild(selectedRectBorder);
                 this.isSelected = false;
+                selectedRectBorder = null;
             }
         }
     }

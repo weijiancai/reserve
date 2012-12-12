@@ -2,6 +2,8 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:process="*"
                 creationComplete="init()" paddingLeft="0" paddingTop="0" paddingRight="0" paddingBottom="0">
     <mx:Script><![CDATA[
+        import mx.managers.PopUpManager;
+
         include "ActivitiViewerScript.as";
         private function handlerMyTasksService(event:ResultEvent):void {
             dg_myTasks.dataProvider = XML(event.result).children();
@@ -72,6 +74,34 @@
         private function handlerDeployProcess(event:ResultEvent):void {
             processEngineService.send();
         }
+
+        private function submitForm():void {
+
+        }
+
+        private function addAskForLeaveOrder():void {
+            if(userId == null) {
+                Alert.show("请选择用户！");
+            } else {
+                var askWin:AskForLeaveOrderWin = new AskForLeaveOrderWin();
+                askWin.userId = userId;
+                askWin.addEventListener("sendData", function(e:Event):void {
+                    addAskForLeaveOrderService.request.processEngineName = processEngineName;
+                    addAskForLeaveOrderService.request.processDefineId = processDefineId;
+                    addAskForLeaveOrderService.request.name = userId;
+                    addAskForLeaveOrderService.request.days = e.currentTarget.days.text;
+                    addAskForLeaveOrderService.request.desc = e.currentTarget.desc.text;
+                    addAskForLeaveOrderService.send();
+                });
+                PopUpManager.addPopUp(askWin, this, true);
+                PopUpManager.centerPopUp(askWin);
+            }
+        }
+
+        private function handleAddAskForLeaveOrder(event:ResultEvent):void {
+            // 更新流程实例
+            requestProcessInstance();
+        }
     ]]></mx:Script>
 
     <mx:HTTPService id="processEngineService" url="/process?method=getProcessEngines" method="post" resultFormat="e4x"/>
@@ -106,6 +136,8 @@
     <mx:HTTPService id="addCandidateUserService" url="/process?method=addCandidateUser" method="post" resultFormat="e4x" fault="{trace('error');}"/>
     <mx:HTTPService id="addCandidateGroupService" url="/process?method=addCandidateGroup" method="post" resultFormat="e4x" fault="{trace('error');}"/>
 
+    <mx:HTTPService id="addAskForLeaveOrderService" url="/process?method=addAskForLeaveOrder" method="post" resultFormat="e4x" result="handleAddAskForLeaveOrder(event)" fault="{trace('error');}"/>
+
     <mx:HDividedBox width="100%" height="100%">
         <mx:VBox width="17%" height="100%">
             <mx:TabNavigator width="100%" height="100%">
@@ -115,8 +147,11 @@
 
                 <mx:Canvas label="用户">
                     <mx:VBox height="100%" width="100%">
-                        <mx:Tree width="100%" id="groupTree" height="50%" dataProvider="{groupList}" labelField="@name" click="handleGroupTreeClick()" />
-                        <mx:Tree width="100%" id="userTree" height="50%" dataProvider="{userList}" labelField="@firstName" click="handleUserTreeClick()"/>
+                        <mx:Tree width="100%" id="groupTree" height="45%" dataProvider="{groupList}" labelField="@name" click="handleGroupTreeClick()" />
+                        <mx:Tree width="100%" id="userTree" height="45%" dataProvider="{userList}" labelField="@firstName" click="handleUserTreeClick()"/>
+                        <mx:HBox width="100%" height="10%">
+                            <mx:Button label="填写请假申请单" click="addAskForLeaveOrder()"/>
+                        </mx:HBox>
                     </mx:VBox>
                 </mx:Canvas>
             </mx:TabNavigator>
@@ -136,6 +171,8 @@
             </mx:DataGrid>
 
             <mx:Canvas width="100%" height="60%">
+                <mx:VBox id="orderBox"/>
+
                 <mx:Button label="添加候选人" right="390" y="0" click="addCandidateUser()"/>
                 <mx:Button label="添加候选组" right="300" y="0" click="addCandidateGroup()"/>
                 <mx:Button label="指定用户" right="220" y="0" click="assigneeUser()"/>

@@ -69,28 +69,7 @@ public class ProcessAction extends HttpServlet {
                 ProcessBO.deployProcess(processEngineName, fileName, processDefineXml);
                 break;
             case "startProcess":
-                if (processEngineName != null && processDefineId != null) {
-                    ProcessBO.startProcessByProcessDefineId(processEngineName, processDefineId);
-                } else {
-                    String name = req.getParameter("name");
-                    String days = req.getParameter("days");
-                    String desc = req.getParameter("desc");
-
-                    // 保存单据
-                    Order order = new Order(name, Integer.parseInt(days), desc);
-                    OrderBO.saveOrder(order);
-
-                    Map<String, Object> params = new HashMap<String, Object>();
-                    params.put("order", order);
-                    String processId = ProcessBO.startProcess(ProcessBO.PROCESS_KEY, params);
-
-                    List<Task> tasks = ProcessBO.getTasksByUser(processId, name);
-                    for (Task task : tasks) {
-                        System.out.println("完成任务： " + task.getName());
-                        ProcessBO.getTaskService().complete(task.getId());
-                    }
-                }
-
+                ProcessBO.startProcessByProcessDefineId(processEngineName, processDefineId);
                 break;
             case "getProcessDefXml":
                 String xml = ProcessBO.getProcessDefXml(processEngineName, processDefineId);
@@ -236,6 +215,26 @@ public class ProcessAction extends HttpServlet {
                 break;
             case "addCandidateGroup":
                 ProcessBO.addCandidateGroupToTask(processEngineName, processDefineId, groupId, taskDefineKey);
+                break;
+            case "addAskForLeaveOrder":
+                String name = req.getParameter("name");
+                String days = req.getParameter("days");
+                String desc = req.getParameter("desc");
+
+                // 保存单据
+                Order order = new Order(name, Integer.parseInt(days), desc);
+                OrderBO.saveOrder(order);
+
+                Map<String, Object> params = new HashMap<String, Object>();
+                params.put("order", order);
+                String processId = ProcessBO.startProcess(processEngineName, processDefineId, params);
+
+                List<Task> tasks = ProcessBO.getTasksByUser(processId, name);
+                for (Task task : tasks) {
+                    System.out.println("完成任务： " + task.getName());
+                    ProcessBO.getTaskService().complete(task.getId());
+                }
+//                ProcessBO.addCandidateGroupToTask(processEngineName, processDefineId, groupId, taskDefineKey);
                 break;
         }
     }

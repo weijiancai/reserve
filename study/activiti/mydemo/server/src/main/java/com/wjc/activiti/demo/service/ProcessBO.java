@@ -96,9 +96,10 @@ public class ProcessBO {
         return new String(bytes, "UTF-8");
     }
 
-    public static String startProcess(String key, Map<String, Object> params) {
-        System.out.println("启动流程 > " + key);
-        ProcessInstance processInstance = getRuntimeService().startProcessInstanceByKey(key, params);
+    public static String startProcess(String processEngineName, String processDefineId, Map<String, Object> params) {
+        System.out.println("启动流程 > " + processDefineId);
+        ProcessEngine processEngine = ProcessEngines.getProcessEngine(processEngineName);
+        ProcessInstance processInstance = processEngine.getRuntimeService().startProcessInstanceById(processDefineId, params);
         return processInstance.getId();
     }
 
