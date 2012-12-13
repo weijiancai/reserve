@@ -80,7 +80,9 @@
         }
 
         private function addAskForLeaveOrder():void {
-            if(userId == null) {
+            if(processDefineId == null) {
+                Alert.show("请选择流程定义！");
+            } else if(userId == null) {
                 Alert.show("请选择用户！");
             } else {
                 var askWin:AskForLeaveOrderWin = new AskForLeaveOrderWin();
