@@ -1,0 +1,36 @@
+JPA关联关系映射
+JPA中规定中多的一方为关系维护端，关系维护端负责外键记录的更新，关系被维护端是关系被维护端，是没有权利更新外键记录。
+ 一对多 @OneToMany(cascade={CascadeType.REFRESH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE},fetch=FetchType.EAGER,mappedBy="order")
+ cascade表示级联
+ fetch=FetchType.EAGER表示马上加载数据
+ fetch=FetchType.LAZY表示延迟加载数据
+ mappedBy="order" 表示是关系被维护端 相当于hibernate中的 invserse 后面是Many的一方，默认是延迟加载 后面是One的一方，默认是立即加载
+
+ 多对一 @ManyToOne(cascade={CascadeType.REFRESH,CascadeType.MERGE},optional=falsefalsefalsefalse)
+ @JoinColumn(name="order_id") 表示外键列 optionnal表示是否可以为空 true表示可以为空 false表示不能为空
+
+ 一对一关系 @OneToOne(mappedBy = "idCard", cascade = { CascadeType.REFRESH,    CascadeType.PERSIST, CascadeType.MERGE },optional=falsefalsefalsefalse)
+ @OneToOne(optional=falsefalsefalsefalse,cascade=CascadeType.ALL) @JoinColumn(name="c_id")
+
+ 多对多关系 维护端设为student 维护端的注解 @ManyToMany(cascade = CascadeType.REFRESH)
+ @JoinTable(name = "student_teacher",  inverseJoinColumns = @JoinColumn(name = "teacher_id"), joinColumns = @JoinColumn(name = "stu_id"))
+ @JoinTable表示第三方关系表的信息 inverseJoinColumns = @JoinColumn(name = "teacher_id")表示被维护端外键在第三方关系表的定义
+ joinColumns = @JoinColumn(name = "stu_id"))表示维护端在第三方关系表的定义  被维护端的注解 @ManyToMany(cascade=CascadeType.REFRESH,mappedBy="teachers")
+
+联合主键 定义主键类
+1. 需要空的构造方法
+2. 必须实现序列化接口
+3. 类上注解@Embeddable
+告诉JPA这个类里面的属性作为其他类的属性，也就是嵌入到其他类中  在使用上面定义的联合主键类的属性上标注 @EmbeddedId  publicpublicpublicpublic CompositeKey getId() {   returnreturnreturnreturn id; }
+代表 id是一个使用联合主键的属性  大多数人以为hashCode()方法就是JAVA地址转换而来，这其实是一个误解。hashCode是native的方法，对地址进行处理得到的。各个类继承它时，可以重写该类的这个方法，
+如：对于Integer类的hashCode()就一条语句：return value; 只是返回数据实际值，hashCode的计算方式越复杂，冲突的可能性越小。 在API帮助中，是这样描述的：  hashCode 的常规协定是： •
+在 Java 应用程序执行期间，在对同一对象多次调用 hashCode 方法时，必须一致地返回相同的整数，前提是将对象进行 equals 比较时所用的信息没有被修改。从某一应用程序的一次执行到同一应用程序的另一次执行，该整数无需保持一致。  •
+如果根据 equals(Object) 方法，两个对象是相等的，那么对这两个对象中的每个对象调用 hashCode 方法都必须生成相同的整数结果。  如果根据 equals(java.lang.Object) 方法，两个对象不相等，
+那么对这两个对象中的任一对象上调用 hashCode 方法不 要求一定生成不同的整数结果。但是，程序员应该意识到，为不相等的对象生成不同整数结果可以提高哈希表的性能。
+实际上，由 Object 类定义的 hashCode 方法确实会针对不同的对象返回不同的整数。这一般是通过将该对象的内部地址转换成一个整数来实现的，但是 JavaTM 编程语言不需要这种实现技巧。要有效率的类必然会重写这个方法，
+重写时有两条原则：  说到Hashcode()，有必要提下以Hash开头的另几个类：    HashCode是返回对象的哈希码，是对象的散列码。跟HashMap和Hashtable没多大关系。 它们两者是一种数据结构，以（值，关键字）形式存储数据值。
+HashTable是方法是线程同步的，HashMap不是线程同步，所以速度更快。
+HashMap中可以存在一条key或value为空的记录，Hashtable不可以。
+HashTable继承自Dictionary,HashMap继承自Map接口。
+1. 不必对每个不同的对象都产生一个唯一的hashcode，只要你的HashCode方法使get()能够得到put()放进去的内容就可以了。即“不为一原则”。
+2. 生成hashcode的算法尽量使hashcode的值分散一些，不要很多hashcode都集中在一个范围内，这样有利于提高HashMap的性能。即“分散原则”。
