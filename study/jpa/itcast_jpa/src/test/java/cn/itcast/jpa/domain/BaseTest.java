@@ -1,5 +1,6 @@
-package cn.itcast.jpa;
+package cn.itcast.jpa.domain;
 
+import cn.itcast.jpa.JpaUtil;
 import cn.itcast.jpa.domain.*;
 
 import javax.persistence.EntityManager;
@@ -16,7 +17,7 @@ import java.util.Set;
 public class BaseTest {
     public static void main(String[] args) {
         User user = new User();
-        user.setName("ÕÅÈý");
+        user.setName("å¼ ä¸‰");
         user.setBirthday(new Date());
 
         addUser(user);
@@ -92,7 +93,7 @@ public class BaseTest {
         }
     }
 
-    static void query(int id) {
+    static void query(String id) {
         EntityManager em = JpaUtil.getEntityManager();
         User user = em.find(User.class, id);
         String jpaQl = "select user from User user";
