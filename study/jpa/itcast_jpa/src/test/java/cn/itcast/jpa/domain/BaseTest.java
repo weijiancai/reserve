@@ -2,6 +2,7 @@ package cn.itcast.jpa.domain;
 
 import cn.itcast.jpa.JpaUtil;
 import cn.itcast.jpa.domain.*;
+import org.junit.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -21,9 +22,10 @@ public class BaseTest {
         user.setBirthday(new Date());
 
         addUser(user);
-        addDepart();
         query(user.getId());
     }
+
+
 
     static void addUser(User user) {
         EntityManager em = null;
@@ -47,7 +49,8 @@ public class BaseTest {
         }
     }
 
-    static void addDepart() {
+    @Test
+    public void addDepart() {
         EntityManager em = null;
         EntityTransaction tx = null;
 
