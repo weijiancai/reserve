@@ -39,7 +39,7 @@ public class IDCard {
         this.cardNo = cardNo;
     }
 
-    @OneToOne(mappedBy = "idCard", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToOne(mappedBy = "idCard", cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     public Person getPerson() {
         return person;
     }

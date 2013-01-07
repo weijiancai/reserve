@@ -16,18 +16,19 @@ import java.util.Date;
 public class User {
     @Id
     @GeneratedValue(generator = "uuidpk")
-    private int id;
+    @Column(length = 32)
+    private String id;
 
     @Index(name = "name_index")
     @Column(nullable = true, name = "user_name", unique = true)
     private String name;
     private Date birthday;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

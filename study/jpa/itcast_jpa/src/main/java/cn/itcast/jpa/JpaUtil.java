@@ -12,7 +12,7 @@ public class JpaUtil {
     private static EntityManagerFactory emf;
 
     static {
-        emf = Persistence.createEntityManagerFactory("persistUnitName");
+        emf = Persistence.createEntityManagerFactory("itcast_jpa");
     }
 
     public static EntityManager getEntityManager() {
