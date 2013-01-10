@@ -180,6 +180,8 @@ public class JingDongParser implements IProductParser {
                             }
                         }
                     }
+                } else {
+                    return null;
                 }
             }
         } catch (IOException e) {
