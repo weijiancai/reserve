@@ -11,6 +11,8 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 亚马逊解析器
@@ -32,6 +34,7 @@ public class AmazonParser implements IProductParser {
     public IWebProduct parse() {
         WebProductImpl prod = new WebProductImpl();
         prod.setSourceSite(SiteName.AMAZON.name());
+        List<URL> pictureUrlList = new ArrayList<URL>();
         try {
             // 打开搜索结果页面
             Document doc = Jsoup.connect(SEARCH_URL + isbn).timeout(TIME_OUT).get();
@@ -44,6 +47,8 @@ public class AmazonParser implements IProductParser {
                 if (elements.size() > 0) {
                     Element element = elements.first();
                     Elements mElements;
+                    // 取搜索结果页面图片 160 * 160
+                    pictureUrlList.add(new URL(element.select("div.productImage a img").first().attr("src")));
                     // 打开详细页面
                     String detailUrl = element.select("div.productImage a").first().attr("href");
 
@@ -53,14 +58,26 @@ public class AmazonParser implements IProductParser {
                             .get();
                     // 取书名
                     prod.setName(UtilString.trim(detailDoc.select("form#handleBuy > div.buying > h1 > span").first().ownText()));
-                    // 取图片
-                    prod.setPicture(new URL(detailDoc.select("form#handleBuy > table.productImageGrid img#original-main-image").first().attr("src")));
+                    // 取详细页面图片 大图 300 * 300
+                    elements = detailDoc.select("div#main-image-canvas img");
+                    for(Element aElement : elements) {
+                        if ("original-main-image".equals(aElement.attr("id"))) {
+                            pictureUrlList.add(new URL(aElement.attr("src")));
+                        } else {
+                            pictureUrlList.add(new URL(aElement.attr("src")));
+                        }
+                    }
+//                    prod.setPicture(new URL(detailDoc.select("form#handleBuy > table.productImageGrid img#original-main-image").first().attr("src")));
                     // 取定价
-                    prod.setPrice(detailDoc.select("form#handleBuy div#priceBlock span#listPriceValue").first().text().replace("￥", "").trim());
+                    elements = detailDoc.select("form#handleBuy div#priceBlock span#listPriceValue");
+                    if (elements.size() > 0) {
+                        prod.setPrice(elements.first().text().replace("￥", "").trim());
+
+                    }
                     // 取作者
                     prod.setAuthor(detailDoc.select("form#handleBuy > div.buying > a").first().text());
                     // 取内容简介
-                    prod.setContent(detailDoc.select("div#divsinglecolumnminwidth > div#ps-content > div.content").text());
+                    prod.setContent(detailDoc.select("div#divsinglecolumnminwidth > div#ps-content > div.content").html());
 
                     // 取基本信息
                     mElements = detailDoc.select("div#divsinglecolumnminwidth > table td.bucket > div.content > ul > li");
@@ -107,8 +124,16 @@ public class AmazonParser implements IProductParser {
                             prod.setIsbn(isbn);
                         } else if (bTagText.contains("商品尺寸")) {
                             prod.setSize(value);
+                            if(UtilString.trim(value).length() > 0) {
+                                String[] strs = prod.getSize().replace("cm", "").trim().split("x");
+                                if(strs.length == 3) {
+                                    prod.setLength(UtilString.trim(strs[0]));
+                                    prod.setWidth(UtilString.trim(strs[1]));
+                                    prod.setDeep(UtilString.trim(strs[2]));
+                                }
+                            }
                         } else if (bTagText.contains("商品重量")) {
-                            prod.setWeight(value);
+                            prod.setWeight(UtilString.trim(value.replace("g", "")));
                         }
                     }
 
@@ -123,7 +148,7 @@ public class AmazonParser implements IProductParser {
                     }
                     for (Element aElement : mElements) {
                         String text = aElement.text();
-                        String siblingText = aElement.nextElementSibling().text();
+                        String siblingText = aElement.nextElementSibling().html();
                         if ("编辑推荐".equals(text)) {
                             prod.setHAbstract(siblingText);
                         } else if ("作者简介".equals(text)) {
@@ -138,6 +163,9 @@ public class AmazonParser implements IProductParser {
                             prod.setMediaFeedback(siblingText);
                         }
                     }
+
+                    // 设置图片
+                    prod.setPictureURLs(pictureUrlList.toArray(new URL[pictureUrlList.size()]));
                 }
             }
         } catch (IOException e) {

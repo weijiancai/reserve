@@ -1,6 +1,7 @@
 package com.wjc.demo.fetchbook;
 
 import java.net.URL;
+import java.util.Arrays;
 
 /**
  * @author weijiancai
@@ -8,7 +9,7 @@ import java.net.URL;
  */
 public class WebProductImpl implements IWebProduct {
     private String name;
-    private URL picture;
+    private URL[] pictureURLs;
     private String hAbstract;
     private String content;
     private String authorIntro;
@@ -39,6 +40,9 @@ public class WebProductImpl implements IWebProduct {
     private String cnName;
     private String mediaFeedback;
     private String wordCount;
+    private String length;
+    private String width;
+    private String deep;
 
     public String getName() {
         return name;
@@ -48,12 +52,12 @@ public class WebProductImpl implements IWebProduct {
         this.name = name;
     }
 
-    public URL getPictureURL() {
-        return picture;
+    public URL[] getPictureURLs() {
+        return pictureURLs;
     }
 
-    public void setPicture(URL picture) {
-        this.picture = picture;
+    public void setPictureURLs(URL[] picture) {
+        this.pictureURLs = picture;
     }
 
     public String getHAbstract() {
@@ -297,12 +301,36 @@ public class WebProductImpl implements IWebProduct {
         this.wordCount = wordCount;
     }
 
+    public String getLength() {
+        return length;
+    }
+
+    public void setLength(String length) {
+        this.length = length;
+    }
+
+    public String getWidth() {
+        return width;
+    }
+
+    public void setWidth(String width) {
+        this.width = width;
+    }
+
+    public String getDeep() {
+        return deep;
+    }
+
+    public void setDeep(String deep) {
+        this.deep = deep;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append("WebProductImpl").append("{\n");
         sb.append("name = '").append(name).append('\'').append('\n');
-        sb.append("picture = ").append(picture).append('\n');
+        sb.append("pictureURLs = ").append(pictureURLs == null ? "null" : Arrays.asList(pictureURLs).toString());
         sb.append("hAbstract = '").append(hAbstract).append('\'').append('\n');
         sb.append("content = '").append(content).append('\'').append('\n');
         sb.append("authorIntro = '").append(authorIntro).append('\'').append('\n');
@@ -333,6 +361,9 @@ public class WebProductImpl implements IWebProduct {
         sb.append("cnName = '").append(cnName).append('\'').append('\n');
         sb.append("mediaFeedback = '").append(mediaFeedback).append('\'').append('\n');
         sb.append("wordCount = '").append(wordCount).append('\'').append('\n');
+        sb.append("length = '").append(length).append('\'').append('\n');
+        sb.append("width = '").append(width).append('\'').append('\n');
+        sb.append("deep = '").append(deep).append('\'').append('\n');
         sb.append('}');
         return sb.toString();
     }

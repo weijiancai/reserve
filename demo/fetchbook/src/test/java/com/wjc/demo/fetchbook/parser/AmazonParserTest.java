@@ -3,7 +3,11 @@ package com.wjc.demo.fetchbook.parser;
 import com.wjc.demo.fetchbook.IWebProduct;
 import org.junit.Test;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.hasItemInArray;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -12,16 +16,22 @@ import static org.junit.Assert.assertThat;
  */
 public class AmazonParserTest {
     @Test
-    public void testParseChinese() {
-//                String isbn = "9787544731706"; // 少年Pi的奇幻漂流
-        String isbn = "9787504479037"; // 牛刀说货币：货币狼烟
+    public void testParseChinese() throws MalformedURLException {
+                String isbn = "9787544731706"; // 少年Pi的奇幻漂流
+//        String isbn = "9787504479037"; // 牛刀说货币：货币狼烟
+//        String isbn = "6925002300023";
         AmazonParser parser = new AmazonParser(isbn);
         IWebProduct prod = parser.parse();
         System.out.println(prod);
 
         assertThat(prod.getSourceSite(), equalTo("AMAZON"));
-        assertThat(prod.getName(), equalTo("牛刀说货币:货币狼烟"));
-        assertThat(prod.getPictureURL().toString(), equalTo("http://ec4.images-amazon.com/images/I/518hrslAYgL._SL500_AA300_.jpg"));
+//        assertThat(prod.getName(), equalTo("牛刀说货币:货币狼烟"));
+//        assertThat(prod.getPictureURLs().length, equalTo(2));
+        assertThat(prod.getPictureURLs(), hasItemInArray(new URL("http://ec4.images-amazon.com/images/I/518hrslAYgL._AA160_.jpg"))); // 160 * 160
+        assertThat(prod.getPictureURLs(), hasItemInArray(new URL("http://ec4.images-amazon.com/images/I/510eoZh-ltL._BO2,204,203,200_PIsitb-sticker-arrow-click,TopRight,35,-76_AA300_SH20_OU28_.jpg"))); // 280 * 280
+        assertThat(prod.getPictureURLs(), hasItemInArray(new URL("http://ec4.images-amazon.com/images/I/51BV60a3M8L._AA300_.jpg"))); // 280 * 280
+        assertThat(prod.getPictureURLs(), hasItemInArray(new URL("http://ec4.images-amazon.com/images/I/51kLhg0hxEL._AA300_.jpg"))); // 280 * 280
+        assertThat(prod.getPictureURLs(), hasItemInArray(new URL("http://g-ec4.images-amazon.com/images/G/28/x-locale/communities/customerimage/play-shuttle-off._V200435414_.gif"))); // 280 * 280
         assertThat(prod.getPrice(), equalTo("36.80"));
         assertThat(prod.getAuthor(), equalTo("牛刀"));
         assertThat(prod.getPublishing(), equalTo("中国商业出版社"));
@@ -55,7 +65,7 @@ public class AmazonParserTest {
 
         assertThat(prod.getSourceSite(), equalTo("AMAZON"));
         assertThat(prod.getName(), equalTo("Steve Jobs: The Exclusive Biography (史蒂夫•乔布斯传)(英国版)"));
-        assertThat(prod.getPictureURL().toString(), equalTo("http://ec4.images-amazon.com/images/I/510O6F6qUJL._SL500_AA300_.jpg"));
+//        assertThat(prod.getPictureURL().toString(), equalTo("http://ec4.images-amazon.com/images/I/510O6F6qUJL._SL500_AA300_.jpg"));
         assertThat(prod.getPrice(), equalTo("282.85"));
         assertThat(prod.getAuthor(), equalTo("Walter Isaacson"));
         assertThat(prod.getPublishing(), equalTo("Little, Brown"));

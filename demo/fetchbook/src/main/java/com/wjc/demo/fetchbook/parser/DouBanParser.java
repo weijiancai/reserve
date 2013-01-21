@@ -3,6 +3,7 @@ package com.wjc.demo.fetchbook.parser;
 import com.wjc.demo.fetchbook.IWebProduct;
 import com.wjc.demo.fetchbook.SiteName;
 import com.wjc.demo.fetchbook.WebProductImpl;
+import com.wjc.demo.fetchbook.doanload.DownloadImage;
 import com.wjc.demo.fetchbook.util.UtilString;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -35,17 +36,18 @@ public class DouBanParser implements IProductParser {
         try {
             // 打开搜索结果页面
             Document doc = Jsoup.connect(SEARCH_URL + isbn).timeout(TIME_OUT).get();
-            String searchResult = doc.select("div#content div.article > div.rr").text();
+            String searchResult = doc.select("div#content div.article > div.trr").text();
             try {
                 int result = Integer.parseInt(UtilString.trim(searchResult.substring(searchResult.indexOf("共") + 1)));
                 if (result == 0) {
-                    return null;
+                    return prod;
                 }
             } catch (NumberFormatException e) {
-                return null;
+                return prod;
             }
 
-            Elements elements = doc.select("div#content div.article > table tr.item");
+//            Elements elements = doc.select("div#content div.article > table tr.item");
+            Elements elements = doc.select("div#content div.article ul.subject-list li.subject-item");
             if (elements != null) {
                 /*for (Element element : elements) {
 
@@ -55,7 +57,7 @@ public class DouBanParser implements IProductParser {
                     Element element = elements.first();
                     Elements mElements;
                     // 打开详细页面
-                    String detailUrl = element.select("td:eq(0) a").first().attr("href");
+                    String detailUrl = element.select("div.pic a").first().attr("href");
 
                     Document detailDoc = Jsoup.connect(detailUrl)
                             .timeout(TIME_OUT)
@@ -64,7 +66,8 @@ public class DouBanParser implements IProductParser {
                     // 取书名
                     prod.setName(UtilString.trim(detailDoc.select("div#wrapper > h1 > span").first().ownText()));
                     // 取图片
-                    prod.setPicture(new URL(detailDoc.select("div#content div.article div#mainpic > a").first().attr("href")));
+//                    prod.setPicture(new URL(detailDoc.select("div#content div.article div#mainpic > a").first().attr("href")));
+                    prod.setPictureURLs(new URL[]{new URL(detailDoc.select("div#content div.article div#mainpic > a").first().attr("href"))});
                     // 取基本信息
                     String infoHtml = detailDoc.select("div#content div.article div#info").first().html();
                     String[] infoStrs = infoHtml.split("<br />");
@@ -91,7 +94,7 @@ public class DouBanParser implements IProductParser {
                     mElements = detailDoc.select("div#content div.article > div.related_info > h2");
                     for (Element aElement : mElements) {
                         String text = aElement.text();
-                        String siblingText = aElement.nextElementSibling().text();
+                        String siblingText = aElement.nextElementSibling().html();
                         if (text.contains("内容简介")) {
                             prod.setContent(siblingText);
                         } else if (text.contains("作者简介")) {
@@ -99,6 +102,12 @@ public class DouBanParser implements IProductParser {
                         } else if (text.contains("目录")) {
                             prod.setCatalog(siblingText);
                         }
+                    }
+
+                    // 下载图片
+                    new DownloadImage(prod.getPictureURLs());
+                    for (URL url : prod.getPictureURLs()) {
+
                     }
                 }
             }

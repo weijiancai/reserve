@@ -16,4 +16,8 @@ public class UtilStringTest {
         String exptected = "牛刀说货币：货币狼烟（股市不行，楼市不行，2013年最好的理财方法是外汇理财）";
         assertThat(UtilString.trim(str), equalTo(exptected));
     }
+
+    @Test
+    public void test() {
+    }
 }

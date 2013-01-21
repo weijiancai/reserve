@@ -10,6 +10,8 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author weijiancai
@@ -28,6 +30,7 @@ public class JingDongParser implements IProductParser {
     public IWebProduct parse() {
         WebProductImpl prod = new WebProductImpl();
         prod.setSourceSite(SiteName.JING_DONG.name());
+        List<URL> pictureUrlList = new ArrayList<URL>();
         try {
             // 打开搜索结果页面
             Document doc = Jsoup.connect(SEARCH_URL + isbn).get();
@@ -40,18 +43,20 @@ public class JingDongParser implements IProductParser {
                 if (elements.size() > 0) {
                     Element element = elements.first();
                     Elements mElements;
+                    // 取搜索结果图片 160 * 160
+                    pictureUrlList.add(new URL(element.select("div.i-img a img").first().attr("data-lazyload")));
                     // 打开详细页面
                     String detailUrl = element.select("div.i-img a").first().attr("href");
 
                     Document detailDoc = Jsoup.connect(detailUrl).get();
                     // 取书名
                     prod.setName(detailDoc.select("div.main div.right-extra div#name h1").first().ownText());
-                    // 取图片
-                    prod.setPicture(new URL(detailDoc.select("div.main div.right-extra div#preview div#spec-n1 img").first().attr("src")));
+                    // 取详细页面图片 280 * 280
+                    pictureUrlList.add(new URL(detailDoc.select("div.main div.right-extra div#preview div#spec-n1 img").first().attr("src")));
                     // 取编辑推荐
                     mElements = detailDoc.select("div.main div.right-extra div#recommend-editor div.mc div.con");
                     if (mElements.size() > 0) {
-                        prod.setHAbstract(mElements.first().text());
+                        prod.setHAbstract(mElements.first().html());
                     }
 
                     mElements = detailDoc.select("div.main div.right-extra > div.m1 div.mt h2");
@@ -59,7 +64,7 @@ public class JingDongParser implements IProductParser {
                         String text = aElement.ownText();
                         if (text != null) {
                             text = text.trim();
-                            String value = aElement.parent().parent().select("div.mc div.con").text();
+                            String value = aElement.parent().parent().select("div.mc div.con").html();
                             if ("内容简介".equals(text)) { // 取内容简介
                                 prod.setContent(value);
                             } else if ("作者简介".equals(text)) { // 取作者简介
@@ -117,6 +122,14 @@ public class JingDongParser implements IProductParser {
                                 } else if(strs.length == 2) {
                                     prod.setSize(strs[0]);
                                     prod.setWeight(strs[1]);
+                                }
+                                if(prod.getSize() != null) {
+                                    strs = prod.getSize().replace("cm", "").split("x");
+                                    if(strs.length == 3) {
+                                        prod.setLength(strs[0]);
+                                        prod.setWidth(strs[1]);
+                                        prod.setDeep(strs[2]);
+                                    }
                                 }
                             } else if ("纸　　张/Paper:".equals(span)) {
                                 prod.setPaper(aElement.ownText());
@@ -180,6 +193,9 @@ public class JingDongParser implements IProductParser {
                             }
                         }
                     }
+
+                    // 设置图片
+                    prod.setPictureURLs(pictureUrlList.toArray(new URL[pictureUrlList.size()]));
                 } else {
                     return null;
                 }

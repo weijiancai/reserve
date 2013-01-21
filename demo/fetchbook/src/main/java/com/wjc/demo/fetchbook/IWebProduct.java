@@ -21,7 +21,7 @@ public interface IWebProduct {
      *
      * @return 返回商品的图片输入流
      */
-    URL getPictureURL();
+    URL[] getPictureURLs();
 
     /**
      * 获取商品名称
@@ -232,4 +232,24 @@ public interface IWebProduct {
      * @return 返回字数
      */
     String getWordCount();
+
+    /**
+     * 获取长度
+     * @return 返回长度
+     */
+    String getLength();
+
+    /**
+     * 获取宽度
+     *
+     * @return 返回宽度
+     */
+    String getWidth();
+
+    /**
+     * 获取厚度
+     *
+     * @return 返回厚度
+     */
+    String getDeep();
 }
