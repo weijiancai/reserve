@@ -27,7 +27,7 @@ public class JingDongParserTest {
         assertThat(prod.getPictureURLs().length, equalTo(2));
         assertThat(prod.getPictureURLs(), hasItemInArray(new URL("http://img14.360buyimg.com/n2/g6/M03/02/15/rBEGF1CkuaAIAAAAAAEwfxp3DX0AAAhNQJXS0YAATCX981.jpg "))); // 160 * 160
         assertThat(prod.getPictureURLs(), hasItemInArray(new URL("http://img10.360buyimg.com/n11/g6/M03/02/15/rBEGF1CkuaAIAAAAAAEwfxp3DX0AAAhNQJXS0YAATCX981.jpg"))); // 280 * 280
-        assertThat(prod.getAuthor(), equalTo("(加) 扬·马特尔"));
+        assertThat(prod.getAuthor(), equalTo("(加) 扬・马特尔"));
         assertThat(prod.getTranslator(), equalTo("姚媛"));
         assertThat(prod.getPublishing(), equalTo("译林出版社"));
         assertThat(prod.getBanci(), equalTo("1"));
@@ -47,10 +47,9 @@ public class JingDongParserTest {
         assertThat(prod.getPainter(), equalTo(null));*/
     }
 
-    @Test
-    public void testParseChinese() throws MalformedURLException {
-//        String isbn = "9787544731706"; // 少年Pi的奇幻漂流
-        String isbn = "9787504479037"; // 牛刀说货币：货币狼烟
+    // 牛刀说货币：货币狼烟
+    @Test public void test9787504479037() throws MalformedURLException {
+        String isbn = "9787504479037";
         JingDongParser parser = new JingDongParser(isbn);
         IWebProduct prod = parser.parse();
         System.out.println(prod);
@@ -79,9 +78,9 @@ public class JingDongParserTest {
         assertThat(prod.getPainter(), equalTo(null));
     }
 
-    @Test
-    public void testParseEnglish() {
-        String isbn = "9780747573906"; // 101 Things To Do Before You Die
+    // 101 Things To Do Before You Die
+    @Test public void test9780747573906() {
+        String isbn = "9780747573906";
         JingDongParser parser = new JingDongParser(isbn);
         IWebProduct prod = parser.parse();
         System.out.println(prod);

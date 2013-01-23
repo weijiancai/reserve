@@ -59,14 +59,15 @@ public class AmazonParser implements IProductParser {
                     // 取书名
                     prod.setName(UtilString.trim(detailDoc.select("form#handleBuy > div.buying > h1 > span").first().ownText()));
                     // 取详细页面图片 大图 300 * 300
-                    elements = detailDoc.select("div#main-image-canvas img");
+                    /*elements = detailDoc.select("div#main-image-canvas img");
                     for(Element aElement : elements) {
                         if ("original-main-image".equals(aElement.attr("id"))) {
                             pictureUrlList.add(new URL(aElement.attr("src")));
                         } else {
                             pictureUrlList.add(new URL(aElement.attr("src")));
                         }
-                    }
+                    }*/
+                    pictureUrlList.add(new URL(detailDoc.select("form#handleBuy > table.productImageGrid img#original-main-image").first().attr("src")));
 //                    prod.setPicture(new URL(detailDoc.select("form#handleBuy > table.productImageGrid img#original-main-image").first().attr("src")));
                     // 取定价
                     elements = detailDoc.select("form#handleBuy div#priceBlock span#listPriceValue");
@@ -133,7 +134,7 @@ public class AmazonParser implements IProductParser {
                                 }
                             }
                         } else if (bTagText.contains("商品重量")) {
-                            prod.setWeight(UtilString.trim(value.replace("g", "")));
+                            prod.setWeight(UtilString.trim(value.replace("g", "").replace("K", "")));
                         }
                     }
 

@@ -3,6 +3,7 @@ package com.wjc.demo.fetchbook.parser;
 import com.wjc.demo.fetchbook.IWebProduct;
 import com.wjc.demo.fetchbook.SiteName;
 import com.wjc.demo.fetchbook.WebProductImpl;
+import com.wjc.demo.fetchbook.util.UtilString;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -91,15 +92,21 @@ public class JingDongParser implements IProductParser {
                         for (Element aElement : summaryElements.select("li")) {
                             span = aElement.getElementsByTag("span").text();
                             if ("作　　者/Author:".equals(span)) {
-                                Elements authorElements = aElement.getElementsByTag("a");
-                                if (authorElements.size() > 0) {
-                                    prod.setAuthor(authorElements.get(0).text());
-                                }
-                                if (authorElements.size() > 1) {
-                                    prod.setTranslator(authorElements.get(1).text());
-                                }
-                                if (authorElements.size() > 2) {
-                                    prod.setPainter(authorElements.get(2).text());
+                                String values = aElement.text().replace("作　　者/Author:", "");
+                                StringBuilder sb = new StringBuilder();
+                                for(char c : values.toCharArray()) {
+                                    if(c == '著') {
+                                        prod.setAuthor(UtilString.trim(sb.toString()));
+                                        sb = new StringBuilder();
+                                    } else if(c == '译') {
+                                        prod.setTranslator(UtilString.trim(sb.toString()));
+                                        sb = new StringBuilder();
+                                    } else if(c == '绘') {
+                                        prod.setPainter(UtilString.trim(sb.toString()));
+                                        sb = new StringBuilder();
+                                    } else {
+                                        sb.append(c);
+                                    }
                                 }
                             } else if ("中文书名/Chinese Title:".equals(span)) {
                                 prod.setCnName(aElement.ownText());
@@ -140,18 +147,24 @@ public class JingDongParser implements IProductParser {
                     } else { // 取summary
                         mElements = detailDoc.select("div.main div.right-extra > ul#summary");
                         summaryElements = mElements.first();
-                        for (Element aElement : summaryElements.select("li")) {
+                        for (Element aElement : summaryElements.select("> li")) {
                             span = aElement.getElementsByTag("span").text();
                             if ("作　　者：".equals(span)) {
-                                Elements authorElements = aElement.getElementsByTag("a");
-                                if (authorElements.size() > 0) {
-                                    prod.setAuthor(authorElements.get(0).text());
-                                }
-                                if (authorElements.size() > 1) {
-                                    prod.setTranslator(authorElements.get(1).text());
-                                }
-                                if (authorElements.size() > 2) {
-                                    prod.setPainter(authorElements.get(2).text());
+                                String values = aElement.text().replace("作　　者：", "");
+                                StringBuilder sb = new StringBuilder();
+                                for(char c : values.toCharArray()) {
+                                    if(c == '著') {
+                                        prod.setAuthor(UtilString.trim(sb.toString()));
+                                        sb = new StringBuilder();
+                                    } else if(c == '译') {
+                                        prod.setTranslator(UtilString.trim(sb.toString()));
+                                        sb = new StringBuilder();
+                                    } else if(c == '绘') {
+                                        prod.setPainter(UtilString.trim(sb.toString()));
+                                        sb = new StringBuilder();
+                                    } else {
+                                        sb.append(c);
+                                    }
                                 }
                             } else if ("出 版 社：".equals(span)) {
                                 prod.setPublishing(aElement.getElementsByTag("a").text());

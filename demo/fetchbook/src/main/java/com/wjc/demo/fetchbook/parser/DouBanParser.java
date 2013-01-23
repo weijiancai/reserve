@@ -79,7 +79,7 @@ public class DouBanParser implements IProductParser {
                         } else if (infoStr.contains("出版年")) {
                             prod.setPublishDate(Jsoup.parse(infoStr).select("body").first().ownText());
                         } else if (infoStr.contains("页数")) {
-                            prod.setPageNum(Jsoup.parse(infoStr).select("body").first().ownText());
+                            prod.setPageNum(UtilString.trim(Jsoup.parse(infoStr).select("body").first().ownText().replace("页", "")));
                         } else if (infoStr.contains("定价")) {
                             prod.setPrice(Jsoup.parse(infoStr).select("body").first().ownText().replace("元", ""));
                         } else if (infoStr.contains("ISBN")) {
@@ -94,6 +94,8 @@ public class DouBanParser implements IProductParser {
                     mElements = detailDoc.select("div#content div.article > div.related_info > h2");
                     for (Element aElement : mElements) {
                         String text = aElement.text();
+                        // 去掉<script>
+                        aElement.nextElementSibling().select("script").remove();
                         String siblingText = aElement.nextElementSibling().html();
                         if (text.contains("内容简介")) {
                             prod.setContent(siblingText);
