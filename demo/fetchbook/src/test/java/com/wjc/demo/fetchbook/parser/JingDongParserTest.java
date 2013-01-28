@@ -97,7 +97,7 @@ public class JingDongParserTest {
         assertThat(prod.getPageNum(), equalTo("224"));
         assertThat(prod.getPrice(), equalTo("107.40"));
         assertThat(prod.getSize(), equalTo("17.27x11.18x2.03cm"));
-        assertThat(prod.getWeight(), equalTo("0.3kg"));
+        assertThat(prod.getWeight(), equalTo("0.3"));
         assertThat(prod.getPaper(), equalTo("胶版纸"));
         assertThat(prod.getLanguage(), equalTo("英文"));
         assertThat(prod.getLength(), equalTo("17.27"));

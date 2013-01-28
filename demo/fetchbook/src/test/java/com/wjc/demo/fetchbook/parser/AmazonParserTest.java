@@ -116,4 +116,15 @@ public class AmazonParserTest {
         assertThat(prod.getSize(), equalTo("15.9 x 5.5 x 24 cm"));
         assertThat(prod.getWeight(), equalTo("1"));
     }
+
+//    private String str = "my name is %s";
+
+    @Test
+    public void test() {
+        String str = "my name is '%s'";
+        String[] strs = {"zhangsan", "lisi", "wangwu"};
+        for(String s : strs) {
+            System.out.println(String.format(str, s));
+        }
+    }
 }

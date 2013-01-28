@@ -128,7 +128,7 @@ public class JingDongParser implements IProductParser {
                                     prod.setSize(strs[0]);
                                 } else if(strs.length == 2) {
                                     prod.setSize(strs[0]);
-                                    prod.setWeight(strs[1]);
+                                    prod.setWeight(strs[1].replace("kg", ""));
                                 }
                                 if(prod.getSize() != null) {
                                     strs = prod.getSize().replace("cm", "").split("x");
