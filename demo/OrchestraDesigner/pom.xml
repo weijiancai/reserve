@@ -1,0 +1,174 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.ow2.orchestra.designer</groupId>
+	<artifactId>orchestra-designer</artifactId>
+	<packaging>pom</packaging>
+	<name>Orchestra Designer</name>
+	<version>0.0.1-SNAPSHOT</version>
+	<description>Orchestra Designer Maven</description>
+	
+	<properties>
+		<flex.home>${env.FLEX_HOME}</flex.home>
+		<service-config-path>WebContent\WEB-INF\blazds\services-config.xml</service-config-path>
+		<ow2-util.version>1.0.18</ow2-util.version>
+		<mv-dep-plugin.version>2.0</mv-dep-plugin.version>
+		<license.version>3.3.0.4852</license.version>
+		<flex.version>3.3.0.4852</flex.version>
+		<undotextfields.version>1.0.0</undotextfields.version>
+	</properties>
+
+
+	<repositories>
+        <repository>
+            <id>flex-mojos-repository</id>
+            <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>ObjectWEB</id>
+            <url>http://maven.ow2.org/maven2/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+	</repositories>
+
+	<pluginRepositories>
+        <pluginRepository>
+            <id>flex-mojos-repository</id>
+            <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+	</pluginRepositories>
+
+	<dependencyManagement>
+		<dependencies>
+            <dependency>
+                <groupId>com.adobe.flex.framework</groupId>
+                <artifactId>flex</artifactId>
+                <version>3.5.0.12683</version>
+                <type>pom</type>
+            </dependency>
+
+            <dependency>
+                <groupId>com.adobe.flexunit</groupId>
+                <artifactId>flexunit</artifactId>
+                <version>4.0-rc-1</version>
+                <type>swc</type>
+                <scope>test</scope>
+            </dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<defaultGoal>install</defaultGoal>
+
+		<plugins>
+            <plugin>
+                <groupId>org.sonatype.flexmojos</groupId>
+                <artifactId>flexmojos-maven-plugin</artifactId>
+                <version>3.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <!--<sourceFile>./as01/AS_0100_HelloWorld.as</sourceFile>-->
+                    <!--<output>../WebRoot/flex/${project.build.finalName}.swf</output>
+                    <services>../WebRoot/WEB-INF/flex/services-config.xml</services>
+                    <contextRoot>/yuncrm</contextRoot>-->
+                    <!--<locales>
+                        <locale>en_US</locale>
+                    </locales>-->
+                    <!--<compilerWarnings>
+                        <warn-no-constructor>false</warn-no-constructor>
+                    </compilerWarnings>-->
+                    <debug>true</debug>
+                    <!--<coverage>true</coverage>-->
+                    <aggregate>true</aggregate>
+                    <storepass/>
+                </configuration>
+            </plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>initWTP</id>
+			<dependencies>
+				<dependency>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging-api</artifactId>
+					<version>1.1</version>
+				</dependency>
+				<!--<dependency>
+					<groupId>org.un.cava.birdeye.ravis</groupId>
+					<artifactId>libRaVis</artifactId>
+					<version>20080612</version>
+					<type>swc</type>
+				</dependency>-->
+				<dependency>
+					<groupId>flexlib</groupId>
+					<artifactId>flexlib-bin</artifactId>
+					<version>2.4</version>
+					<type>swc</type>
+				</dependency>
+			</dependencies>
+			<build>
+				<defaultGoal>clean</defaultGoal>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.0-alpha-4</version>
+						<executions>
+							<execution>
+								<phase>clean</phase>
+								<goals>
+									<goal>copy</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>org.un.cava.birdeye.ravis</groupId>
+											<artifactId>libRaVis</artifactId>
+											<version>20080612</version>
+											<type>swc</type>
+											<overWrite>true</overWrite>
+											<outputDirectory>WebContent/WEB-INF/lib</outputDirectory>
+										</artifactItem>
+									</artifactItems>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>install</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<defaultGoal>install</defaultGoal>
+			</build>
+			<modules>
+				<module>modules</module>
+			</modules>
+		</profile>
+	</profiles>
+
+</project>

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>org.ow2.orchestra.designer</groupId>
+		<artifactId>orchestra-designer-modules</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<groupId>org.ow2.orchestra.designer</groupId>
+	<artifactId>swf-orchestra-designer</artifactId>
+	<modelVersion>4.0.0</modelVersion>
+	<packaging>swf</packaging>
+	<name>SWF Module</name>
+	<description>OrchestraDesigner :: SWF : unit test and main application </description>
+
+	<properties>
+		<flex.locale>en_US</flex.locale>
+		<!--<licence.flexbuilder3>${env.FLEX_LICENSE}</licence.flexbuilder3>-->
+		<flexmojos.version>3.5.0</flexmojos.version>
+		<flashPlayer.command>/home/zairh/Adobe_Flex_Builder_Linux/Player/linux/flashplayer</flashPlayer.command>
+	</properties>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>servebox</id>
+			<name>ServeBox Plugin Repository</name>
+			<url>http://maven.servebox.org/repository</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<repositories>
+		<repository>
+			<id>sonatype-repository</id>
+			<url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+		</repository>
+		<repository>
+			<id>servebox</id>
+			<name>ServeBox Plugin Repository</name>
+			<url>http://maven.servebox.org/repository</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>flexlib</groupId>
+			<artifactId>flexlib-bin</artifactId>
+			<version>2.4</version>
+			<type>swc</type>
+		</dependency>
+
+		<dependency>
+			<groupId>flexlib</groupId>
+			<artifactId>undotextfields</artifactId>
+			<type>swc</type>
+			<version>${undotextfields.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>framework</artifactId>
+			<type>swc</type>
+			<classifier>en_US.rb</classifier>
+			<version>${flex.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>playerglobal</artifactId>
+			<version>10-3.3.0.4852</version>
+			<type>swc</type>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>rpc</artifactId>
+			<classifier>en_US.rb</classifier>
+			<version>${flex.version}</version>
+			<type>swc</type>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>rpc</artifactId>
+			<version>${flex.version}</version>
+			<type>swc</type>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>framework</artifactId>
+			<type>swc</type>
+			<version>${flex.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.adobe.flexunit</groupId>
+			<artifactId>flexunit</artifactId>
+			<version>0.85</version>
+			<type>swc</type>
+			<scope>test</scope>
+		</dependency>
+
+		<!--<dependency>
+			<groupId>com.adobe.flash.core</groupId>
+			<artifactId>playerglobal</artifactId>
+			<version>2.0</version>
+			<scope>test</scope>
+			<type>swc</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.adobe.flex.sdkcore</groupId>
+			<artifactId>framework</artifactId>
+			<version>3.2.0.3958</version>
+			<type>swc</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.sdkcore</groupId>
+			<artifactId>flex</artifactId>
+			<version>3.2.0.3958</version>
+			<type>swc</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.sdkcore</groupId>
+			<artifactId>rpc</artifactId>
+			<version>3.2.0.3958</version>
+			<type>swc</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.sdkcore</groupId>
+			<artifactId>utilities</artifactId>
+			<version>3.2.0.3958</version>
+			<type>swc</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.locales.en_US</groupId>
+			<artifactId>framework_rb</artifactId>
+			<version>3.2.0.3958</version>
+			<type>swc</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.locales.en_US</groupId>
+			<artifactId>rpc_rb</artifactId>
+			<version>3.2.0.3958</version>
+			<type>swc</type>
+			<scope>test</scope>
+		</dependency>-->
+	</dependencies>
+
+
+	<build>
+		<sourceDirectory>${basedir}/src/main/flex</sourceDirectory>
+		<testSourceDirectory>${basedir}/src/test/flex</testSourceDirectory>
+		<plugins>
+
+			<plugin>
+				<groupId>org.sonatype.flexmojos</groupId>
+				<artifactId>flexmojos-maven-plugin</artifactId>
+				<extensions>true</extensions>
+
+				<configuration>
+					<!--<skipTests>true</skipTests>
+					<skipTest>true</skipTest>-->
+					<resourceBundlePath>${basedir}/src/main/locales/${flex.locale}</resourceBundlePath>
+					<compiledLocales>
+						<locale>en_US</locale>
+					</compiledLocales>
+					<contextRoot>orchestradesigner</contextRoot>
+					<sourceFile>Orchestra_Designer.mxml</sourceFile>
+					<services>${basedir}/src/main/blazds/services-config.xml</services>
+					<optimize>false</optimize>
+					<mergeResourceBundle>true</mergeResourceBundle>
+					<!--<licenses>
+						<flexbuilder3>${licence.flexbuilder3}</flexbuilder3>
+					</licenses>-->
+					<outputDirectory>${project.build.directory}</outputDirectory>
+					<testRunner>
+				          <launcher>
+				            	<flashplayerCommand>${flashPlayer.command}</flashplayerCommand>
+				          </launcher>
+			        </testRunner>
+
+				</configuration>
+
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

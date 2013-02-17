@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<version>0.0.1-SNAPSHOT</version>
+		<groupId>org.ow2.orchestra.designer</groupId>
+		<artifactId>orchestra-designer-modules</artifactId>
+	</parent>
+
+	<!-- JAR model -->
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.ow2.orchestra.designer</groupId>
+	<artifactId>war-orchestra-designer</artifactId>
+	<packaging>war</packaging>
+	<name>War Application</name>
+	<description>OrchestraDesigner :: WAR :  War Model</description>
+
+	<properties>
+		<target.swf.dir>${project.build.directory}/orchestradesigner</target.swf.dir>
+	</properties>
+	<!-- include all swf files  -->
+	<dependencies>
+	     <!-- include orchestra-designer.swf  -->
+		<dependency>
+			<groupId>org.ow2.orchestra.designer</groupId>
+			<version>0.0.1-SNAPSHOT</version>
+			<artifactId>swf-orchestra-designer</artifactId>
+			<type>swf</type>
+		</dependency>
+         <!-- include testRunner.swf  -->
+		<!--<dependency>
+			<groupId>org.ow2.orchestra.designer</groupId>
+			<version>0.0.1-SNAPSHOT</version>
+			<artifactId>swf-test-runner</artifactId>
+			<type>swf</type>
+		</dependency>-->
+
+		<dependency>
+			<groupId>com.adobe.blazeds</groupId>
+			<artifactId>blazeds-common</artifactId>
+			<version>3.0.0.544</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>sonatype-repository</id>
+			<url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+		</repository>
+	</repositories>
+
+	<build>
+
+		<plugins>
+			<!--
+				 copy-dependecies to pull in the swf dependecies into the working
+				 floder
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<phase>compile</phase>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.ow2.orchestra.designer</groupId>
+									<artifactId>swf-orchestra-designer</artifactId>
+									<type>swf</type>
+								</artifactItem>
+
+<!--								<artifactItem>-->
+<!--									<groupId>org.ow2.orchestra.designer</groupId>-->
+<!--									<artifactId>swf-test-runner</artifactId>-->
+<!--									<type>swf</type>-->
+<!--								</artifactItem>-->
+
+							</artifactItems>
+							<outputDirectory>${target.swf.dir}</outputDirectory>
+							<!--<excludeGroupIds>org.ow2.jonas</excludeGroupIds>-->
+							<stripVersion>true</stripVersion>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>copy</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.adobe.blazeds</groupId>
+									<artifactId>blazeds-common</artifactId>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${target.swf.dir}/WEB-INF/lib</outputDirectory>
+							<overWriteReleases>true</overWriteReleases>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+				</configuration>
+			</plugin>
+
+		</plugins>
+		<finalName>orchestradesigner</finalName>
+	</build>
+</project>

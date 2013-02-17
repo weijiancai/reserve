@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	layout="absolute"
+	xmlns:local="*"
+	width="100%" height="100%" historyManagementEnabled="false"
+
+	xmlns:designer="org.act.od.impl.view.*"
+ 	viewSourceURL="srcview/index.html">
+
+	<designer:OrchestraDesigner/>
+
+
+</mx:Application>
