@@ -4,7 +4,7 @@ package org.act.od.impl.view{
 	import mx.controls.MenuBar;
 	import mx.events.MenuEvent;
 	
-//	import org.act.od.impl.other.Localizator;
+	import org.act.od.impl.other.Localizator;
 //	import org.act.od.impl.viewhelper.DesignerMenuBarVH;
 	
 	/**
@@ -30,9 +30,10 @@ package org.act.od.impl.view{
 		}
 		private function initEventListener():void{
 			
-        	/*var localizator : Localizator = Localizator.getInstance();
-			for each(var item : XML in menubarXML){
+        	var localizator : Localizator = Localizator.getInstance();
+			for each(var item : XML in menubarXML.elements("menuitem")){
 				var labelText : String = null;
+                trace("id = " + item.@id);
 				if(item.@id == "0") {
 					labelText = localizator.getText('menubar.file');
 					item.@label = labelText;
@@ -106,12 +107,12 @@ package org.act.od.impl.view{
 					item.@label = labelText;
 				}
 			}
-			this.addEventListener(MenuEvent.ITEM_CLICK, designerMenuBarVH.menuClick);*/
+//			this.addEventListener(MenuEvent.ITEM_CLICK, designerMenuBarVH.menuClick);
 		}
 		//data
 		private var menubarXML :XMLList = 
 			<>
-				<menuitem label="File" icon="newproject">
+				<menuitem label="File" icon="newproject" id="0">
 					<menuitem label="New" icon="newproject">
 						<menuitem label="Project" icon="{newproject}" id="1"/>
 						<menuitem label="Folder" icon="" id="2"/>
