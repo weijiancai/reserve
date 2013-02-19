@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Show the "About Orchestra Designer" Window.-->
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="470" height="212" title="About Orchestra Designer ">
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			/**
+			 * Show the "About Orchestra Designer" Window.
+			 */
+			[Bindable]
+			private var fileName :String =
+				"<b>Orchestra Designer：<p></p><p></p></b>Version: 3.0.3 <p></p><p></p>(c) Copyright ACT Lab of Beihang University(BUAA), 2010. All rights reserved.<p></p><p></p>" +
+				"Visit " +
+				"<a href=\"http://www.trustie.org/projects/project/show/OrchestraDesigner\" target=\"_blank\"><u>http://www.trustie.org/projects/project/show/OrchestraDesigner</u></a>";
+			/**
+			 * Close this TitleWindow
+			 **/
+			internal function onCloseHandle(event :MouseEvent) :void {
+				PopUpManager.removePopUp(this);
+			}
+		]]>
+	</mx:Script>
+	<mx:TextArea id="file" x="10" y="10" width="430" htmlText="{fileName}" fontWeight="normal" fontSize="10" height="118" editable="false" borderStyle="none"/>
+	<mx:HRule x="0" y="136" width="450" height="1"/>
+	<mx:Button label="OK" x="198" y="145" width="71" click="onCloseHandle(event)" />
+</mx:TitleWindow>

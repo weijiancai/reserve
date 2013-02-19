@@ -7,8 +7,8 @@ package org.act.od.impl.view{
 	import mx.events.FlexEvent;
 	import mx.managers.ToolTipManager;
 	
-//	import org.act.od.impl.control.OrDesignerController;
-//	import org.act.od.impl.model.OrDesignerModelLocator;
+	import org.act.od.impl.control.OrDesignerController;
+	import org.act.od.impl.model.OrDesignerModelLocator;
 //	import org.act.od.impl.state.*;
 	
 	/**
@@ -17,7 +17,7 @@ package org.act.od.impl.view{
 	public class OrchestraDesigner extends Panel{
 		
 		/** controller，must init here  */
-//		private var odController :OrDesignerController = new OrDesignerController();
+		private var odController :OrDesignerController = new OrDesignerController();
 		
 		/** Menu Bar */	
 		private var designerMenuBar :DesignerMenuBar;
@@ -175,7 +175,7 @@ package org.act.od.impl.view{
 		private function editorCreationComplete(event :FlexEvent):void{
 			//To be considered
 //			OrDesignerModelLocator.getInstance().getFigureCanvasStateDomain().setFCActiveState(new SelectionState());
-//			OrDesignerModelLocator.getInstance().setOrchestraDesigner(this);
+			OrDesignerModelLocator.getInstance().setOrchestraDesigner(this);
 		}
 	}
 }

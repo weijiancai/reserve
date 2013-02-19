@@ -7,7 +7,7 @@ package org.act.od.impl.viewhelper
 	import org.act.od.framework.view.ViewHelper;
 	import org.act.od.framework.view.ViewLocator;
 //	import org.act.od.impl.events.DesignerMenuBarAppEvent;
-//	import org.act.od.impl.events.FigureCanvasAppEvent;
+	import org.act.od.impl.events.FigureCanvasAppEvent;
 //	import org.act.od.impl.events.FigureEditorAppEvent;
 //	import org.act.od.impl.model.FigureEditorModel;
 //	import org.act.od.impl.model.FigureEditorNavigatorModel;
@@ -53,9 +53,9 @@ package org.act.od.impl.viewhelper
 		 */
 		public function menuClick(event:MenuEvent) :void{
 
-			/*switch(int(event.item.@id))
+			switch(int(event.item.@id))
 			{
-				case 1: //new project
+                /*case 1: //new project
 					var newProject:SaveFileWindow = SaveFileWindow(PopUpManager.createPopUp(OrDesignerModelLocator.getInstance().getOrchestraDesigner(), SaveFileWindow,true));
 					newProject.setTitle("Project");
 					PopUpManager.centerPopUp(newProject);
@@ -114,14 +114,14 @@ package org.act.od.impl.viewhelper
 				case 13://UDDI Configuration
 					this.onDUUIConfigurationHandle();
 					break;
-
-				case 14://About
+                 */
+				case 19://About
 					this.onAboutHandle();
 					break;
 
 				default:
 					break;
-			}*/
+			}
 		}
 		private function newProjectResult(event:CloseEvent):void{
 			/*var projectName:String=SaveFileWindow(event.currentTarget).getText();
@@ -232,9 +232,9 @@ package org.act.od.impl.viewhelper
 		 	new DesignerMenuBarAppEvent(DesignerMenuBarAppEvent.UDDI_CONFIGURATION,
 					{address : _address, name : _name} ).dispatch();*/
 		 }
-		private function onAboutHandle():void{
 
-//			new FigureCanvasAppEvent(FigureCanvasAppEvent.About_Info).dispatch();
+		private function onAboutHandle():void{
+			new FigureCanvasAppEvent(FigureCanvasAppEvent.About_Info).dispatch();
 		}
 	}
 
