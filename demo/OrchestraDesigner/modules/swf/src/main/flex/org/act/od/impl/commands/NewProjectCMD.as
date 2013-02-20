@@ -9,7 +9,7 @@ package org.act.od.impl.commands
 	import org.act.od.framework.view.ViewLocator;
 //	import org.act.od.impl.model.FileNavigatorViewModel;
 	import org.act.od.impl.model.OrDesignerModelLocator;
-//	import org.act.od.impl.viewhelper.FileNavigatorViewVH;
+	import org.act.od.impl.viewhelper.FileNavigatorViewVH;
 	/**
 	 * Create a new project in fileNavigator.
 	 */ 
@@ -22,9 +22,9 @@ package org.act.od.impl.commands
 		 * @param event {projectName}
 		 */
 		override public function execute(event :OrDesignerEvent) :void{
-			/*var fileNavigatorViewVH :FileNavigatorViewVH =
+			var fileNavigatorViewVH :FileNavigatorViewVH =
 					ViewLocator.getInstance().getViewHelper(FileNavigatorViewVH.VH_KEY) as FileNavigatorViewVH;
-			var fileNavigatorViewModel :FileNavigatorViewModel =
+			/*var fileNavigatorViewModel :FileNavigatorViewModel =
 					OrDesignerModelLocator.getInstance().getFileNavigatorViewModel();
 					
 			var exist:Boolean = false;

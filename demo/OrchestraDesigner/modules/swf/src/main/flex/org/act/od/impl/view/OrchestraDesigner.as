@@ -23,7 +23,7 @@ package org.act.od.impl.view{
 		private var designerMenuBar :DesignerMenuBar;
 		
 		/** Tool Bar*/
-//		private var designerToolBar :DesignerToolBar;
+		private var designerToolBar :DesignerToolBar;
 		
 		/** Attribute Navigator*/	
 //		private var figureAttributeNav :FigureAttributeNavigator;
@@ -35,7 +35,7 @@ package org.act.od.impl.view{
 //		private var uddiNavigator :UDDINavigator;
 		
 		/** File Navigator */	
-//		private var fileNavigator : FileNavigator;
+		private var fileNavigator : FileNavigator;
 		
 		/**	Microimage */
 //		private var microimage:Microimage;
@@ -60,19 +60,19 @@ package org.act.od.impl.view{
 			designerMenuBar = new DesignerMenuBar();
 			this.addChild(designerMenuBar);
 
-            /*designerToolBar = new DesignerToolBar();
+            designerToolBar = new DesignerToolBar();
 			this.addChild(designerToolBar);
 			
 			
 			//initilize figure editor area
-			figureEditorNavigator = new EditorNavigator();
+			/*figureEditorNavigator = new EditorNavigator();
 			
 			//initilize attribute area
-			figureAttributeNav = new FigureAttributeNavigator();
+			figureAttributeNav = new FigureAttributeNavigator();*/
 			
 			fileNavigator = new FileNavigator();
 			
-			uddiNavigator = new UDDINavigator();
+			/*uddiNavigator = new UDDINavigator();
 			
 			microimage = Microimage.getInstance();*/
 			
@@ -123,7 +123,7 @@ package org.act.od.impl.view{
 			leftBmBox.setStyle("borderThicknessLeft","2");
 			leftBmBox.setStyle("borderThicknessRight","2");
 			leftBmBox.setStyle("backgroundAlpha","0.5");
-//			leftBmBox.addChild(fileNavigator);
+			leftBmBox.addChild(fileNavigator);
 			
 			
 			var rightVDBox :VDividedBox = new VDividedBox();
