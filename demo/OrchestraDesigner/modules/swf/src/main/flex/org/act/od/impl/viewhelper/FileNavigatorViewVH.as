@@ -48,7 +48,7 @@ package org.act.od.impl.viewhelper
 //			this.figureEditorNavigatorModel=OrDesignerModelLocator.getInstance().getFigureEditorNavigatorModel();
 			
 			this.consumer.destination = "cooperation";
-//			this.consumer.subscribe();
+			this.consumer.subscribe();
 			this.consumer.addEventListener(MessageEvent.MESSAGE, upData);
 		}
 		/**

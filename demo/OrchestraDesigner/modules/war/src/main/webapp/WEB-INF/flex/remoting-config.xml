@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service id="remoting-service"
+    class="flex.messaging.services.RemotingService">
+
+    <adapters>
+        <adapter-definition id="java-object" class="flex.messaging.services.remoting.adapters.JavaAdapter" default="true"/>
+    </adapters>
+
+    <default-channels>
+        <channel ref="my-amf"/>
+    </default-channels>
+
+    <destination id="navigator">
+    	<properties>
+    		<source>server.Navigator</source>
+    	</properties>
+    </destination>
+
+    <destination id="helloworld">
+    	<properties>
+    		<source>server.HelloWorld</source>
+    	</properties>
+    </destination>
+
+<!--	<destination id="MyRemoteObjectDest">-->
+<!--		<properties>-->
+<!--			<source>server.Navigator</source>-->
+<!--			<scope>javaProjectTestPath</scope>-->
+<!--		</properties>-->
+<!--	</destination>-->
+
+</service>

@@ -40,6 +40,36 @@
 			<version>3.0.0.544</version>
 		</dependency>
 
+        <dependency>
+            <groupId>com.adobe.blazeds</groupId>
+            <artifactId>blazeds-core</artifactId>
+            <version>3.0.0.544</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.adobe.blazeds</groupId>
+            <artifactId>blazeds-proxy</artifactId>
+            <version>3.0.0.544</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.adobe.blazeds</groupId>
+            <artifactId>blazeds-remoting</artifactId>
+            <version>3.0.0.544</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.adobe.blazeds</groupId>
+            <artifactId>blazeds-opt</artifactId>
+            <version>3.0.0.544</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+        </dependency>
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
