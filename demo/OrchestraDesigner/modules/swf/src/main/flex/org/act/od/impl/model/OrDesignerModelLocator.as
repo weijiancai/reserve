@@ -23,7 +23,7 @@ package org.act.od.impl.model{
 		/** 
 		 * Primitives editor area Moedl.
 		 */
-//		public var figureEditorNavigatorModel :FigureEditorNavigatorModel;
+		public var figureEditorNavigatorModel :FigureEditorNavigatorModel;
 		
 		/** 
 		 * TooLBox Model.
@@ -75,9 +75,9 @@ package org.act.od.impl.model{
    		public function OrDesignerModelLocator(enforcer:SingleEnforcer):void {
    			super();	
 			
-			/*this.attributeViewModel = new AttributeViewModel();
+//			this.attributeViewModel = new AttributeViewModel();
 			this.figureEditorNavigatorModel = new FigureEditorNavigatorModel();
-			this.toolPanelModel = new ToolPanelModel();
+			/*this.toolPanelModel = new ToolPanelModel();
 			this.fcStateDomain = new FigureCanvasStateDomain();
 			this.fileNavigatorViewModel  = new FileNavigatorViewModel();
 			this.UDDIRefModel = new UDDIReferenceModel();*/
@@ -92,9 +92,9 @@ package org.act.od.impl.model{
    		/**
    		 * Return the figureEditorNavigatorModel.
    		 */
-   		/*public function getFigureEditorNavigatorModel() :FigureEditorNavigatorModel{
+   		public function getFigureEditorNavigatorModel() :FigureEditorNavigatorModel{
    			return this.figureEditorNavigatorModel;
-   		}*/
+   		}
    		/**
    		 * Return the toolPanelModel
    		 */

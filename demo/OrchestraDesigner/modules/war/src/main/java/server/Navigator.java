@@ -216,7 +216,7 @@ public class Navigator {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
-        return xml.substring(42);
+        return xml.substring(4);
 	}
 	/**
 	 * @param projectName

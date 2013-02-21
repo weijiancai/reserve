@@ -17,8 +17,8 @@ package org.act.od.impl.viewhelper
 	import mx.messaging.events.MessageEvent;
 	
 	import org.act.od.framework.view.ViewHelper;
-//	import org.act.od.impl.events.FileNavigatorViewAppEvent;
-//	import org.act.od.impl.model.FigureEditorNavigatorModel;
+	import org.act.od.impl.events.FileNavigatorViewAppEvent;
+	import org.act.od.impl.model.FigureEditorNavigatorModel;
 	import org.act.od.impl.model.OrDesignerModelLocator;
 //	import org.act.od.impl.view.DeleteConfirmWindow;
 //	import org.act.od.impl.view.EditorNavigatorChild;
@@ -35,7 +35,7 @@ package org.act.od.impl.viewhelper
 		 * The key of FileNavigatorViewVH
 		 */
 		public static const VH_KEY :String = "FileNavigatorViewVH";
-//		private var figureEditorNavigatorModel:FigureEditorNavigatorModel;
+		private var figureEditorNavigatorModel:FigureEditorNavigatorModel;
 		// consumer
        	private var consumer :Consumer = new Consumer;
        	private var fileReference: FileReference = new FileReference();
@@ -45,7 +45,7 @@ package org.act.od.impl.viewhelper
 		public function FileNavigatorViewVH(document : Object, id : String){
 			super();
 			initialized(document, id);
-//			this.figureEditorNavigatorModel=OrDesignerModelLocator.getInstance().getFigureEditorNavigatorModel();
+			this.figureEditorNavigatorModel=OrDesignerModelLocator.getInstance().getFigureEditorNavigatorModel();
 			
 			this.consumer.destination = "cooperation";
 			this.consumer.subscribe();
@@ -186,12 +186,12 @@ package org.act.od.impl.viewhelper
 		 * Updata the model by reload the model file.
 		 */
 		private function upData(message :MessageEvent):void{
-			/*var relativeBpelFileIDT :String;
+			var relativeBpelFileIDT :String;
 			if(figureEditorNavigatorModel.activeFigureEditorModel != null){
 				relativeBpelFileIDT = figureEditorNavigatorModel.activeFigureEditorModel.relativeBpelID;
 				new FileNavigatorViewAppEvent(FileNavigatorViewAppEvent.FIGUREFILE_OPEN,
 						{fileID :message.message.body.fileID, relativeBpelID : relativeBpelFileIDT, filePath :message.message.body.filePath, fileName :message.message.body.fileName}).dispatch();
-			}*/
+			}
 		}
 		/**
 		 * Handler of fileRename event.
