@@ -7,7 +7,7 @@ package org.act.od.impl.commands
 	import org.act.od.framework.commands.AODCommand;
 	import org.act.od.framework.control.OrDesignerEvent;
 	import org.act.od.framework.view.ViewLocator;
-//	import org.act.od.impl.model.FileNavigatorViewModel;
+	import org.act.od.impl.model.FileNavigatorViewModel;
 	import org.act.od.impl.model.OrDesignerModelLocator;
 	import org.act.od.impl.viewhelper.FileNavigatorViewVH;
 	/**
@@ -24,7 +24,7 @@ package org.act.od.impl.commands
 		override public function execute(event :OrDesignerEvent) :void{
 			var fileNavigatorViewVH :FileNavigatorViewVH =
 					ViewLocator.getInstance().getViewHelper(FileNavigatorViewVH.VH_KEY) as FileNavigatorViewVH;
-			/*var fileNavigatorViewModel :FileNavigatorViewModel =
+			var fileNavigatorViewModel :FileNavigatorViewModel =
 					OrDesignerModelLocator.getInstance().getFileNavigatorViewModel();
 					
 			var exist:Boolean = false;
@@ -45,7 +45,7 @@ package org.act.od.impl.commands
 				newProjectNode.@name=event.data.projectName;
 				newProjectNode.@type="project";
 				fileNavigatorViewModel.xmlListCollection.addItem(newProjectNode);
-   			}*/
+   			}
 		}
 		
 		private function fault(event :FaultEvent):void{

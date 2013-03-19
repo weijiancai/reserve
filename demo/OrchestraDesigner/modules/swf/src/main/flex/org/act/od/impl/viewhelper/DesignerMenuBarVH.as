@@ -6,17 +6,17 @@ package org.act.od.impl.viewhelper
 
 	import org.act.od.framework.view.ViewHelper;
 	import org.act.od.framework.view.ViewLocator;
-//	import org.act.od.impl.events.DesignerMenuBarAppEvent;
+	import org.act.od.impl.events.DesignerMenuBarAppEvent;
 	import org.act.od.impl.events.FigureCanvasAppEvent;
 //	import org.act.od.impl.events.FigureEditorAppEvent;
 //	import org.act.od.impl.model.FigureEditorModel;
 //	import org.act.od.impl.model.FigureEditorNavigatorModel;
 //	import org.act.od.impl.model.FileNavigatorViewModel;
-//	import org.act.od.impl.model.OrDesignerModelLocator;
+	import org.act.od.impl.model.OrDesignerModelLocator;
 //	import org.act.od.impl.view.BPELFileOverWriteWarning;
 	import org.act.od.impl.view.DesignerMenuBar;
 //	import org.act.od.impl.view.EditorNavigatorChild;
-//	import org.act.od.impl.view.SaveFileWindow;
+	import org.act.od.impl.view.SaveFileWindow;
 //	import org.act.od.impl.view.UDDIConfigurationWindow;
 
 	/**
@@ -55,14 +55,14 @@ package org.act.od.impl.viewhelper
 
 			switch(int(event.item.@id))
 			{
-                /*case 1: //new project
+                case 2: //new project
 					var newProject:SaveFileWindow = SaveFileWindow(PopUpManager.createPopUp(OrDesignerModelLocator.getInstance().getOrchestraDesigner(), SaveFileWindow,true));
 					newProject.setTitle("Project");
 					PopUpManager.centerPopUp(newProject);
 					newProject.addEventListener(CloseEvent.CLOSE, newProjectResult);
 					break;
 
-				case 2://open/new folder
+				/*case 2://open/new folder
 					var newFolder:SaveFileWindow = SaveFileWindow(PopUpManager.createPopUp(OrDesignerModelLocator.getInstance().getOrchestraDesigner(), SaveFileWindow,true));
 					newFolder.setTitle("Folder");
 					PopUpManager.centerPopUp(newFolder);
@@ -124,10 +124,10 @@ package org.act.od.impl.viewhelper
 			}
 		}
 		private function newProjectResult(event:CloseEvent):void{
-			/*var projectName:String=SaveFileWindow(event.currentTarget).getText();
+			var projectName:String=SaveFileWindow(event.currentTarget).getText();
 			if(projectName != "")
 				new DesignerMenuBarAppEvent(DesignerMenuBarAppEvent.NEW_PROJECT,
-					{projectName:projectName}).dispatch();*/
+					{projectName:projectName}).dispatch();
 		}
 		private function newFolderResult(event:CloseEvent):void{
 			/*var folderName:String=SaveFileWindow(event.currentTarget).getText();

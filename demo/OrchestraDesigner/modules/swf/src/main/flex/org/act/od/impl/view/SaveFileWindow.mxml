@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
+				width="336" height="156">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.RadioButton;
+			import mx.controls.RadioButtonGroup;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+
+			import org.act.od.impl.model.*;
+
+			private var fileName :String;
+
+			internal function onCancleHandle(event :MouseEvent) :void {
+				PopUpManager.removePopUp(this);
+			}
+
+			internal function onConfirmHandle(event :MouseEvent) :void {
+
+				fileName = fn.text;
+				this.dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+				PopUpManager.removePopUp(this);
+			}
+			internal function confirm():void{
+				fileName = fn.text;
+				this.dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+				PopUpManager.removePopUp(this);
+			}
+
+			public function getText():String{
+				return fileName;
+			}
+
+			public function setTitle(title:String):void{
+				this.title="New " + title;
+				la.text=title+" Name:"
+				this.fn.setFocus();
+
+				if(title=="File")
+				{
+					bpmnRadio.visible = true;
+					bpelRadio.visible = true;
+
+					//Default bpel Radio selected
+					bpelRadio.selected = true;
+
+				}
+			}
+
+			public function getSelectedFileType():String
+			{
+				return fileType.selectedValue.toString();
+			}
+
+			public function setRenameTitle(title:String):void{
+				this.title=title;
+				la.text="New Name:"
+			}
+			public function setText(text:String):void{
+				this.fn.text = text;
+				this.fn.setSelection(0, text.length);
+				this.fn.setFocus();
+			}
+		]]>
+	</mx:Script>
+
+	<mx:TextInput id="fn" x="103" y="41" width="197" height="21" enter="confirm()"/>
+	<mx:Label x="10" y="43" id="la" width="85" height="19"/>
+
+	<mx:RadioButtonGroup id="fileType" />
+	<mx:RadioButton id="bpmnRadio" x="10" y="10" group="{fileType}" label="BPMN" visible="false"/>
+	<mx:RadioButton id="bpelRadio" x="73" y="10" group="{fileType}" label="BPEL" visible="false"/>
+
+	<mx:HRule x="0" y="79" width="316"/>
+
+	<mx:Button label="Confirm" x="64" y="89" click="onConfirmHandle(event)" />
+	<mx:Button label="Cancel" x="186" y="89" click="onCancleHandle(event)" />
+
+
+</mx:TitleWindow>

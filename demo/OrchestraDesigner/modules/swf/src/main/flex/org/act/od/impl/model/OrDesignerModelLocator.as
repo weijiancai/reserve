@@ -38,7 +38,7 @@ package org.act.od.impl.model{
 		/** 
 		 * File navigator Model.
 		 */
-//		private var fileNavigatorViewModel:FileNavigatorViewModel;
+		private var fileNavigatorViewModel:FileNavigatorViewModel;
 		
 		/**
 		 * UDDIRefModel reference model.
@@ -78,9 +78,9 @@ package org.act.od.impl.model{
 //			this.attributeViewModel = new AttributeViewModel();
 			this.figureEditorNavigatorModel = new FigureEditorNavigatorModel();
 			/*this.toolPanelModel = new ToolPanelModel();
-			this.fcStateDomain = new FigureCanvasStateDomain();
+			this.fcStateDomain = new FigureCanvasStateDomain();*/
 			this.fileNavigatorViewModel  = new FileNavigatorViewModel();
-			this.UDDIRefModel = new UDDIReferenceModel();*/
+//			this.UDDIRefModel = new UDDIReferenceModel();
    		}
    		
    		/**
@@ -110,9 +110,9 @@ package org.act.od.impl.model{
 		/**
 		 * Return the fileNavigatorViewModel
 		 */
-   		/*public function getFileNavigatorViewModel():FileNavigatorViewModel{
+   		public function getFileNavigatorViewModel():FileNavigatorViewModel{
    			return this.fileNavigatorViewModel;
-   		}*/
+   		}
    		/**
    		 * Return the orchestraDesigner.
    		 */
