@@ -153,8 +153,9 @@
 	<build>
 		<sourceDirectory>${basedir}/src/main/flex</sourceDirectory>
 		<testSourceDirectory>${basedir}/src/test/flex</testSourceDirectory>
+        <outputDirectory>../war/src/main/webapp</outputDirectory>
+        <finalName>orchestra-designer</finalName>
 		<plugins>
-
 			<plugin>
 				<groupId>org.sonatype.flexmojos</groupId>
 				<artifactId>flexmojos-maven-plugin</artifactId>
@@ -163,6 +164,7 @@
 				<configuration>
 					<!--<skipTests>true</skipTests>
 					<skipTest>true</skipTest>-->
+                    <storepass>flexmojos</storepass>
 					<resourceBundlePath>${basedir}/src/main/locales/${flex.locale}</resourceBundlePath>
 					<compiledLocales>
 						<locale>en_US</locale>
@@ -175,12 +177,12 @@
 					<!--<licenses>
 						<flexbuilder3>${licence.flexbuilder3}</flexbuilder3>
 					</licenses>-->
-					<outputDirectory>${project.build.directory}</outputDirectory>
-					<testRunner>
+					<outputDirectory>../war/src/main/webapp</outputDirectory>
+					<!--<testRunner>
 				          <launcher>
 				            	<flashplayerCommand>${flashPlayer.command}</flashplayerCommand>
 				          </launcher>
-			        </testRunner>
+			        </testRunner>-->
 
 				</configuration>
 

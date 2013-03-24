@@ -21,9 +21,9 @@ package org.act.od.impl.viewhelper
 	import org.act.od.impl.model.FigureEditorNavigatorModel;
 	import org.act.od.impl.model.OrDesignerModelLocator;
 //	import org.act.od.impl.view.DeleteConfirmWindow;
-//	import org.act.od.impl.view.EditorNavigatorChild;
-//	import org.act.od.impl.view.FileNavigatorView;
-//	import org.act.od.impl.view.SaveFileWindow;
+	import org.act.od.impl.view.EditorNavigatorChild;
+	import org.act.od.impl.view.FileNavigatorView;
+	import org.act.od.impl.view.SaveFileWindow;
 
 	/**
 	 * The ViewHelper of FileNavigatorView.
@@ -60,20 +60,20 @@ package org.act.od.impl.viewhelper
 		/**
 		 * Return FileNavigatorView
 		 */
-		/*private function get fileNavigatorView() :FileNavigatorView{
+		private function get fileNavigatorView() :FileNavigatorView{
 			return this.view as FileNavigatorView;
-		}*/
+		}
 		/**
 		 * Return the selectedItem in the tree control
 		 */
-		/*public function getSelectedItem():Object{
+		public function getSelectedItem():Object{
 			return this.fileNavigatorView.selectedItem;
-		}*/
+		}
 		/**
 		 * Rename the selectedItem in the tree control
 		 */
 		public function reName(newName :String):void{
-//			this.fileNavigatorView.selectedItem.@name = newName;
+			this.fileNavigatorView.selectedItem.@name = newName;
 		}
 		/**
 		 * Return the path of selectedItem in the tree control
@@ -197,7 +197,7 @@ package org.act.od.impl.viewhelper
 		 * Handler of fileRename event.
 		 */
 		public function fileRename(event :ContextMenuEvent):void{
-			/*var reName :SaveFileWindow = SaveFileWindow(PopUpManager.createPopUp(OrDesignerModelLocator.getInstance().getOrchestraDesigner(),SaveFileWindow,true));
+			var reName :SaveFileWindow = SaveFileWindow(PopUpManager.createPopUp(OrDesignerModelLocator.getInstance().getOrchestraDesigner(),SaveFileWindow,true));
 			reName.setRenameTitle("Rename");
 			var fileName :String = this.getSelectedItem().@name;
 			var i :int = fileName.indexOf(".", 0);
@@ -206,10 +206,10 @@ package org.act.od.impl.viewhelper
 			else 
 				reName.setText(fileName);
 			PopUpManager.centerPopUp(reName);
-			reName.addEventListener(CloseEvent.CLOSE, reNameResult);*/
+			reName.addEventListener(CloseEvent.CLOSE, reNameResult);
 		}
 		private function reNameResult(event :CloseEvent):void{
-			/*var newName:String=SaveFileWindow(event.currentTarget).getText();
+			var newName:String=SaveFileWindow(event.currentTarget).getText();
 			if(newName != ""){
 				if(this.getSelectedItem().@type == EditorNavigatorChild.FIGURE_EDITOR_TYPE)
 					newName = newName + ".xml";
@@ -217,7 +217,7 @@ package org.act.od.impl.viewhelper
 					newName = newName + ".bpel";
 				new FileNavigatorViewAppEvent(FileNavigatorViewAppEvent.FILE_RENAME,
 					{fileName :newName}).dispatch();
-			}*/
+			}
 		}
 		/**
 		 * Handler of download event.
@@ -225,7 +225,7 @@ package org.act.od.impl.viewhelper
 		public function downloadBPEL(event :ContextMenuEvent):void{
 			var filePath :String = this.getSelectedItemPath();
 			var url :String = Application.application.url;
-			url = "http://localhost:8080/OrchestraDesigner/Orchestra_Designer.swf"
+			url = "/OrchestraDesigner/Orchestra_Designer.swf"
 			url = url.substring(0,url.lastIndexOf("/",url.length));
 			var myPattern :RegExp = /\\/g;  
 			filePath = filePath.replace(myPattern, "/");
