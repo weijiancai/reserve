@@ -14,6 +14,10 @@
         td a {
             text-decoration: none;
         }
+        .required {
+            font-weight: bold;
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -96,7 +100,7 @@
             </tr>
 
             <tr>
-                <td rowspan="29">可视化组件</td>
+                <td rowspan="32">可视化组件</td>
                 <td rowspan="22">基础组件</td>
                 <td>水平分割线</td>
                 <td><a href="#html_hr">&lt;hr/&gt;</a></td>
@@ -290,7 +294,7 @@
 
             <!-- 应用组件 -->
             <tr>
-                <td rowspan="7">应用组件</td>
+                <td rowspan="10">应用组件</td>
                 <td>折叠</td>
                 <td></td>
                 <td><a href="#">Accordion</a></td>
@@ -373,7 +377,7 @@
 
     <div>
         <h1>HTML</h1>
-        <h3><a name="html_hr" href="http://www.w3school.com.cn/tags/tag_hr.asp">水平分割线&lt;hr&gt;</a></h3>
+        <h3><a name="html_hr" href="http://www.w3school.com.cn/tags/tag_hr.asp" target="_blank">水平分割线&lt;hr&gt;</a></h3>
         <dl>
             <dt>描述：</dt>
             <dd>&lt;hr&gt; 标签在 HTML 页面中创建一条水平线。</dd>
@@ -386,28 +390,76 @@
             <dd></dd>
         </dl>
 
-        <h3><a name="html_a" href="http://www.w3school.com.cn/tags/tag_a.asp">超链接&lt;a&gt;</a></h3>
+        <h3><a name="html_a" href="http://www.w3school.com.cn/tags/tag_a.asp" target="_blank">超链接&lt;a&gt;</a></h3>
         <dl>
             <dt>描述：</dt>
-            <dd>&lt;hr&gt; 标签在 HTML 页面中创建一条水平线。</dd>
+            <dd>&lt;a&gt; 标签可定义锚。锚 (anchor) 有两种用法：</dd>
+            <ul>
+                <li>通过使用 href 属性，创建指向另外一个文档的链接（或超链接）</li>
+                <li>通过使用 name 或 id 属性，创建一个文档内部的书签（也就是说，可以创建指向文档片段的链接）</li>
+            </ul>
             <dt>属性：</dt>
             <dd>id, class, title, style, dir, lang, xml:lang
                 <ul>
-                    <li>charset 【字符集名称】 规定目标 URL 的字符编码。</li>
-                    <li>coords 【坐标】 规定链接的坐标</li>
-                    <li>href 【URL】 链接的目标 URL</li>
-                    <li>hreflang 【ISO 语言代码】 规定目标 URL 的基准语言</li>
-                    <li>name 【section_name】 规定锚的名称</li>
-                    <li>rel 【text】 规定当前文档与目标 URL 之间的关系</li>
-                    <li>rev 【text】 规定目标 URL 与当前文档之间的关系</li>
-                    <li>shape 【default，rect，circle，poly】 规定链接的形状</li>
-                    <li>target 【_blank，_parent，_self，_top，framename】 在何处打开目标 URL</li>
-                    <li>type 【MIME 编码类型】 规定目标 URL 的 MIME 类型</li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_a_charset.asp" target="_blank">charset</a> 【字符集名称】 规定目标 URL 的字符编码。</li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_a_coords.asp" target="_blank">coords</a> 【坐标】 规定链接的坐标。</li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_a_href.asp" target="_blank">href</a> 【URL】 链接的目标。 </li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_a_hreflang.asp" target="_blank">hreflang</a> 【ISO 语言代码】 规定目标 URL 的基准语言。</li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_a_name.asp" target="_blank">name</a> 【section_name】 规定锚的名称。</li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_a_rel.asp" target="_blank">rel</a> 【text】 规定当前文档与目标 URL 之间的关系。</li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_a_rev.asp" target="_blank">rev</a> 【text】 规定目标 URL 与当前文档之间的关系。</li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_a_shape.asp" target="_blank">shape</a> 【default，rect，circle，poly】 规定链接的形状。</li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_a_target.asp" target="_blank">target</a> 【_blank，_parent，_self，_top，framename】 在何处打开目标。 </li>
+                    <li>type 【MIME 编码类型】 规定目标 URL 的 MIME 类型。</li>
                 </ul>
             </dd>
             <dt>事件：</dt>
             <dd>onclick, ondblclick, onmousedown, onmouseup, onmouseover,
                 onmousemove, onmouseout, onkeypress, onkeydown, onkeyup</dd>
+            <dt>方法：</dt>
+            <dd></dd>
+        </dl>
+
+
+        <h3><a name="html_img" href="http://www.w3school.com.cn/tags/tag_img.asp" target="_blank">图像&lt;img&gt;</a></h3>
+        <dl>
+            <dt>描述：</dt>
+            <dd>&lt;img&gt; 元素向网页中嵌入一幅图像。</dd>
+            <dt>属性：</dt>
+            <dd>
+                <ul>
+                    <li><a href="http://www.w3school.com.cn/tags/att_a_charset.asp" target="_blank" class="required">alt</a> 【text】 规定图像的替代文本。</li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_a_coords.asp" target="_blank" class="required">src</a> 【URL】 规定显示图像的 URL。</li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_img_height-width.asp" target="_blank">height</a> 【pixels%】 定义图像的高度。 </li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_img_ismap.asp" target="_blank">ismap</a> 【URL】 将图像定义为服务器端图像映射。</li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_img_longdesc.asp" target="_blank">longdesc</a> 【URL】 指向包含长的图像描述文档的 URL。</li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_img_usemap.asp" target="_blank">usemap</a> 【URL】 将图像定义为客户器端图像映射。</li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_img_height-width.asp" target="_blank">width</a> 【pixels%】 设置图像的宽度。</li>
+                </ul>
+            </dd>
+            <dt>事件：</dt>
+            <dd>onclick, ondblclick, onmousedown, onmouseup, onmouseover,
+                onmousemove, onmouseout, onkeypress, onkeydown, onkeyup</dd>
+            <dt>方法：</dt>
+            <dd></dd>
+        </dl>
+
+        <h3><a name="html_button" href="http://www.w3school.com.cn/tags/tag_button.asp" target="_blank">按钮&lt;button&gt;</a></h3>
+        <dl>
+            <dt>描述：</dt>
+            <dd>&lt;button&gt; 标签定义一个按钮。</dd>
+            <dt>属性：</dt>
+            <dd>
+                <ul>
+                    <li><a href="http://www.w3school.com.cn/tags/att_button_disabled.asp" target="_blank">disabled</a> 【disabled】 规定禁用此按钮。</li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_button_name.asp" target="_blank">name</a> 【name】 规定按钮的名称。</li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_button_type.asp" target="_blank">type</a> 【button reset submit】 规定按钮的类型。</li>
+                    <li><a href="http://www.w3school.com.cn/tags/att_button_value.asp" target="_blank">value</a> 【text】 规定按钮的初始值。</li>
+                </ul>
+            </dd>
+            <dt>事件：</dt>
+            <dd>onfocus, onblur, onclick, ondblclick, onmousedown, onmouseup,
+                onmouseover, onmousemove, onmouseout, onkeypress, onkeydown, onkeyup</dd>
             <dt>方法：</dt>
             <dd></dd>
         </dl>
