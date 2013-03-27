@@ -22,7 +22,7 @@ package org.act.od.impl.control{
 //	import org.act.od.impl.commands.FigureFileOpenCMD;
 //	import org.act.od.impl.commands.FigurePasteToCanvasCMD;
 //	import org.act.od.impl.commands.FileDeleteCMD;
-//	import org.act.od.impl.commands.FileRenameCMD;
+	import org.act.od.impl.commands.FileRenameCMD;
 //	import org.act.od.impl.commands.FileSaveAllCMD;
 //	import org.act.od.impl.commands.FileSaveCMD;
 //	import org.act.od.impl.commands.FolderDeleteCMD;
@@ -50,7 +50,7 @@ package org.act.od.impl.control{
 	import org.act.od.impl.events.FigureCanvasAppEvent;
 //	import org.act.od.impl.events.FigureEditorAppEvent;
 //	import org.act.od.impl.events.FigureEditorNavigatorAppEvent;
-//	import org.act.od.impl.events.FileNavigatorViewAppEvent;
+	import org.act.od.impl.events.FileNavigatorViewAppEvent;
 //	import org.act.od.impl.events.ToolPanelAppEvent;
 //	import org.act.od.impl.events.UDDIRefViewAppEvent;
 
@@ -179,7 +179,7 @@ package org.act.od.impl.control{
 			
 //			addCommand(FileNavigatorViewAppEvent.FOLDER_DELETE, FolderDeleteCMD);
 			
-//			addCommand(FileNavigatorViewAppEvent.FILE_RENAME, FileRenameCMD);
+			addCommand(FileNavigatorViewAppEvent.FILE_RENAME, FileRenameCMD);
 	
 		}
 	

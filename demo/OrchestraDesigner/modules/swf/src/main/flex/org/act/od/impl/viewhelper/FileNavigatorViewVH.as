@@ -82,7 +82,7 @@ package org.act.od.impl.viewhelper
 			var theParentItem:Object;
 			var str:String;
 			var path:String;
-			/*if(this.fileNavigatorView.selectedItem != null)
+			if(this.fileNavigatorView.selectedItem != null)
 				path = this.fileNavigatorView.selectedItem.@name;
 				
 			else
@@ -94,15 +94,15 @@ package org.act.od.impl.viewhelper
                 	str=theParentItem.@name+"\\"+path;
                 	path=str;
                 }
-			}*/
+			}
 			return path;
 		}
 		/**
 		 * Retrun the dataDescriptor of the tree control
 		 */
-		/*public function getDataDescriptor():ITreeDataDescriptor{
+		public function getDataDescriptor():ITreeDataDescriptor{
 			return this.fileNavigatorView.dataDescriptor;
-		}*/
+		}
 		/**
 		 * Append a node in the parent item and expand the parent item.
 		 */ 
@@ -113,9 +113,9 @@ package org.act.od.impl.viewhelper
         /**
          * Return the selectedItem's patent item. 
          */
-        /*public function getParentItem(item :Object):*{
+        public function getParentItem(item :Object):*{
         	return this.fileNavigatorView.getParentItem(item);
-        }*/
+        }
         /**
          * Handler of doubleClick event in a item of the tree control
          */
