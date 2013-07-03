@@ -12,6 +12,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -19,7 +20,8 @@ import java.util.List;
  * @since 0.0.1
  */
 public class JingDongParser implements IProductParser {
-    public static final String SEARCH_URL = "http://search.360buy.com/Search?enc=utf-8&book=y&keyword=";
+    public static final String SEARCH_URL = "http://search.jd.com/Search?enc=utf-8&book=y&keyword=";
+    public static final String JOURNAL_SEARCH_URL = "http://search.jd.com/bookadvsearch?keyword=%s&isbn=%s";
 
     private String isbn;
 
@@ -34,7 +36,13 @@ public class JingDongParser implements IProductParser {
         List<URL> pictureUrlList = new ArrayList<URL>();
         try {
             // 打开搜索结果页面
-            Document doc = Jsoup.connect(SEARCH_URL + isbn).get();
+            Document doc;
+            if (isbn.startsWith("977")) {
+                String year = Calendar.getInstance().get(Calendar.YEAR) + "";
+                doc = Jsoup.connect(String.format(JOURNAL_SEARCH_URL, year, isbn)).get();
+            } else {
+                doc = Jsoup.connect(SEARCH_URL + isbn).get();
+            }
             Elements elements = doc.select("div.main div.right-extra div#plist div.item");
             if (elements != null) {
                 /*for (Element element : elements) {
@@ -45,22 +53,22 @@ public class JingDongParser implements IProductParser {
                     Element element = elements.first();
                     Elements mElements;
                     // 取搜索结果图片 160 * 160
-                    pictureUrlList.add(new URL(element.select("div.i-img a img").first().attr("data-lazyload")));
+                    pictureUrlList.add(new URL(element.select("div.p-img a img").first().attr("data-lazyload")));
                     // 打开详细页面
-                    String detailUrl = element.select("div.i-img a").first().attr("href");
+                    String detailUrl = element.select("div.p-img a").first().attr("href");
 
                     Document detailDoc = Jsoup.connect(detailUrl).get();
                     // 取书名
-                    prod.setName(detailDoc.select("div.main div.right-extra div#name h1").first().ownText());
+                    prod.setName(detailDoc.select("div.w div.right div#name h1").first().ownText());
                     // 取详细页面图片 280 * 280
-                    pictureUrlList.add(new URL(detailDoc.select("div.main div.right-extra div#preview div#spec-n1 img").first().attr("src")));
+                    pictureUrlList.add(new URL(detailDoc.select("div.w div.right div#preview div#spec-n1 img").first().attr("src")));
                     // 取编辑推荐
-                    mElements = detailDoc.select("div.main div.right-extra div#recommend-editor div.mc div.con");
+                    mElements = detailDoc.select("div.w div.right div#recommend-editor div.mc div.con");
                     if (mElements.size() > 0) {
                         prod.setHAbstract(mElements.first().html());
                     }
 
-                    mElements = detailDoc.select("div.main div.right-extra > div.m1 div.mt h2");
+                    mElements = detailDoc.select("div.w div.right > div.m1 div.mt h2");
                     for (Element aElement : mElements) {
                         String text = aElement.ownText();
                         if (text != null) {
@@ -81,10 +89,10 @@ public class JingDongParser implements IProductParser {
                     }
 
                     // 取定价
-                    prod.setPrice(detailDoc.select("div.main div.right-extra ul#book-price li").first().text().replace("定", "").replace("价", "").replace("：", "").replace("￥", "").replace(" ", "").trim());
+                    prod.setPrice(detailDoc.select("div.w div.right ul#summary li#summary-market").first().text().replace("定", "").replace("价", "").replace("：", "").replace("￥", "").replace(" ", "").trim());
 
                     // 取summary-english
-                    mElements = detailDoc.select("div.main div.right-extra > ul#summary-english");
+                    mElements = detailDoc.select("div.w div.right > ul#summary-english");
                     Element summaryElements;
                     String span;
                     if (mElements != null && mElements.size() > 0) {
@@ -145,7 +153,7 @@ public class JingDongParser implements IProductParser {
                             }
                         }
                     } else { // 取summary
-                        mElements = detailDoc.select("div.main div.right-extra > ul#summary");
+                        mElements = detailDoc.select("div.w div.right > ul#summary");
                         summaryElements = mElements.first();
                         for (Element aElement : summaryElements.select("> li")) {
                             span = aElement.getElementsByTag("span").text();

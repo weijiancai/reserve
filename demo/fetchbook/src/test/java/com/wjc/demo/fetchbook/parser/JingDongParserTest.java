@@ -104,4 +104,11 @@ public class JingDongParserTest {
         assertThat(prod.getWidth(), equalTo("11.18"));
         assertThat(prod.getDeep(), equalTo("2.03"));
     }
+
+    @Test public void test9771672097131() {
+        String isbn = "9771672097131";
+        JingDongParser parser = new JingDongParser(isbn);
+        IWebProduct prod = parser.parse();
+        System.out.println(prod);
+    }
 }
