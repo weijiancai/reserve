@@ -26,7 +26,7 @@ package org.act.od.impl.commands
 					ViewLocator.getInstance().getViewHelper(FileNavigatorViewVH.VH_KEY) as FileNavigatorViewVH;
 			var fileNavigatorViewModel :FileNavigatorViewModel =
 					OrDesignerModelLocator.getInstance().getFileNavigatorViewModel();
-					
+
 			var exist:Boolean = false;
 			for(var i :int = 0; i < fileNavigatorViewModel.xmlList.length(); i++){
 				if(event.data.projectName == fileNavigatorViewModel.xmlList[i].@name)

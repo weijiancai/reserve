@@ -107,9 +107,9 @@ package org.act.od.impl.model{
 		* @param fileID ID file
 		* @return figurEditorModel.
 		*/
-		/*public function getFigureEditorModel(fileID :String) :FigureEditorModel {
+		public function getFigureEditorModel(fileID :String) :FigureEditorModel {
 			return this.figureEditorModelMap[fileID];
-		}*/
+		}
 
 
 

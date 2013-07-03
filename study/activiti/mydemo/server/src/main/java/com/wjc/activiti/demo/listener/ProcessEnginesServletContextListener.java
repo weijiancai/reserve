@@ -19,7 +19,7 @@ public class ProcessEnginesServletContextListener implements ServletContextListe
         System.out.println("contextInitialized.........");
         ProcessEngines.init();
 //        ProcessBO.deploy("FinancialReportProcess.bpmn20.xml", "FinancialReportProcess.png");
-        ProcessBO.deploy("条件分支与合并流程.bpmn20.xml", "条件分支与合并流程.png");
+        ProcessBO.deploy("fork.bpmn20.xml", "fork.png");
     }
 
     public void contextDestroyed(ServletContextEvent sce) {

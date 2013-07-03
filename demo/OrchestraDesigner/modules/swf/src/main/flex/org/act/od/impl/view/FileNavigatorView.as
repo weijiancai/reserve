@@ -17,7 +17,7 @@ package org.act.od.impl.view
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.remoting.RemoteObject;
 
-//	import org.act.od.impl.model.FileNavigatorViewModel;
+	import org.act.od.impl.model.FileNavigatorViewModel;
 	import org.act.od.impl.model.OrDesignerModelLocator;
 	import org.act.od.impl.viewhelper.FileNavigatorViewVH;
 
@@ -55,7 +55,7 @@ package org.act.od.impl.view
         private static var bpelIcon :Class;
 
 		private var fileNavigatorViewVH :FileNavigatorViewVH;
-//		private var fileNavigatorViewModel :FileNavigatorViewModel;
+		private var fileNavigatorViewModel :FileNavigatorViewModel;
 		private var reNameItem :ContextMenuItem = new ContextMenuItem("Rename");
 		private var downloadItem :ContextMenuItem = new ContextMenuItem("Download");
 
@@ -66,7 +66,7 @@ package org.act.od.impl.view
 			super();
 
 			this.fileNavigatorViewVH = new FileNavigatorViewVH(this, FileNavigatorViewVH.VH_KEY);
-//			this.fileNavigatorViewModel = OrDesignerModelLocator.getInstance().getFileNavigatorViewModel();
+			this.fileNavigatorViewModel = OrDesignerModelLocator.getInstance().getFileNavigatorViewModel();
 
 			this.x=0;
 			this.y=0;
@@ -104,10 +104,10 @@ package org.act.od.impl.view
         	var xml:XML=new XML(str);
         	var xmlList :XMLList = xml.elements();
 
-//        	this.fileNavigatorViewModel.xmlList = xmlList.copy();
-//        	this.fileNavigatorViewModel.xmlListCollection = new XMLListCollection(this.fileNavigatorViewModel.xmlList);
+        	this.fileNavigatorViewModel.xmlList = xmlList.copy();
+        	this.fileNavigatorViewModel.xmlListCollection = new XMLListCollection(this.fileNavigatorViewModel.xmlList);
 
-//        	BindingUtils.bindProperty(this, "dataProvider" ,this.fileNavigatorViewModel, "xmlListCollection");
+        	BindingUtils.bindProperty(this, "dataProvider" ,this.fileNavigatorViewModel, "xmlListCollection");
   		}
  		private function fault(event :FaultEvent):void{
         	Alert.show("Remote invoke error Houssem : "+event.message);
@@ -118,8 +118,8 @@ package org.act.od.impl.view
      			return projectIcon;
     		else if(xml.@type == "folder")
      			return folderIcon;
-     		/*else if(xml.@type == EditorNavigatorChild.BPEL_EDITOR_TYPE)
-     			return bpelIcon;*/
+     		else if(xml.@type == EditorNavigatorChild.BPEL_EDITOR_TYPE)
+     			return bpelIcon;
      		else
      			return fileIcon;
 		}
@@ -143,11 +143,11 @@ package org.act.od.impl.view
    				if(this.selectedIndex != rightClickIndex)
    					this.selectedIndex = rightClickIndex;
    			}
-   			/*if(this.selectedItem.@type == EditorNavigatorChild.BPEL_EDITOR_TYPE){
+   			if(this.selectedItem.@type == EditorNavigatorChild.BPEL_EDITOR_TYPE){
    				downloadItem.visible = true;
    			}else{
    				downloadItem.visible = false;
-   			}*/
+   			}
 		}
 	}
 }
