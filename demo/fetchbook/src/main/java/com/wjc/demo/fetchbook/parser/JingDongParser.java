@@ -10,6 +10,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -61,7 +62,13 @@ public class JingDongParser implements IProductParser {
                     // 取书名
                     prod.setName(detailDoc.select("div.w div.right div#name h1").first().ownText());
                     // 取详细页面图片 280 * 280
-                    pictureUrlList.add(new URL(detailDoc.select("div.w div.right div#preview div#spec-n1 img").first().attr("src")));
+                    URL bigPicUrl = getBigPic(detailDoc);
+                    if (bigPicUrl == null) {
+                        pictureUrlList.add(new URL(detailDoc.select("div.w div.right div#preview div#spec-n1 img").first().attr("src")));
+                    } else {
+                        pictureUrlList.add(bigPicUrl);
+                    }
+
                     // 取编辑推荐
                     mElements = detailDoc.select("div.w div.right div#recommend-editor div.mc div.con");
                     if (mElements.size() > 0) {
@@ -226,5 +233,32 @@ public class JingDongParser implements IProductParser {
         }
 
         return prod;
+    }
+
+    private URL getBigPic(Document detailDoc) {
+        Elements elements = detailDoc.getElementsByTag("script");
+
+        try {
+            for (Element element : elements) {
+                String text = element.html();
+                if(text != null) {
+                    text = text.trim();
+                    if (text.startsWith("window.pageConfig=") && text.contains("jqimg")) {
+                        int idx = text.indexOf("\"jqimg\":\"");
+                        if (idx != -1) {
+                            int endIdx = text.indexOf("\"", idx + 9);
+                            String url = text.substring(idx + 9, endIdx).replace("\\", "");
+                            System.out.println(url);
+                            return new URL(url);
+                        }
+                    }
+                }
+                System.out.println(text);
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
