@@ -69,156 +69,91 @@ public class JingDongParser implements IProductParser {
                         pictureUrlList.add(bigPicUrl);
                     }
 
-                    // 取编辑推荐
-                    mElements = detailDoc.select("div.w div.right div#recommend-editor div.mc div.con");
-                    if (mElements.size() > 0) {
-                        prod.setHAbstract(mElements.first().html());
+                    // 取定价
+                    prod.setPrice(detailDoc.select("div.w div.right ul#summary li#summary-market div.dd").first().text().replace("￥", "").replace(" ", "").trim());
+                    // 取作者
+                    String authorStr = detailDoc.select("div.w div.right ul#summary li#summary-author div.dd").first().text();
+                    StringBuilder sb = new StringBuilder();
+                    for(char c : authorStr.toCharArray()) {
+                        if(c == '著') {
+                            prod.setAuthor(UtilString.trim(sb.toString()));
+                            sb = new StringBuilder();
+                        } else if(c == '译') {
+                            prod.setTranslator(UtilString.trim(sb.toString()));
+                            sb = new StringBuilder();
+                        } else if(c == '绘') {
+                            prod.setPainter(UtilString.trim(sb.toString()));
+                            sb = new StringBuilder();
+                        } else {
+                            sb.append(c);
+                        }
                     }
-
-                    mElements = detailDoc.select("div.w div.right > div.m1 div.mt h2");
+                    // 取出版社
+                    prod.setPublishing(detailDoc.select("div.w div.right ul#summary li#summary-ph div.dd").first().text());
+                    // 取出版时间
+                    prod.setPublishDate(detailDoc.select("div.w div.right ul#summary li#summary-published div.dd").first().text());
+                    // 取ISBN
+                    prod.setIsbn(detailDoc.select("div.w div.right ul#summary li#summary-isbn div.dd").first().text());
+                    // 取商品介绍
+                    mElements = detailDoc.select("div.w div.right div#product-detail div#product-detail-1 > ul li");
                     for (Element aElement : mElements) {
                         String text = aElement.ownText();
-                        if (text != null) {
-                            text = text.trim();
-                            String value = aElement.parent().parent().select("div.mc div.con").html();
-                            if ("内容简介".equals(text)) { // 取内容简介
-                                prod.setContent(value);
-                            } else if ("作者简介".equals(text)) { // 取作者简介
-                                prod.setAuthorIntro(value);
-                            } else if ("目录".equals(text)) { // 取目录
-                                prod.setCatalog(value);
-                            } else if ("前言".equals(text)) { // 取前言
-                                prod.setPrologue(value);
-                            } else if ("精彩书摘".equals(text)) { // 取精彩书摘
-                                prod.setExtract(value);
+                        if (text.startsWith("版次：")) { // 取版次
+                            prod.setBanci(aElement.ownText().substring(3).trim());
+                        } else if (text.startsWith("装帧：")) { // 取装帧
+                            prod.setPack(aElement.ownText().substring(3).trim());
+                        } else if (text.startsWith("纸张：")) { // 取纸张
+                            prod.setPaper(aElement.ownText().substring(3).trim());
+                        } else if (text.startsWith("印刷时间：")) { // 取印刷时间
+                            prod.setPrintDate(aElement.ownText().substring(5).trim());
+                        } else if (text.startsWith("印次：")) { // 取印次
+                            prod.setPrintNum(aElement.ownText().substring(3).trim());
+                        } else if (text.startsWith("正文语种：")) { // 取正文语种
+                            prod.setLanguage(aElement.ownText().substring(5).trim());
+                        } else if (text.startsWith("开本：")) { // 取开本
+                            prod.setKaiben(aElement.ownText().substring(3).trim());
+                        } else if (text.startsWith("页数：")) { // 取页数
+                            prod.setPageNum(aElement.ownText().substring(3).trim());
+                        } else if (text.startsWith("作者：")) { // 作者
+                            prod.setAuthor(aElement.ownText().substring(3).trim());
+                        } else if (text.startsWith("尺寸：")) { // 尺寸
+                            String[] strs = aElement.ownText().substring(3).trim().split(";");
+                            if(strs.length == 1) {
+                                prod.setSize(strs[0]);
+                            } else if(strs.length == 2) {
+                                prod.setSize(strs[0]);
+                                prod.setWeight(strs[1].replace("kg", ""));
+                            }
+                            if(prod.getSize() != null) {
+                                strs = prod.getSize().replace("cm", "").split("x");
+                                if(strs.length == 3) {
+                                    prod.setLength(strs[0]);
+                                    prod.setWidth(strs[1]);
+                                    prod.setDeep(strs[2]);
+                                }
                             }
                         }
                     }
 
-                    // 取定价
-                    prod.setPrice(detailDoc.select("div.w div.right ul#summary li#summary-market").first().text().replace("定", "").replace("价", "").replace("：", "").replace("￥", "").replace(" ", "").trim());
-
-                    // 取summary-english
-                    mElements = detailDoc.select("div.w div.right > ul#summary-english");
-                    Element summaryElements;
-                    String span;
-                    if (mElements != null && mElements.size() > 0) {
-                        summaryElements = mElements.first();
-                        for (Element aElement : summaryElements.select("li")) {
-                            span = aElement.getElementsByTag("span").text();
-                            if ("作　　者/Author:".equals(span)) {
-                                String values = aElement.text().replace("作　　者/Author:", "");
-                                StringBuilder sb = new StringBuilder();
-                                for(char c : values.toCharArray()) {
-                                    if(c == '著') {
-                                        prod.setAuthor(UtilString.trim(sb.toString()));
-                                        sb = new StringBuilder();
-                                    } else if(c == '译') {
-                                        prod.setTranslator(UtilString.trim(sb.toString()));
-                                        sb = new StringBuilder();
-                                    } else if(c == '绘') {
-                                        prod.setPainter(UtilString.trim(sb.toString()));
-                                        sb = new StringBuilder();
-                                    } else {
-                                        sb.append(c);
-                                    }
-                                }
-                            } else if ("中文书名/Chinese Title:".equals(span)) {
-                                prod.setCnName(aElement.ownText());
-                            } else if ("出  版  社/Publisher:".equals(span)) {
-                                prod.setPublishing(aElement.getElementsByTag("a").text());
-                            } else if ("ＩＳＢＮ:".equals(span)) {
-                                prod.setIsbn(aElement.ownText());
-                            } else if ("出版时间/Publication Date:".equals(span)) {
-                                prod.setPublishDate(aElement.ownText());
-                            } else if ("版　　次/Edition:".equals(span)) {
-                                prod.setBanci(aElement.ownText());
-                            } else if ("页　　数/Pages:".equals(span)) {
-                                prod.setPageNum(aElement.ownText());
-                            } else if ("装　　帧/Format:".equals(span)) {
-                                prod.setPack(aElement.ownText());
-                            } else if ("尺寸及重量/Dimensions & Weight:".equals(span)) {
-                                String[] strs = aElement.ownText().split(";");
-                                if(strs.length == 1) {
-                                    prod.setSize(strs[0]);
-                                } else if(strs.length == 2) {
-                                    prod.setSize(strs[0]);
-                                    prod.setWeight(strs[1].replace("kg", ""));
-                                }
-                                if(prod.getSize() != null) {
-                                    strs = prod.getSize().replace("cm", "").split("x");
-                                    if(strs.length == 3) {
-                                        prod.setLength(strs[0]);
-                                        prod.setWidth(strs[1]);
-                                        prod.setDeep(strs[2]);
-                                    }
-                                }
-                            } else if ("纸　　张/Paper:".equals(span)) {
-                                prod.setPaper(aElement.ownText());
-                            } else if ("正文语种/Language:".equals(span)) {
-                                prod.setLanguage(aElement.ownText());
-                            }
-                        }
-                    } else { // 取summary
-                        mElements = detailDoc.select("div.w div.right > ul#summary");
-                        summaryElements = mElements.first();
-                        for (Element aElement : summaryElements.select("> li")) {
-                            span = aElement.getElementsByTag("span").text();
-                            if ("作　　者：".equals(span)) {
-                                String values = aElement.text().replace("作　　者：", "");
-                                StringBuilder sb = new StringBuilder();
-                                for(char c : values.toCharArray()) {
-                                    if(c == '著') {
-                                        prod.setAuthor(UtilString.trim(sb.toString()));
-                                        sb = new StringBuilder();
-                                    } else if(c == '译') {
-                                        prod.setTranslator(UtilString.trim(sb.toString()));
-                                        sb = new StringBuilder();
-                                    } else if(c == '绘') {
-                                        prod.setPainter(UtilString.trim(sb.toString()));
-                                        sb = new StringBuilder();
-                                    } else {
-                                        sb.append(c);
-                                    }
-                                }
-                            } else if ("出 版 社：".equals(span)) {
-                                prod.setPublishing(aElement.getElementsByTag("a").text());
-                            } else if ("ＩＳＢＮ：".equals(span)) {
-                                prod.setIsbn(aElement.ownText());
-                            } else if ("出版时间：".equals(span)) {
-                                prod.setPublishDate(aElement.ownText());
-                            } else if ("版　　次：".equals(span)) {
-                                prod.setBanci(aElement.ownText());
-                            } else if ("页　　数：".equals(span)) {
-                                prod.setPageNum(aElement.ownText());
-                            } else if ("装　　帧：".equals(span)) {
-                                prod.setPack(aElement.ownText());
-                            } else if ("开　　本：".equals(span)) {
-                                prod.setKaiben(aElement.ownText());
-                            } else if ("丛 书 名：".equals(span)) {
-                                prod.setSeriesName(aElement.ownText());
-                            }
-
-                            else if (aElement.hasClass("extra")) {
-                                for (Element e : aElement.select("div")) {
-                                    String[] values = e.ownText().split("：");
-                                    if(values.length == 2) {
-                                        if ("纸　　张".equals(values[0].trim())) {
-                                            prod.setPaper(values[1]);
-                                        } else if ("正文语种".equals(values[0].trim())) {
-                                            prod.setLanguage(values[1]);
-                                        } else if ("印刷时间".equals(values[0].trim())) {
-                                            prod.setPrintDate(values[1]);
-                                        } else if ("印　　次".equals(values[0].trim())) {
-                                            prod.setPrintNum(values[1]);
-                                        } else if ("套装数量".equals(values[0].trim())) {
-                                            prod.setSuitNum(values[1]);
-                                        } else if ("读者对象".equals(values[0].trim())) {
-                                            prod.setReaders(values[1]);
-                                        }
-                                    }
-                                }
-                            }
+                    // 取其他信息
+                    mElements = detailDoc.select("div.w div.right div#product-detail div#product-detail-1 > div.sub-m");
+                    for (Element aElement : mElements) {
+                        String title = aElement.select("div.sub-mt h3").text();
+                        String value = aElement.select("div.sub-mc").html();
+                        if("内容简介".equals(title)) { // 内容简介
+                            prod.setContent(value);
+                        } else if("作者简介".equals(title)) { // 作者简介
+                            prod.setAuthorIntro(value);
+                        } else if("精彩书摘".equals(title)) { // 取精彩书摘
+                            prod.setExtract(value);
+                        } else if("编辑推荐".equals(title)) { // 编辑推荐
+                            prod.setHAbstract(value);
+                        } else if("媒体评论".equals(title)) { // 媒体评论
+                            prod.setMediaFeedback(value);
+                        } else if("目录".equals(title)) { // 目录
+                            prod.setCatalog(value);
+                        } else if("前言".equals(title)) { // 前言
+                            prod.setPrologue(value);
                         }
                     }
 
@@ -248,12 +183,10 @@ public class JingDongParser implements IProductParser {
                         if (idx != -1) {
                             int endIdx = text.indexOf("\"", idx + 9);
                             String url = text.substring(idx + 9, endIdx).replace("\\", "");
-                            System.out.println(url);
                             return new URL(url);
                         }
                     }
                 }
-                System.out.println(text);
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();

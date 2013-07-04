@@ -330,7 +330,7 @@ public class WebProductImpl implements IWebProduct {
         final StringBuilder sb = new StringBuilder();
         sb.append("WebProductImpl").append("{\n");
         sb.append("name = '").append(name).append('\'').append('\n');
-        sb.append("pictureURLs = ").append(pictureURLs == null ? "null" : Arrays.asList(pictureURLs).toString());
+        sb.append("pictureURLs = ").append(pictureURLs == null ? "null" : Arrays.asList(pictureURLs).toString()).append('\n');
         sb.append("hAbstract = '").append(hAbstract).append('\'').append('\n');
         sb.append("content = '").append(content).append('\'').append('\n');
         sb.append("authorIntro = '").append(authorIntro).append('\'').append('\n');

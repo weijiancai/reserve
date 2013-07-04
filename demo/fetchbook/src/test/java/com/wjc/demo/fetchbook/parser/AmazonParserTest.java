@@ -1,6 +1,7 @@
 package com.wjc.demo.fetchbook.parser;
 
 import com.wjc.demo.fetchbook.IWebProduct;
+import com.wjc.demo.fetchbook.doanload.DownloadImage;
 import org.junit.Test;
 
 import java.net.MalformedURLException;
@@ -30,7 +31,7 @@ public class AmazonParserTest {
         assertThat(prod.getPictureURLs(), hasItemInArray(new URL("http://ec4.images-amazon.com/images/I/510eoZh-ltL._BO2,204,203,200_PIsitb-sticker-arrow-click,TopRight,35,-76_AA300_SH20_OU28_.jpg"))); // 280 * 280
         assertThat(prod.getPrice(), equalTo("35.00"));
         assertThat(prod.getPublishing(), equalTo("译林出版社"));
-        assertThat(prod.getPublishDate(), equalTo("2012年11月29日"));
+        assertThat(prod.getPublishDate(), equalTo("2012年11月1日"));
         assertThat(prod.getBanci(), equalTo("1"));
         assertThat(prod.getPageNum(), equalTo("324"));
         assertThat(prod.getKaiben(), equalTo("16"));
@@ -41,6 +42,8 @@ public class AmazonParserTest {
         assertThat(prod.getLength(), equalTo("21.4"));
         assertThat(prod.getWidth(), equalTo("15"));
         assertThat(prod.getDeep(), equalTo("2.2"));
+
+        new DownloadImage(prod.getPictureURLs());
     }
 
     // 牛刀说货币：货币狼烟
